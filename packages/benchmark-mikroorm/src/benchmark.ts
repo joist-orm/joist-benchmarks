@@ -9,7 +9,7 @@ let orm: MikroORM;
 async function loadData(size: number): Promise<number> {
   return measure(async () => {
     const authorRepository = orm.em.getRepository(Author);
-    
+
     const authors = await authorRepository.find(
       {},
       {
@@ -18,7 +18,7 @@ async function loadData(size: number): Promise<number> {
         orderBy: { id: 'ASC' }
       }
     );
-    
+
     console.log(`Loaded ${authors.length} authors with their books, reviews, and tags`);
   });
 }
@@ -26,17 +26,13 @@ async function loadData(size: number): Promise<number> {
 async function saveData(size: number): Promise<number> {
   // Load the generated seed data
   const seedFile = getDataPath(size);
-  if (!fs.existsSync(seedFile)) {
-    throw new Error(`Seed file not found: ${seedFile}`);
-  }
-  
   const seedData = JSON.parse(fs.readFileSync(seedFile, 'utf8'));
-  
+
   return measure(async () => {
     // Start a transaction
     const em = orm.em.fork();
     await em.begin();
-    
+
     try {
       // Insert authors
       for (const authorData of seedData.authors) {
@@ -50,10 +46,10 @@ async function saveData(size: number): Promise<number> {
         });
         em.persist(author);
       }
-      
+
       // Need to flush now to ensure authors are in the database
       await em.flush();
-      
+
       // Insert books
       for (const bookData of seedData.books) {
         const book = em.create(Book, {
@@ -67,10 +63,10 @@ async function saveData(size: number): Promise<number> {
         });
         em.persist(book);
       }
-      
+
       // Need to flush now to ensure books are in the database
       await em.flush();
-      
+
       // Insert reviews
       for (const reviewData of seedData.reviews) {
         const review = em.create(BookReview, {
@@ -83,7 +79,7 @@ async function saveData(size: number): Promise<number> {
         });
         em.persist(review);
       }
-      
+
       // Insert tags
       for (const tagData of seedData.tags) {
         const tag = em.create(Tag, {
@@ -94,10 +90,10 @@ async function saveData(size: number): Promise<number> {
         });
         em.persist(tag);
       }
-      
+
       // Need to flush now to ensure tags are in the database
       await em.flush();
-      
+
       // Insert book-tag relationships
       if (seedData.bookTags.length > 0) {
         // Filter out duplicate book-tag pairs
@@ -129,10 +125,10 @@ async function saveData(size: number): Promise<number> {
           }
         }
       }
-      
+
       await em.commit();
       console.log(`Saved ${seedData.authors.length} authors with their books, reviews, and tags`);
-      
+
     } catch (error) {
       await em.rollback();
       throw error;
@@ -141,50 +137,27 @@ async function saveData(size: number): Promise<number> {
 }
 
 async function cleanDatabase(): Promise<void> {
-  try {
-    await orm.em.getConnection().execute('TRUNCATE book_tag, book_review, book, author, tag RESTART IDENTITY CASCADE');
-    console.log('Database cleaned');
-  } catch (error) {
-    console.error('Error cleaning database:', error);
-    // Try a different approach if the first one fails
-    try {
-      await orm.em.getConnection().execute('DELETE FROM book_tag');
-      await orm.em.getConnection().execute('DELETE FROM book_review');
-      await orm.em.getConnection().execute('DELETE FROM book');
-      await orm.em.getConnection().execute('DELETE FROM author');
-      await orm.em.getConnection().execute('DELETE FROM tag');
-      await orm.em.getConnection().execute('ALTER SEQUENCE book_review_id_seq RESTART WITH 1');
-      await orm.em.getConnection().execute('ALTER SEQUENCE book_id_seq RESTART WITH 1');
-      await orm.em.getConnection().execute('ALTER SEQUENCE author_id_seq RESTART WITH 1');
-      await orm.em.getConnection().execute('ALTER SEQUENCE tag_id_seq RESTART WITH 1');
-      console.log('Database cleaned using alternate method');
-    } catch (secondError) {
-      console.error('Error in alternate cleaning method:', secondError);
-      throw secondError;
-    }
-  }
+  await orm.em.getConnection().execute('TRUNCATE book_tag, book_review, book, author, tag RESTART IDENTITY CASCADE');
+  console.log('Database cleaned');
 }
 
 async function runBenchmarks(): Promise<void> {
   try {
     orm = await MikroORM.init(config);
     console.log('Database connection initialized');
-    
+
     const sizes = [1, 10, 100, 1000];
-    
+
     // Clean the database before starting
     await cleanDatabase();
-    
+
     // Save data benchmarks
     await benchmark('MikroORM - Save Data', sizes, saveData);
-    
+
     // Load data benchmarks
     await benchmark('MikroORM - Load Data', sizes, loadData);
-    
-  } catch (error) {
-    console.error('Benchmark error:', error);
   } finally {
-    await orm.close();
+    await orm?.close();
   }
 }
 

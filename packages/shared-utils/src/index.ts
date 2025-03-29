@@ -1,5 +1,4 @@
 export * from './interfaces';
-export * from './generator';
 
 export const DB_CONFIG = {
   host: 'localhost',
@@ -26,7 +25,7 @@ export async function benchmark(
 ): Promise<void> {
   console.log(`\n--- ${name} ---`);
   console.log('Size\tDuration (ms)');
-  
+
   for (const size of sizesToRun) {
     const duration = await fn(size);
     console.log(`${size}\t${duration}`);

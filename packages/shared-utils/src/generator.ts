@@ -158,4 +158,4 @@ function createSeedData(size: number): void {
 const sizes = [1, 10, 100, 1000];
 sizes.forEach(size => createSeedData(size));
 
-console.log('All seed data generated successfully!');
+console.trace('All seed data generated successfully!');

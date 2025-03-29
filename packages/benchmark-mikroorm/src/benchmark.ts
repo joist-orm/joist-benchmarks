@@ -9,7 +9,6 @@ let orm: MikroORM;
 async function loadData(size: number): Promise<number> {
   return measure(async () => {
     const authorRepository = orm.em.getRepository(Author);
-
     const authors = await authorRepository.find(
       {},
       {
@@ -18,7 +17,6 @@ async function loadData(size: number): Promise<number> {
         orderBy: { id: 'ASC' }
       }
     );
-
     console.log(`Loaded ${authors.length} authors with their books, reviews, and tags`);
   });
 }
@@ -44,40 +42,33 @@ async function saveData(size: number): Promise<number> {
           createdAt: new Date(),
           updatedAt: new Date()
         });
-        em.persist(author);
       }
-
-      // Need to flush now to ensure authors are in the database
-      await em.flush();
 
       // Insert books
       for (const bookData of seedData.books) {
+        const author = em.getReference(Author, bookData.authorId);
         const book = em.create(Book, {
           id: bookData.id,
           title: bookData.title,
-          authorId: bookData.authorId,
+          author: author,
           published: bookData.published ? new Date(bookData.published) : undefined,
           pages: bookData.pages,
           createdAt: new Date(),
           updatedAt: new Date()
         });
-        em.persist(book);
       }
-
-      // Need to flush now to ensure books are in the database
-      await em.flush();
 
       // Insert reviews
       for (const reviewData of seedData.reviews) {
+        const book = em.getReference(Book, reviewData.bookId);
         const review = em.create(BookReview, {
           id: reviewData.id,
-          bookId: reviewData.bookId,
+          book: book,
           rating: reviewData.rating,
           text: reviewData.text,
           createdAt: new Date(),
           updatedAt: new Date()
         });
-        em.persist(review);
       }
 
       // Insert tags
@@ -88,7 +79,6 @@ async function saveData(size: number): Promise<number> {
           createdAt: new Date(),
           updatedAt: new Date()
         });
-        em.persist(tag);
       }
 
       // Need to flush now to ensure tags are in the database
@@ -114,7 +104,7 @@ async function saveData(size: number): Promise<number> {
           if (chunk.length > 0) {
             try {
               await em.getConnection().execute(
-                `INSERT INTO book_tag ("bookId", "tagId") VALUES ${
+                `INSERT INTO book_tag (book_id, tag_id) VALUES ${
                   chunk.map((bt: { bookId: number; tagId: number }) => `(${bt.bookId}, ${bt.tagId})`).join(', ')
                 }`
               );
@@ -128,7 +118,6 @@ async function saveData(size: number): Promise<number> {
 
       await em.commit();
       console.log(`Saved ${seedData.authors.length} authors with their books, reviews, and tags`);
-
     } catch (error) {
       await em.rollback();
       throw error;
@@ -155,7 +144,7 @@ async function runBenchmarks(): Promise<void> {
     await benchmark('MikroORM - Save Data', sizes, saveData);
 
     // Load data benchmarks
-    await benchmark('MikroORM - Load Data', sizes, loadData);
+    // await benchmark('MikroORM - Load Data', sizes, loadData);
   } finally {
     await orm?.close();
   }

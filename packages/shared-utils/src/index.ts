@@ -1,3 +1,6 @@
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+
 export * from './interfaces';
 
 export const DB_CONFIG = {
@@ -8,8 +11,6 @@ export const DB_CONFIG = {
   database: 'benchmark'
 };
 
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
 
 // ESM equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -35,6 +36,6 @@ export async function benchmark(
 
   for (const size of sizesToRun) {
     const duration = await fn(size);
-    console.log(`${size}\t${duration}`);
+    console.log(`${size}\t${duration}ms`);
   }
 };

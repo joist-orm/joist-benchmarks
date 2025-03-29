@@ -46,12 +46,14 @@ export class Book {
   @Property({ type: types.string })
   title!: string;
 
-  @Property({ type: types.integer, fieldName: 'author_id' })
-  @Index()
-  authorId!: number;
-
-  @ManyToOne(() => Author, { joinColumn: 'author_id', fieldName: 'author_id', nullable: true })
+  @ManyToOne(() => Author, { joinColumn: 'author_id', nullable: true })
   author?: Author;
+  
+  // Virtual property that maps to the same column as the relation
+  @Property({ type: types.integer, persist: false })
+  get authorId(): number {
+    return this.author?.id || 0;
+  }
 
   @Property({ type: types.datetime, nullable: true })
   published?: Date;
@@ -77,12 +79,14 @@ export class BookReview {
   @PrimaryKey({ type: types.integer })
   id!: number;
 
-  @Property({ type: types.integer, fieldName: 'book_id' })
-  @Index()
-  bookId!: number;
-
-  @ManyToOne(() => Book, { joinColumn: 'book_id', fieldName: 'book_id', nullable: true })
+  @ManyToOne(() => Book, { joinColumn: 'book_id', nullable: true })
   book?: Book;
+  
+  // Virtual property that maps to the same column as the relation
+  @Property({ type: types.integer, persist: false })
+  get bookId(): number {
+    return this.book?.id || 0;
+  }
 
   @Property({ type: types.integer })
   rating!: number;

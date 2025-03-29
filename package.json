@@ -4,14 +4,16 @@
   "private": true,
   "scripts": {
     "generate-seed-data": "yarn workspace shared-utils generate",
-    "build": "yarn workspaces foreach run build",
+    "build": "tsc",
+    "build-all": "yarn workspaces foreach --all run build",
     "db:up": "docker-compose up -d",
     "db:down": "docker-compose down",
     "db:connect": "docker exec -it joist-benchmarks-db-1 psql -U postgres -d benchmark",
     "db:ps": "docker ps | grep postgres"
   },
   "devDependencies": {
-    "tsx": "^4.19.3"
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
   },
   "workspaces": [
     "packages/*"

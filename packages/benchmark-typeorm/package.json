@@ -1,0 +1,19 @@
+{
+  "name": "benchmark-typeorm",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "bench": "ts-node src/benchmark.ts"
+  },
+  "dependencies": {
+    "pg": "^8.0.0",
+    "shared-utils": "workspace:^",
+    "typeorm": "^0.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "benchmark-mikroorm",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "bench": "ts-node src/benchmark.ts"
+  },
+  "dependencies": {
+    "@mikro-orm/core": "^5.0.0",
+    "@mikro-orm/postgresql": "^5.0.0",
+    "pg": "^8.0.0",
+    "shared-utils": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  }
+}

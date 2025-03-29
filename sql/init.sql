@@ -1,0 +1,47 @@
+CREATE TABLE IF NOT EXISTS "author" (
+  "id" SERIAL PRIMARY KEY,
+  "firstName" TEXT NOT NULL,
+  "lastName" TEXT NOT NULL,
+  "email" TEXT NOT NULL UNIQUE,
+  "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+  "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS "book" (
+  "id" SERIAL PRIMARY KEY,
+  "title" TEXT NOT NULL,
+  "authorId" INTEGER NOT NULL REFERENCES "author"("id") ON DELETE CASCADE,
+  "published" TIMESTAMP WITH TIME ZONE,
+  "pages" INTEGER NOT NULL DEFAULT 0,
+  "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+  "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS "book_review" (
+  "id" SERIAL PRIMARY KEY,
+  "bookId" INTEGER NOT NULL REFERENCES "book"("id") ON DELETE CASCADE,
+  "rating" INTEGER NOT NULL,
+  "text" TEXT,
+  "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+  "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+  CONSTRAINT "rating_check" CHECK ("rating" >= 1 AND "rating" <= 5)
+);
+
+CREATE TABLE IF NOT EXISTS "tag" (
+  "id" SERIAL PRIMARY KEY,
+  "name" TEXT NOT NULL UNIQUE,
+  "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+  "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS "book_tag" (
+  "bookId" INTEGER NOT NULL REFERENCES "book"("id") ON DELETE CASCADE,
+  "tagId" INTEGER NOT NULL REFERENCES "tag"("id") ON DELETE CASCADE,
+  PRIMARY KEY ("bookId", "tagId")
+);
+
+-- Index for foreign keys
+CREATE INDEX IF NOT EXISTS "book_authorId_idx" ON "book" ("authorId");
+CREATE INDEX IF NOT EXISTS "book_review_bookId_idx" ON "book_review" ("bookId");
+CREATE INDEX IF NOT EXISTS "book_tag_bookId_idx" ON "book_tag" ("bookId");
+CREATE INDEX IF NOT EXISTS "book_tag_tagId_idx" ON "book_tag" ("tagId");

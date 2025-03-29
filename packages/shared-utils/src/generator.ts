@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 import { Author, Book, BookReview, Tag,  } from "./interfaces";
 
 export class DataGenerator {
@@ -139,6 +140,9 @@ function createSeedData(size: number): void {
 
   const data = generator.generateDataSet(size, booksPerAuthor, reviewsPerBook, tagsPerBook);
 
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  
   const outputDir = path.resolve(__dirname, '../../data');
   fs.mkdirSync(outputDir, { recursive: true });
   fs.writeFileSync(

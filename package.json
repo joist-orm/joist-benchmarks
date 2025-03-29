@@ -7,7 +7,7 @@
     "build": "yarn workspaces foreach run build"
   },
   "devDependencies": {
-    "tsx": "^4.0.0"
+    "tsx": "^4.19.3"
   },
   "workspaces": [
     "packages/*"

@@ -23,13 +23,13 @@
     "bench": "node --import=tsx --conditions=@source src/benchmark.ts"
   },
   "dependencies": {
-    "pg": "^8.0.0",
-    "reflect-metadata": "^0.1.13",
+    "pg": "^8.14.1",
+    "reflect-metadata": "^0.2.2",
     "shared-utils": "workspace:^",
-    "typeorm": "^0.3.0"
+    "typeorm": "^0.3.21"
   },
   "devDependencies": {
-    "@types/node": "^18.0.0",
-    "typescript": "^5.0.0"
+    "@types/node": "^22.13.14",
+    "typescript": "^5.8.2"
   }
 }

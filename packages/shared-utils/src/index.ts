@@ -8,8 +8,15 @@ export const DB_CONFIG = {
   database: 'benchmark'
 };
 
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+
+// ESM equivalent of __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 export const getDataPath = (size: number): string => {
-  return `${__dirname}/../../data/seed-${size}.json`;
+  return resolve(__dirname, `../../data/seed-${size}.json`);
 };
 
 export const measure = async (fn: () => Promise<void>): Promise<number> => {

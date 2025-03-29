@@ -51,12 +51,15 @@ export class DataGenerator {
     return books;
   }
 
+  private reviewIdCounter = 0;
+
   generateReviews(bookId: number, count: number): BookReview[] {
     const reviews: BookReview[] = [];
     
     for (let i = 0; i < count; i++) {
+      this.reviewIdCounter++;
       reviews.push({
-        id: this.startId + reviews.length,
+        id: this.reviewIdCounter,
         bookId,
         rating: faker.number.int({ min: 1, max: 5 }),
         text: faker.lorem.paragraph(),
@@ -70,14 +73,23 @@ export class DataGenerator {
 
   generateTags(count: number): Tag[] {
     const tags: Tag[] = [];
+    const usedNames = new Set<string>();
     
     for (let i = 0; i < count; i++) {
       const tagId = this.startId + this.tagIds.length;
       this.tagIds.push(tagId);
       
+      // Make sure tag names are unique
+      let tagName: string;
+      do {
+        tagName = faker.word.sample() + '-' + faker.number.int(1000);
+      } while (usedNames.has(tagName));
+      
+      usedNames.add(tagName);
+      
       tags.push({
         id: tagId,
-        name: faker.word.sample(),
+        name: tagName,
         createdAt: new Date(),
         updatedAt: new Date(),
       });

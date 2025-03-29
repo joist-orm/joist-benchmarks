@@ -11,7 +11,7 @@ import {
   Index
 } from '@mikro-orm/core';
 
-@Entity({ tableName: 'author' })
+@Entity()
 export class Author {
   @PrimaryKey()
   id!: number;
@@ -29,14 +29,14 @@ export class Author {
   @OneToMany(() => Book, book => book.author, { cascade: [Cascade.REMOVE] })
   books = new Collection<Book>(this);
 
-  @Property({ name: 'createdAt', defaultRaw: 'now()' })
+  @Property({ defaultRaw: 'now()' })
   createdAt = new Date();
 
-  @Property({ name: 'updatedAt', defaultRaw: 'now()', onUpdate: () => new Date() })
+  @Property({ defaultRaw: 'now()', onUpdate: () => new Date() })
   updatedAt = new Date();
 }
 
-@Entity({ tableName: 'book' })
+@Entity()
 export class Book {
   @PrimaryKey()
   id!: number;
@@ -48,8 +48,8 @@ export class Book {
   @Index()
   authorId!: number;
 
-  @ManyToOne(() => Author)
-  author!: Author;
+  @ManyToOne(() => Author, { joinColumn: 'authorId', fieldName: 'authorId', nullable: true })
+  author?: Author;
 
   @Property({ nullable: true })
   published?: Date;
@@ -63,10 +63,10 @@ export class Book {
   @ManyToMany({ entity: () => Tag, pivotTable: 'book_tag', joinColumn: 'bookId', inverseJoinColumn: 'tagId' })
   tags = new Collection<Tag>(this);
 
-  @Property({ name: 'createdAt', defaultRaw: 'now()' })
+  @Property({ defaultRaw: 'now()' })
   createdAt = new Date();
 
-  @Property({ name: 'updatedAt', defaultRaw: 'now()', onUpdate: () => new Date() })
+  @Property({ defaultRaw: 'now()', onUpdate: () => new Date() })
   updatedAt = new Date();
 }
 
@@ -79,8 +79,8 @@ export class BookReview {
   @Index()
   bookId!: number;
 
-  @ManyToOne(() => Book)
-  book!: Book;
+  @ManyToOne(() => Book, { joinColumn: 'bookId', fieldName: 'bookId', nullable: true })
+  book?: Book;
 
   @Property()
   rating!: number;
@@ -88,14 +88,14 @@ export class BookReview {
   @Property({ nullable: true })
   text?: string;
 
-  @Property({ name: 'createdAt', defaultRaw: 'now()' })
+  @Property({ defaultRaw: 'now()' })
   createdAt = new Date();
 
-  @Property({ name: 'updatedAt', defaultRaw: 'now()', onUpdate: () => new Date() })
+  @Property({ defaultRaw: 'now()', onUpdate: () => new Date() })
   updatedAt = new Date();
 }
 
-@Entity({ tableName: 'tag' })
+@Entity()
 export class Tag {
   @PrimaryKey()
   id!: number;
@@ -107,9 +107,9 @@ export class Tag {
   @ManyToMany(() => Book, book => book.tags)
   books = new Collection<Book>(this);
 
-  @Property({ name: 'createdAt', defaultRaw: 'now()' })
+  @Property({ defaultRaw: 'now()' })
   createdAt = new Date();
 
-  @Property({ name: 'updatedAt', defaultRaw: 'now()', onUpdate: () => new Date() })
+  @Property({ defaultRaw: 'now()', onUpdate: () => new Date() })
   updatedAt = new Date();
 }

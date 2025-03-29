@@ -8,12 +8,12 @@
     "generate": "prisma generate"
   },
   "dependencies": {
-    "@prisma/client": "^5.0.0",
+    "@prisma/client": "6.5.0",
     "shared-utils": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
-    "prisma": "^5.0.0",
+    "prisma": "6.5.0",
     "ts-node": "^10.9.0",
     "typescript": "^5.0.0"
   }

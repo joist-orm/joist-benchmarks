@@ -90,11 +90,34 @@ async function saveData(size: number): Promise<number> {
       
       // Insert book-tag relationships
       if (seedData.bookTags.length > 0) {
-        await queryRunner.query(
-          `INSERT INTO book_tag ("bookId", "tagId") VALUES ${
-            seedData.bookTags.map((bt: { bookId: number; tagId: number }) => `(${bt.bookId}, ${bt.tagId})`).join(', ')
-          }`
-        );
+        // Filter out duplicate book-tag pairs
+        const uniquePairs = new Set<string>();
+        const uniqueBookTags = seedData.bookTags.filter((bt: { bookId: number; tagId: number }) => {
+          const pairKey = `${bt.bookId}-${bt.tagId}`;
+          if (uniquePairs.has(pairKey)) {
+            return false;
+          }
+          uniquePairs.add(pairKey);
+          return true;
+        });
+
+        // Process in chunks of 100 to avoid query size limits
+        const chunkSize = 100;
+        for (let i = 0; i < uniqueBookTags.length; i += chunkSize) {
+          const chunk = uniqueBookTags.slice(i, i + chunkSize);
+          if (chunk.length > 0) {
+            try {
+              await queryRunner.query(
+                `INSERT INTO book_tag ("bookId", "tagId") VALUES ${
+                  chunk.map((bt: { bookId: number; tagId: number }) => `(${bt.bookId}, ${bt.tagId})`).join(', ')
+                }`
+              );
+            } catch (err) {
+              console.error(`Error inserting book-tag chunk ${i} to ${i + chunk.length}:`, err);
+              // Continue with the next chunk
+            }
+          }
+        }
       }
       
       await queryRunner.commitTransaction();
@@ -109,8 +132,28 @@ async function saveData(size: number): Promise<number> {
 }
 
 async function cleanDatabase(): Promise<void> {
-  await AppDataSource.query('TRUNCATE book_tag, book_review, book, author, tag RESTART IDENTITY CASCADE');
-  console.log('Database cleaned');
+  try {
+    await AppDataSource.query('TRUNCATE book_tag, book_review, book, author, tag RESTART IDENTITY CASCADE');
+    console.log('Database cleaned');
+  } catch (error) {
+    console.error('Error cleaning database:', error);
+    // Try a different approach if the first one fails
+    try {
+      await AppDataSource.query('DELETE FROM book_tag');
+      await AppDataSource.query('DELETE FROM book_review');
+      await AppDataSource.query('DELETE FROM book');
+      await AppDataSource.query('DELETE FROM author');
+      await AppDataSource.query('DELETE FROM tag');
+      await AppDataSource.query('ALTER SEQUENCE book_review_id_seq RESTART WITH 1');
+      await AppDataSource.query('ALTER SEQUENCE book_id_seq RESTART WITH 1');
+      await AppDataSource.query('ALTER SEQUENCE author_id_seq RESTART WITH 1');
+      await AppDataSource.query('ALTER SEQUENCE tag_id_seq RESTART WITH 1');
+      console.log('Database cleaned using alternate method');
+    } catch (secondError) {
+      console.error('Error in alternate cleaning method:', secondError);
+      throw secondError;
+    }
+  }
 }
 
 async function runBenchmarks(): Promise<void> {

@@ -93,7 +93,7 @@ export class BookReview {
   @Column()
   rating!: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'text' })
   text!: string | null;
 
   @CreateDateColumn({ name: 'createdAt' })

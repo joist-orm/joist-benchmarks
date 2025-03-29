@@ -51,13 +51,15 @@ async function saveData(size: number): Promise<number> {
         em.persist(author);
       }
       
+      // Need to flush now to ensure authors are in the database
+      await em.flush();
+      
       // Insert books
       for (const bookData of seedData.books) {
         const book = em.create(Book, {
           id: bookData.id,
           title: bookData.title,
           authorId: bookData.authorId,
-          author: { id: bookData.authorId },
           published: bookData.published ? new Date(bookData.published) : undefined,
           pages: bookData.pages,
           createdAt: new Date(),
@@ -66,12 +68,14 @@ async function saveData(size: number): Promise<number> {
         em.persist(book);
       }
       
+      // Need to flush now to ensure books are in the database
+      await em.flush();
+      
       // Insert reviews
       for (const reviewData of seedData.reviews) {
         const review = em.create(BookReview, {
           id: reviewData.id,
           bookId: reviewData.bookId,
-          book: { id: reviewData.bookId },
           rating: reviewData.rating,
           text: reviewData.text,
           createdAt: new Date(),
@@ -91,13 +95,39 @@ async function saveData(size: number): Promise<number> {
         em.persist(tag);
       }
       
+      // Need to flush now to ensure tags are in the database
+      await em.flush();
+      
       // Insert book-tag relationships
       if (seedData.bookTags.length > 0) {
-        await em.getConnection().execute(
-          `INSERT INTO book_tag ("bookId", "tagId") VALUES ${
-            seedData.bookTags.map((bt: { bookId: number; tagId: number }) => `(${bt.bookId}, ${bt.tagId})`).join(', ')
-          }`
-        );
+        // Filter out duplicate book-tag pairs
+        const uniquePairs = new Set<string>();
+        const uniqueBookTags = seedData.bookTags.filter((bt: { bookId: number; tagId: number }) => {
+          const pairKey = `${bt.bookId}-${bt.tagId}`;
+          if (uniquePairs.has(pairKey)) {
+            return false;
+          }
+          uniquePairs.add(pairKey);
+          return true;
+        });
+
+        // Process in chunks of 100 to avoid query size limits
+        const chunkSize = 100;
+        for (let i = 0; i < uniqueBookTags.length; i += chunkSize) {
+          const chunk = uniqueBookTags.slice(i, i + chunkSize);
+          if (chunk.length > 0) {
+            try {
+              await em.getConnection().execute(
+                `INSERT INTO book_tag ("bookId", "tagId") VALUES ${
+                  chunk.map((bt: { bookId: number; tagId: number }) => `(${bt.bookId}, ${bt.tagId})`).join(', ')
+                }`
+              );
+            } catch (err) {
+              console.error(`Error inserting book-tag chunk ${i} to ${i + chunk.length}:`, err);
+              // Continue with the next chunk
+            }
+          }
+        }
       }
       
       await em.commit();
@@ -111,8 +141,28 @@ async function saveData(size: number): Promise<number> {
 }
 
 async function cleanDatabase(): Promise<void> {
-  await orm.em.getConnection().execute('TRUNCATE book_tag, book_review, book, author, tag RESTART IDENTITY CASCADE');
-  console.log('Database cleaned');
+  try {
+    await orm.em.getConnection().execute('TRUNCATE book_tag, book_review, book, author, tag RESTART IDENTITY CASCADE');
+    console.log('Database cleaned');
+  } catch (error) {
+    console.error('Error cleaning database:', error);
+    // Try a different approach if the first one fails
+    try {
+      await orm.em.getConnection().execute('DELETE FROM book_tag');
+      await orm.em.getConnection().execute('DELETE FROM book_review');
+      await orm.em.getConnection().execute('DELETE FROM book');
+      await orm.em.getConnection().execute('DELETE FROM author');
+      await orm.em.getConnection().execute('DELETE FROM tag');
+      await orm.em.getConnection().execute('ALTER SEQUENCE book_review_id_seq RESTART WITH 1');
+      await orm.em.getConnection().execute('ALTER SEQUENCE book_id_seq RESTART WITH 1');
+      await orm.em.getConnection().execute('ALTER SEQUENCE author_id_seq RESTART WITH 1');
+      await orm.em.getConnection().execute('ALTER SEQUENCE tag_id_seq RESTART WITH 1');
+      console.log('Database cleaned using alternate method');
+    } catch (secondError) {
+      console.error('Error in alternate cleaning method:', secondError);
+      throw secondError;
+    }
+  }
 }
 
 async function runBenchmarks(): Promise<void> {

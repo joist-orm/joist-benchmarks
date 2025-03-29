@@ -18,10 +18,10 @@ export class Author {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ name: 'first_name' })
   firstName!: string;
 
-  @Column()
+  @Column({ name: 'last_name' })
   lastName!: string;
 
   @Column({ unique: true })
@@ -30,10 +30,10 @@ export class Author {
   @OneToMany(() => Book, book => book.author)
   books!: Book[];
 
-  @CreateDateColumn({ name: 'createdAt' })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
-  @UpdateDateColumn({ name: 'updatedAt' })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 }
 
@@ -45,12 +45,12 @@ export class Book {
   @Column()
   title!: string;
 
-  @Column()
+  @Column({ name: 'author_id' })
   @Index()
   authorId!: number;
 
   @ManyToOne(() => Author, author => author.books, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'authorId' })
+  @JoinColumn({ name: 'author_id' })
   author!: Author;
 
   @Column({ nullable: true, type: 'timestamp with time zone' })
@@ -65,15 +65,15 @@ export class Book {
   @ManyToMany(() => Tag, tag => tag.books)
   @JoinTable({
     name: 'book_tag',
-    joinColumn: { name: 'bookId', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'tagId', referencedColumnName: 'id' }
+    joinColumn: { name: 'book_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'tag_id', referencedColumnName: 'id' }
   })
   tags!: Tag[];
 
-  @CreateDateColumn({ name: 'createdAt' })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
-  @UpdateDateColumn({ name: 'updatedAt' })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 }
 
@@ -82,12 +82,12 @@ export class BookReview {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ name: 'book_id' })
   @Index()
   bookId!: number;
 
   @ManyToOne(() => Book, book => book.reviews, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'bookId' })
+  @JoinColumn({ name: 'book_id' })
   book!: Book;
 
   @Column()
@@ -96,10 +96,10 @@ export class BookReview {
   @Column({ nullable: true, type: 'text' })
   text!: string | null;
 
-  @CreateDateColumn({ name: 'createdAt' })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
-  @UpdateDateColumn({ name: 'updatedAt' })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 }
 
@@ -114,18 +114,18 @@ export class Tag {
   @ManyToMany(() => Book, book => book.tags)
   books!: Book[];
 
-  @CreateDateColumn({ name: 'createdAt' })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
-  @UpdateDateColumn({ name: 'updatedAt' })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 }
 
 @Entity('book_tag')
 export class BookTag {
-  @PrimaryColumn()
+  @PrimaryColumn({ name: 'book_id' })
   bookId!: number;
 
-  @PrimaryColumn()
+  @PrimaryColumn({ name: 'tag_id' })
   tagId!: number;
 }

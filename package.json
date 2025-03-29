@@ -3,7 +3,11 @@
   "packageManager": "yarn@4.7.0",
   "private": true,
   "scripts": {
-    "generate-seed-data": "yarn workspace shared-utils generate"
+    "generate-seed-data": "yarn workspace shared-utils generate",
+    "build": "yarn workspaces foreach run build"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0"
   },
   "workspaces": [
     "packages/*"

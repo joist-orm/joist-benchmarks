@@ -4,16 +4,29 @@
   "private": true,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "@source": "./src/index.ts",
+        "default": "./dist/index.js",
+        "types": "./dist/index.d.ts"
+      },
+      "require": {
+        "@source": "./src/index.ts",
+        "default": "./dist/index.js",
+        "types": "./dist/index.d.ts"
+      }
+    }
+  },
   "scripts": {
     "build": "tsc",
-    "generate": "ts-node src/generator.ts"
+    "generate": "node --import=tsx --conditions=@source src/generator.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^8.0.0"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
-    "ts-node": "^10.9.0",
     "typescript": "^5.0.0"
   }
 }

@@ -2,6 +2,9 @@
   "name": "joist-benchmarks",
   "packageManager": "yarn@4.7.0",
   "private": true,
+  "scripts": {
+    "generate-seed-data": "yarn workspace shared-utils generate"
+  },
   "workspaces": [
     "packages/*"
   ]

@@ -4,8 +4,6 @@ export interface Author {
   lastName: string;
   email: string;
   books?: Book[];
-  createdAt?: Date;
-  updatedAt?: Date;
 }
 
 export interface Book {
@@ -17,8 +15,6 @@ export interface Book {
   pages: number;
   reviews?: BookReview[];
   tags?: Tag[];
-  createdAt?: Date;
-  updatedAt?: Date;
 }
 
 export interface BookReview {
@@ -27,16 +23,12 @@ export interface BookReview {
   book?: Book;
   rating: number;
   text?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
 }
 
 export interface Tag {
   id?: number;
   name: string;
   books?: Book[];
-  createdAt?: Date;
-  updatedAt?: Date;
 }
 
 export interface BenchmarkData {
@@ -49,8 +41,6 @@ export interface BenchmarkData {
   totalReviews: number;
   totalTags: number;
 }
-
-export type BenchmarkSize = 1 | 10 | 100 | 1000;
 
 export interface BenchmarkResult {
   orm: 'prisma' | 'typeorm' | 'mikroorm';

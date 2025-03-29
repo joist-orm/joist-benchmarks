@@ -45,7 +45,7 @@ export interface BenchmarkData {
 export interface BenchmarkResult {
   orm: 'prisma' | 'typeorm' | 'mikroorm';
   operation: 'load' | 'save';
-  size: BenchmarkSize;
+  size: number;
   duration: number; // milliseconds
   timestamp: Date;
 }

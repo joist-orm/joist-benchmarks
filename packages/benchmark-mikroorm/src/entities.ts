@@ -8,53 +8,55 @@ import {
   ManyToMany,
   Cascade,
   Unique,
-  Index
+  Index,
+  Type,
+  types
 } from '@mikro-orm/core';
 
 @Entity()
 export class Author {
-  @PrimaryKey()
+  @PrimaryKey({ type: types.integer })
   id!: number;
 
-  @Property()
+  @Property({ type: types.string })
   firstName!: string;
 
-  @Property()
+  @Property({ type: types.string })
   lastName!: string;
 
-  @Property()
+  @Property({ type: types.string })
   @Unique()
   email!: string;
 
   @OneToMany(() => Book, book => book.author, { cascade: [Cascade.REMOVE] })
   books = new Collection<Book>(this);
 
-  @Property({ defaultRaw: 'now()' })
+  @Property({ type: types.datetime, defaultRaw: 'now()' })
   createdAt = new Date();
 
-  @Property({ defaultRaw: 'now()', onUpdate: () => new Date() })
+  @Property({ type: types.datetime, defaultRaw: 'now()', onUpdate: () => new Date() })
   updatedAt = new Date();
 }
 
 @Entity()
 export class Book {
-  @PrimaryKey()
+  @PrimaryKey({ type: types.integer })
   id!: number;
 
-  @Property()
+  @Property({ type: types.string })
   title!: string;
 
-  @Property()
+  @Property({ type: types.integer })
   @Index()
   authorId!: number;
 
   @ManyToOne(() => Author, { joinColumn: 'authorId', fieldName: 'authorId', nullable: true })
   author?: Author;
 
-  @Property({ nullable: true })
+  @Property({ type: types.datetime, nullable: true })
   published?: Date;
 
-  @Property({ default: 0 })
+  @Property({ type: types.integer, default: 0 })
   pages = 0;
 
   @OneToMany(() => BookReview, review => review.book, { cascade: [Cascade.REMOVE] })
@@ -63,53 +65,53 @@ export class Book {
   @ManyToMany({ entity: () => Tag, pivotTable: 'book_tag', joinColumn: 'bookId', inverseJoinColumn: 'tagId' })
   tags = new Collection<Tag>(this);
 
-  @Property({ defaultRaw: 'now()' })
+  @Property({ type: types.datetime, defaultRaw: 'now()' })
   createdAt = new Date();
 
-  @Property({ defaultRaw: 'now()', onUpdate: () => new Date() })
+  @Property({ type: types.datetime, defaultRaw: 'now()', onUpdate: () => new Date() })
   updatedAt = new Date();
 }
 
 @Entity({ tableName: 'book_review' })
 export class BookReview {
-  @PrimaryKey()
+  @PrimaryKey({ type: types.integer })
   id!: number;
 
-  @Property()
+  @Property({ type: types.integer })
   @Index()
   bookId!: number;
 
   @ManyToOne(() => Book, { joinColumn: 'bookId', fieldName: 'bookId', nullable: true })
   book?: Book;
 
-  @Property()
+  @Property({ type: types.integer })
   rating!: number;
 
-  @Property({ nullable: true })
+  @Property({ type: types.text, nullable: true })
   text?: string;
 
-  @Property({ defaultRaw: 'now()' })
+  @Property({ type: types.datetime, defaultRaw: 'now()' })
   createdAt = new Date();
 
-  @Property({ defaultRaw: 'now()', onUpdate: () => new Date() })
+  @Property({ type: types.datetime, defaultRaw: 'now()', onUpdate: () => new Date() })
   updatedAt = new Date();
 }
 
 @Entity()
 export class Tag {
-  @PrimaryKey()
+  @PrimaryKey({ type: types.integer })
   id!: number;
 
-  @Property()
+  @Property({ type: types.string })
   @Unique()
   name!: string;
 
   @ManyToMany(() => Book, book => book.tags)
   books = new Collection<Book>(this);
 
-  @Property({ defaultRaw: 'now()' })
+  @Property({ type: types.datetime, defaultRaw: 'now()' })
   createdAt = new Date();
 
-  @Property({ defaultRaw: 'now()', onUpdate: () => new Date() })
+  @Property({ type: types.datetime, defaultRaw: 'now()', onUpdate: () => new Date() })
   updatedAt = new Date();
 }

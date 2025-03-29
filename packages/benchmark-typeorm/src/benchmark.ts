@@ -92,7 +92,7 @@ async function saveData(size: number): Promise<number> {
       if (seedData.bookTags.length > 0) {
         await queryRunner.query(
           `INSERT INTO book_tag ("bookId", "tagId") VALUES ${
-            seedData.bookTags.map(bt => `(${bt.bookId}, ${bt.tagId})`).join(', ')
+            seedData.bookTags.map((bt: { bookId: number; tagId: number }) => `(${bt.bookId}, ${bt.tagId})`).join(', ')
           }`
         );
       }

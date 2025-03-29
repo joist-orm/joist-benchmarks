@@ -44,7 +44,9 @@ async function saveData(size: number): Promise<number> {
           id: authorData.id,
           firstName: authorData.firstName,
           lastName: authorData.lastName,
-          email: authorData.email
+          email: authorData.email,
+          createdAt: new Date(),
+          updatedAt: new Date()
         });
         em.persist(author);
       }
@@ -55,8 +57,11 @@ async function saveData(size: number): Promise<number> {
           id: bookData.id,
           title: bookData.title,
           authorId: bookData.authorId,
+          author: { id: bookData.authorId },
           published: bookData.published ? new Date(bookData.published) : undefined,
-          pages: bookData.pages
+          pages: bookData.pages,
+          createdAt: new Date(),
+          updatedAt: new Date()
         });
         em.persist(book);
       }
@@ -66,8 +71,11 @@ async function saveData(size: number): Promise<number> {
         const review = em.create(BookReview, {
           id: reviewData.id,
           bookId: reviewData.bookId,
+          book: { id: reviewData.bookId },
           rating: reviewData.rating,
-          text: reviewData.text
+          text: reviewData.text,
+          createdAt: new Date(),
+          updatedAt: new Date()
         });
         em.persist(review);
       }
@@ -76,7 +84,9 @@ async function saveData(size: number): Promise<number> {
       for (const tagData of seedData.tags) {
         const tag = em.create(Tag, {
           id: tagData.id,
-          name: tagData.name
+          name: tagData.name,
+          createdAt: new Date(),
+          updatedAt: new Date()
         });
         em.persist(tag);
       }
@@ -85,7 +95,7 @@ async function saveData(size: number): Promise<number> {
       if (seedData.bookTags.length > 0) {
         await em.getConnection().execute(
           `INSERT INTO book_tag ("bookId", "tagId") VALUES ${
-            seedData.bookTags.map(bt => `(${bt.bookId}, ${bt.tagId})`).join(', ')
+            seedData.bookTags.map((bt: { bookId: number; tagId: number }) => `(${bt.bookId}, ${bt.tagId})`).join(', ')
           }`
         );
       }

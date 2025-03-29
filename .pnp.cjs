@@ -665,6 +665,7 @@ const RAW_RUNTIME_STATE =
           ["benchmark-typeorm", "workspace:packages/benchmark-typeorm"],\
           ["@types/node", "npm:18.19.84"],\
           ["pg", "virtual:2733fe344fa4ea45faa331afae156aca32b2acb2845a55ab68fafe8cfd273000ed107cb73389a452cde906a7d2ac5ecf3e91f5f5fa28ef3cc720ee8223824b8b#npm:8.14.1"],\
+          ["reflect-metadata", "npm:0.1.14"],\
           ["shared-utils", "workspace:packages/shared-utils"],\
           ["ts-node", "virtual:5684e10df0b0d4ceda81e7a49e1dce0cdeefe64f7cf73f6b65bae6b36056a2c8afe7954893d9e8e0af41d3fa80eeeeb8dbad164e06bfc993741bc538f79f2b2b#npm:10.9.2"],\
           ["typeorm", "virtual:6ef021e1cbb746d7f8898d0032f0a880138af7a6532bdadc582d5c3be3c198d2625febb0e8beef2783ceadde10b4bd7add1e69a6f82e66bbbe4d67d7fa8b53d8#npm:0.3.21"],\
@@ -1976,6 +1977,13 @@ const RAW_RUNTIME_STATE =
           ["reflect-metadata", "npm:0.1.13"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:0.1.14", {\
+        "packageLocation": "../../.yarn/berry/cache/reflect-metadata-npm-0.1.14-b105eed5b2-10c0.zip/node_modules/reflect-metadata/",\
+        "packageDependencies": [\
+          ["reflect-metadata", "npm:0.1.14"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["require-directory", [\
@@ -2409,7 +2417,7 @@ const RAW_RUNTIME_STATE =
           ["pg-native", null],\
           ["pg-query-stream", null],\
           ["redis", null],\
-          ["reflect-metadata", null],\
+          ["reflect-metadata", "npm:0.1.14"],\
           ["sha.js", "npm:2.4.11"],\
           ["sql-highlight", "npm:6.0.0"],\
           ["sql.js", null],\

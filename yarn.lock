@@ -487,6 +487,7 @@ __metadata:
   dependencies:
     "@types/node": "npm:^18.0.0"
     pg: "npm:^8.0.0"
+    reflect-metadata: "npm:^0.1.13"
     shared-utils: "workspace:^"
     ts-node: "npm:^10.9.0"
     typeorm: "npm:^0.3.0"
@@ -1587,6 +1588,13 @@ __metadata:
   version: 0.1.13
   resolution: "reflect-metadata@npm:0.1.13"
   checksum: 10c0/728bff0b376b05639fd11ed80c648b61f7fe653c5b506d7ca118e58b6752b9b00810fe0c86227ecf02bd88da6251ab3eb19fd403aaf2e9ff5ef36a2fda643026
+  languageName: node
+  linkType: hard
+
+"reflect-metadata@npm:^0.1.13":
+  version: 0.1.14
+  resolution: "reflect-metadata@npm:0.1.14"
+  checksum: 10c0/3a6190c7f6cb224f26a012d11f9e329360c01c1945e2cbefea23976a8bacf9db6b794aeb5bf18adcb673c448a234fbc06fc41853c00a6c206b30f0777ecf019e
   languageName: node
   linkType: hard
 

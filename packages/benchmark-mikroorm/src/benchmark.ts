@@ -1,7 +1,6 @@
 import { MikroORM } from "@mikro-orm/core";
 import { Author, Book, BookReview, Tag } from "./entities";
-import { benchmark, measure, getDataPath } from "seed-data";
-import fs from "fs";
+import { benchmark, measure, getData } from "seed-data";
 import { config } from "./mikro-orm.config";
 
 let orm: MikroORM;
@@ -23,8 +22,7 @@ async function loadData(size: number): Promise<number> {
 
 async function saveData(size: number): Promise<number> {
   // Load the generated seed data
-  const seedFile = getDataPath(size);
-  const seedData = JSON.parse(fs.readFileSync(seedFile, "utf8"));
+  const seedData = getData(size);
 
   return measure(async () => {
     // Start a transaction

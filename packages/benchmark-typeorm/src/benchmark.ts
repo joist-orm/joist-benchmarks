@@ -1,7 +1,6 @@
 import { AppDataSource } from "./db";
 import { Author, Book, BookReview, Tag } from "./entities";
-import { benchmark, measure, getDataPath } from "seed-data";
-import fs from "fs";
+import { benchmark, measure, getData } from "seed-data";
 
 async function loadData(size: number): Promise<number> {
   return measure(async () => {
@@ -26,12 +25,7 @@ async function loadData(size: number): Promise<number> {
 
 async function saveData(size: number): Promise<number> {
   // Load the generated seed data
-  const seedFile = getDataPath(size);
-  if (!fs.existsSync(seedFile)) {
-    throw new Error(`Seed file not found: ${seedFile}`);
-  }
-
-  const seedData = JSON.parse(fs.readFileSync(seedFile, "utf8"));
+  const seedData = getData(size);
 
   return measure(async () => {
     // Use a query runner with transaction

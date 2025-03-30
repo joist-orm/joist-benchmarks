@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { benchmark, measure, getDataPath } from "seed-data";
-import fs from "fs";
+import { benchmark, measure, getData } from "seed-data";
 
 const prisma = new PrismaClient();
 
@@ -27,13 +26,7 @@ async function loadData(size: number): Promise<number> {
 }
 
 async function saveData(size: number): Promise<number> {
-  // Load the generated seed data
-  const seedFile = getDataPath(size);
-  if (!fs.existsSync(seedFile)) {
-    throw new Error(`Seed file not found: ${seedFile}`);
-  }
-
-  const seedData = JSON.parse(fs.readFileSync(seedFile, "utf8"));
+  const seedData = getData(size);
 
   return measure(async () => {
     // Use a transaction for atomicity

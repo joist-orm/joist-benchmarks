@@ -1,7 +1,6 @@
 import { faker } from "@faker-js/faker";
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 import { Author, Book, BookReview, Tag } from "./interfaces";
 
 export class DataGenerator {
@@ -139,11 +138,7 @@ function createSeedData(size: number): void {
 
   const data = generator.generateDataSet(size, booksPerAuthor, reviewsPerBook, tagsPerBook);
 
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
-
-  const outputDir = path.resolve(__dirname, "../../data");
-  fs.mkdirSync(outputDir, { recursive: true });
+  const outputDir = path.resolve(__dirname, "../");
   fs.writeFileSync(path.join(outputDir, `seed-${size}.json`), JSON.stringify(data, null, 2));
 
   console.log(`Generated seed data for size ${size} with:`);
@@ -158,4 +153,4 @@ function createSeedData(size: number): void {
 const sizes = [1, 10, 100, 1000];
 sizes.forEach((size) => createSeedData(size));
 
-console.trace("All seed data generated successfully!");
+console.log("All seed data generated successfully!");

@@ -1,5 +1,6 @@
-import { fileURLToPath } from "url";
-import { dirname, resolve } from "path";
+import fs from "fs";
+import { resolve } from "path";
+import { Author, Book, BookReview, Tag } from "./interfaces";
 
 export * from "./interfaces";
 
@@ -11,13 +12,18 @@ export const DB_CONFIG = {
   database: "benchmark",
 };
 
-// ESM equivalent of __dirname
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-export const getDataPath = (size: number): string => {
-  return resolve(__dirname, `../../data/seed-${size}.json`);
+type SeedData = {
+  authors: Author[];
+  books: Book[];
+  reviews: BookReview[];
+  tags: Tag[];
+  bookTags: { bookId: number; tagId: number }[];
 };
+
+export function getData(size: number): SeedData {
+  const seedFile = resolve(__dirname, `./seed-${size}.json`);
+  return JSON.parse(fs.readFileSync(seedFile, "utf8"));
+}
 
 export const measure = async (fn: () => Promise<void>): Promise<number> => {
   const start = Date.now();

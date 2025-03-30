@@ -1,8 +1,8 @@
-import { MikroORM } from '@mikro-orm/core';
-import { Author, Book, BookReview, Tag } from './entities';
-import { benchmark, measure, getDataPath } from 'seed-data';
-import fs from 'fs';
-import { config } from './mikro-orm.config';
+import { MikroORM } from "@mikro-orm/core";
+import { Author, Book, BookReview, Tag } from "./entities";
+import { benchmark, measure, getDataPath } from "seed-data";
+import fs from "fs";
+import { config } from "./mikro-orm.config";
 
 let orm: MikroORM;
 
@@ -13,9 +13,9 @@ async function loadData(size: number): Promise<number> {
       {},
       {
         limit: size,
-        populate: ['books', 'books.reviews', 'books.tags'],
-        orderBy: { id: 'ASC' }
-      }
+        populate: ["books", "books.reviews", "books.tags"],
+        orderBy: { id: "ASC" },
+      },
     );
     console.log(`Loaded ${authors.length} authors with their books, reviews, and tags`);
   });
@@ -24,7 +24,7 @@ async function loadData(size: number): Promise<number> {
 async function saveData(size: number): Promise<number> {
   // Load the generated seed data
   const seedFile = getDataPath(size);
-  const seedData = JSON.parse(fs.readFileSync(seedFile, 'utf8'));
+  const seedData = JSON.parse(fs.readFileSync(seedFile, "utf8"));
 
   return measure(async () => {
     // Start a transaction
@@ -40,7 +40,7 @@ async function saveData(size: number): Promise<number> {
           lastName: authorData.lastName,
           email: authorData.email,
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         });
       }
 
@@ -54,7 +54,7 @@ async function saveData(size: number): Promise<number> {
           published: bookData.published ? new Date(bookData.published) : undefined,
           pages: bookData.pages,
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         });
       }
 
@@ -67,7 +67,7 @@ async function saveData(size: number): Promise<number> {
           rating: reviewData.rating,
           text: reviewData.text,
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         });
       }
 
@@ -77,7 +77,7 @@ async function saveData(size: number): Promise<number> {
           id: tagData.id,
           name: tagData.name,
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         });
       }
 
@@ -103,11 +103,13 @@ async function saveData(size: number): Promise<number> {
           const chunk = uniqueBookTags.slice(i, i + chunkSize);
           if (chunk.length > 0) {
             try {
-              await em.getConnection().execute(
-                `INSERT INTO book_tag (book_id, tag_id) VALUES ${
-                  chunk.map((bt: { bookId: number; tagId: number }) => `(${bt.bookId}, ${bt.tagId})`).join(', ')
-                }`
-              );
+              await em
+                .getConnection()
+                .execute(
+                  `INSERT INTO book_tag (book_id, tag_id) VALUES ${chunk
+                    .map((bt: { bookId: number; tagId: number }) => `(${bt.bookId}, ${bt.tagId})`)
+                    .join(", ")}`,
+                );
             } catch (err) {
               console.error(`Error inserting book-tag chunk ${i} to ${i + chunk.length}:`, err);
               // Continue with the next chunk
@@ -126,14 +128,14 @@ async function saveData(size: number): Promise<number> {
 }
 
 async function cleanDatabase(): Promise<void> {
-  await orm.em.getConnection().execute('TRUNCATE book_tag, book_review, book, author, tag RESTART IDENTITY CASCADE');
-  console.log('Database cleaned');
+  await orm.em.getConnection().execute("TRUNCATE book_tag, book_review, book, author, tag RESTART IDENTITY CASCADE");
+  console.log("Database cleaned");
 }
 
 async function runBenchmarks(): Promise<void> {
   try {
     orm = await MikroORM.init(config);
-    console.log('Database connection initialized');
+    console.log("Database connection initialized");
 
     const sizes = [1, 10, 100, 1000];
 
@@ -141,7 +143,7 @@ async function runBenchmarks(): Promise<void> {
     await cleanDatabase();
 
     // Save data benchmarks
-    await benchmark('MikroORM - Save Data', sizes, saveData);
+    await benchmark("MikroORM - Save Data", sizes, saveData);
 
     // Load data benchmarks
     // await benchmark('MikroORM - Load Data', sizes, loadData);

@@ -10,6 +10,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "customConditions": ["@source"],
-    "noEmit": true,
+    "noEmit": true
   }
 }

@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { Author, Book, BookReview, Tag,  } from "./interfaces";
+import { Author, Book, BookReview, Tag } from "./interfaces";
 
 export class DataGenerator {
   private authorIds: number[] = [];
@@ -67,10 +67,10 @@ export class DataGenerator {
       // Make sure tag names are unique
       let tagName: string;
       do {
-        tagName = faker.word.sample() + '-' + faker.number.int(1000);
+        tagName = faker.word.sample() + "-" + faker.number.int(1000);
       } while (usedNames.has(tagName));
       usedNames.add(tagName);
-      tags.push({id: tagId, name: tagName,});
+      tags.push({ id: tagId, name: tagName });
     }
     return tags;
   }
@@ -91,7 +91,7 @@ export class DataGenerator {
     authorCount: number,
     booksPerAuthor: number,
     reviewsPerBook: number,
-    tagsPerBook: number
+    tagsPerBook: number,
   ): {
     authors: Author[];
     books: Book[];
@@ -124,7 +124,7 @@ export class DataGenerator {
     const bookTags = this.assignTagsToBooks(
       books.map(b => b.id!).filter(Boolean),
       tags.map(t => t.id!).filter(Boolean),
-      tagsPerBook
+      tagsPerBook,
     );
 
     return { authors, books, reviews, tags, bookTags };
@@ -142,12 +142,9 @@ function createSeedData(size: number): void {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
 
-  const outputDir = path.resolve(__dirname, '../../data');
+  const outputDir = path.resolve(__dirname, "../../data");
   fs.mkdirSync(outputDir, { recursive: true });
-  fs.writeFileSync(
-    path.join(outputDir, `seed-${size}.json`),
-    JSON.stringify(data, null, 2)
-  );
+  fs.writeFileSync(path.join(outputDir, `seed-${size}.json`), JSON.stringify(data, null, 2));
 
   console.log(`Generated seed data for size ${size} with:`);
   console.log(`- ${data.authors.length} authors`);
@@ -161,4 +158,4 @@ function createSeedData(size: number): void {
 const sizes = [1, 10, 100, 1000];
 sizes.forEach(size => createSeedData(size));
 
-console.trace('All seed data generated successfully!');
+console.trace("All seed data generated successfully!");

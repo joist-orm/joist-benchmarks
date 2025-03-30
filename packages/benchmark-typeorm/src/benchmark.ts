@@ -1,7 +1,7 @@
-import { AppDataSource } from './db';
-import { Author, Book, BookReview, Tag } from './entities';
-import { benchmark, measure, getDataPath } from 'seed-data';
-import fs from 'fs';
+import { AppDataSource } from "./db";
+import { Author, Book, BookReview, Tag } from "./entities";
+import { benchmark, measure, getDataPath } from "seed-data";
+import fs from "fs";
 
 async function loadData(size: number): Promise<number> {
   return measure(async () => {
@@ -12,12 +12,12 @@ async function loadData(size: number): Promise<number> {
       relations: {
         books: {
           reviews: true,
-          tags: true
-        }
+          tags: true,
+        },
       },
       order: {
-        id: 'ASC'
-      }
+        id: "ASC",
+      },
     });
 
     console.log(`Loaded ${authors.length} authors with their books, reviews, and tags`);
@@ -31,7 +31,7 @@ async function saveData(size: number): Promise<number> {
     throw new Error(`Seed file not found: ${seedFile}`);
   }
 
-  const seedData = JSON.parse(fs.readFileSync(seedFile, 'utf8'));
+  const seedData = JSON.parse(fs.readFileSync(seedFile, "utf8"));
 
   return measure(async () => {
     // Use a query runner with transaction
@@ -51,7 +51,7 @@ async function saveData(size: number): Promise<number> {
           id: authorData.id,
           firstName: authorData.firstName,
           lastName: authorData.lastName,
-          email: authorData.email
+          email: authorData.email,
         });
         await authorRepository.save(author);
       }
@@ -63,7 +63,7 @@ async function saveData(size: number): Promise<number> {
           title: bookData.title,
           authorId: bookData.authorId,
           published: bookData.published ? new Date(bookData.published) : null,
-          pages: bookData.pages
+          pages: bookData.pages,
         });
         await bookRepository.save(book);
       }
@@ -74,7 +74,7 @@ async function saveData(size: number): Promise<number> {
           id: reviewData.id,
           bookId: reviewData.bookId,
           rating: reviewData.rating,
-          text: reviewData.text
+          text: reviewData.text,
         });
         await reviewRepository.save(review);
       }
@@ -83,7 +83,7 @@ async function saveData(size: number): Promise<number> {
       for (const tagData of seedData.tags) {
         const tag = tagRepository.create({
           id: tagData.id,
-          name: tagData.name
+          name: tagData.name,
         });
         await tagRepository.save(tag);
       }
@@ -108,9 +108,9 @@ async function saveData(size: number): Promise<number> {
           if (chunk.length > 0) {
             try {
               await queryRunner.query(
-                `INSERT INTO book_tag ("bookId", "tagId") VALUES ${
-                  chunk.map((bt: { bookId: number; tagId: number }) => `(${bt.bookId}, ${bt.tagId})`).join(', ')
-                }`
+                `INSERT INTO book_tag ("bookId", "tagId") VALUES ${chunk
+                  .map((bt: { bookId: number; tagId: number }) => `(${bt.bookId}, ${bt.tagId})`)
+                  .join(", ")}`,
               );
             } catch (err) {
               console.error(`Error inserting book-tag chunk ${i} to ${i + chunk.length}:`, err);
@@ -133,24 +133,24 @@ async function saveData(size: number): Promise<number> {
 
 async function cleanDatabase(): Promise<void> {
   try {
-    await AppDataSource.query('TRUNCATE book_tag, book_review, book, author, tag RESTART IDENTITY CASCADE');
-    console.log('Database cleaned');
+    await AppDataSource.query("TRUNCATE book_tag, book_review, book, author, tag RESTART IDENTITY CASCADE");
+    console.log("Database cleaned");
   } catch (error) {
-    console.error('Error cleaning database:', error);
+    console.error("Error cleaning database:", error);
     // Try a different approach if the first one fails
     try {
-      await AppDataSource.query('DELETE FROM book_tag');
-      await AppDataSource.query('DELETE FROM book_review');
-      await AppDataSource.query('DELETE FROM book');
-      await AppDataSource.query('DELETE FROM author');
-      await AppDataSource.query('DELETE FROM tag');
-      await AppDataSource.query('ALTER SEQUENCE book_review_id_seq RESTART WITH 1');
-      await AppDataSource.query('ALTER SEQUENCE book_id_seq RESTART WITH 1');
-      await AppDataSource.query('ALTER SEQUENCE author_id_seq RESTART WITH 1');
-      await AppDataSource.query('ALTER SEQUENCE tag_id_seq RESTART WITH 1');
-      console.log('Database cleaned using alternate method');
+      await AppDataSource.query("DELETE FROM book_tag");
+      await AppDataSource.query("DELETE FROM book_review");
+      await AppDataSource.query("DELETE FROM book");
+      await AppDataSource.query("DELETE FROM author");
+      await AppDataSource.query("DELETE FROM tag");
+      await AppDataSource.query("ALTER SEQUENCE book_review_id_seq RESTART WITH 1");
+      await AppDataSource.query("ALTER SEQUENCE book_id_seq RESTART WITH 1");
+      await AppDataSource.query("ALTER SEQUENCE author_id_seq RESTART WITH 1");
+      await AppDataSource.query("ALTER SEQUENCE tag_id_seq RESTART WITH 1");
+      console.log("Database cleaned using alternate method");
     } catch (secondError) {
-      console.error('Error in alternate cleaning method:', secondError);
+      console.error("Error in alternate cleaning method:", secondError);
       throw secondError;
     }
   }
@@ -159,7 +159,7 @@ async function cleanDatabase(): Promise<void> {
 async function runBenchmarks(): Promise<void> {
   try {
     await AppDataSource.initialize();
-    console.log('Database connection initialized');
+    console.log("Database connection initialized");
 
     const sizes = [1, 10, 100, 1000];
 
@@ -167,13 +167,12 @@ async function runBenchmarks(): Promise<void> {
     await cleanDatabase();
 
     // Save data benchmarks
-    await benchmark('TypeORM - Save Data', sizes, saveData);
+    await benchmark("TypeORM - Save Data", sizes, saveData);
 
     // Load data benchmarks
-    await benchmark('TypeORM - Load Data', sizes, loadData);
-
+    await benchmark("TypeORM - Load Data", sizes, loadData);
   } catch (error) {
-    console.error('Benchmark error:', error);
+    console.error("Benchmark error:", error);
   } finally {
     await AppDataSource.destroy();
   }

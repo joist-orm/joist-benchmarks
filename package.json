@@ -9,9 +9,11 @@
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",
     "db:connect": "docker exec -it joist-benchmarks-db-1 psql -U postgres -d benchmark",
-    "db:ps": "docker ps | grep postgres"
+    "db:ps": "docker ps | grep postgres",
+    "format": "prettier --write \"**/*.{ts,js,json,md,yml}\""
   },
   "devDependencies": {
+    "prettier": "^3.5.3",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
   },

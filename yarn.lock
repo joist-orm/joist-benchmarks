@@ -1179,6 +1179,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "joist-benchmarks@workspace:."
   dependencies:
+    prettier: "npm:^3.5.3"
     tsx: "npm:^4.19.3"
     typescript: "npm:^5.8.2"
   languageName: unknown
@@ -1635,6 +1636,15 @@ __metadata:
   dependencies:
     xtend: "npm:^4.0.0"
   checksum: 10c0/c1734c3cb79e7f22579af0b268a463b1fa1d084e742a02a7a290c4f041e349456f3bee3b4ee0bb3f226828597f7b76deb615c1b857db9a742c45520100456272
+  languageName: node
+  linkType: hard
+
+"prettier@npm:^3.5.3":
+  version: 3.5.3
+  resolution: "prettier@npm:3.5.3"
+  bin:
+    prettier: bin/prettier.cjs
+  checksum: 10c0/3880cb90b9dc0635819ab52ff571518c35bd7f15a6e80a2054c05dbc8a3aa6e74f135519e91197de63705bcb38388ded7e7230e2178432a1468005406238b877
   languageName: node
   linkType: hard
 

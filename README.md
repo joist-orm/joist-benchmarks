@@ -29,6 +29,7 @@ The benchmark uses a simple schema with four entities:
 Each benchmark suite tests:
 
 1. Loading data:
+
    - Single author with associated books and reviews
    - 10 authors with associated books and reviews
    - 100 authors with associated books and reviews

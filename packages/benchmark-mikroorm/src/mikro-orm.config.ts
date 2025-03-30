@@ -1,6 +1,6 @@
-import { defineConfig, PostgreSqlDriver } from '@mikro-orm/postgresql';
-import { DB_CONFIG } from 'seed-data';
-import { Author, Book, BookReview, Tag } from './entities';
+import { defineConfig, PostgreSqlDriver } from "@mikro-orm/postgresql";
+import { DB_CONFIG } from "seed-data";
+import { Author, Book, BookReview, Tag } from "./entities";
 
 export const config = defineConfig({
   entities: [Author, Book, BookReview, Tag],

@@ -26,8 +26,8 @@ export interface Tag {
 }
 
 export interface BenchmarkResult {
-  orm: 'prisma' | 'typeorm' | 'mikroorm';
-  operation: 'load' | 'save';
+  orm: "prisma" | "typeorm" | "mikroorm";
+  operation: "load" | "save";
   size: number;
   duration: number; // milliseconds
   timestamp: Date;

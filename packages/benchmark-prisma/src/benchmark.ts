@@ -1,6 +1,6 @@
-import { PrismaClient } from '@prisma/client';
-import { benchmark, measure, getDataPath } from 'seed-data';
-import fs from 'fs';
+import { PrismaClient } from "@prisma/client";
+import { benchmark, measure, getDataPath } from "seed-data";
+import fs from "fs";
 
 const prisma = new PrismaClient();
 
@@ -14,12 +14,12 @@ async function loadData(size: number): Promise<number> {
             reviews: true,
             tags: {
               include: {
-                tag: true
-              }
-            }
-          }
-        }
-      }
+                tag: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     console.log(`Loaded ${authors.length} authors with their books, reviews, and tags`);
@@ -33,7 +33,7 @@ async function saveData(size: number): Promise<number> {
     throw new Error(`Seed file not found: ${seedFile}`);
   }
 
-  const seedData = JSON.parse(fs.readFileSync(seedFile, 'utf8'));
+  const seedData = JSON.parse(fs.readFileSync(seedFile, "utf8"));
 
   return measure(async () => {
     // Use a transaction for atomicity
@@ -47,8 +47,8 @@ async function saveData(size: number): Promise<number> {
             id,
             firstName,
             lastName,
-            email
-          }
+            email,
+          },
         });
       }
 
@@ -62,8 +62,8 @@ async function saveData(size: number): Promise<number> {
             title,
             authorId,
             published: published ? new Date(published) : null,
-            pages
-          }
+            pages,
+          },
         });
       }
 
@@ -76,8 +76,8 @@ async function saveData(size: number): Promise<number> {
             id,
             bookId,
             rating,
-            text
-          }
+            text,
+          },
         });
       }
 
@@ -88,8 +88,8 @@ async function saveData(size: number): Promise<number> {
         await tx.tag.create({
           data: {
             id,
-            name
-          }
+            name,
+          },
         });
       }
 
@@ -98,8 +98,8 @@ async function saveData(size: number): Promise<number> {
         await tx.bookTag.create({
           data: {
             bookId,
-            tagId
-          }
+            tagId,
+          },
         });
       }
     });
@@ -114,9 +114,9 @@ async function cleanDatabase(): Promise<void> {
     prisma.bookReview.deleteMany(),
     prisma.book.deleteMany(),
     prisma.author.deleteMany(),
-    prisma.tag.deleteMany()
+    prisma.tag.deleteMany(),
   ]);
-  console.log('Database cleaned');
+  console.log("Database cleaned");
 }
 
 async function runBenchmarks(): Promise<void> {
@@ -127,13 +127,12 @@ async function runBenchmarks(): Promise<void> {
     await cleanDatabase();
 
     // Save data benchmarks
-    await benchmark('Prisma - Save Data', sizes, saveData);
+    await benchmark("Prisma - Save Data", sizes, saveData);
 
     // Load data benchmarks
-    await benchmark('Prisma - Load Data', sizes, loadData);
-
+    await benchmark("Prisma - Load Data", sizes, loadData);
   } catch (error) {
-    console.error('Benchmark error:', error);
+    console.error("Benchmark error:", error);
   } finally {
     await prisma.$disconnect();
   }

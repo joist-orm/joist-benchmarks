@@ -70,8 +70,7 @@ export class DataGenerator {
         tagName = faker.word.sample() + '-' + faker.number.int(1000);
       } while (usedNames.has(tagName));
       usedNames.add(tagName);
-      tags.push({id: tagId, name: tagName,
-      });
+      tags.push({id: tagId, name: tagName,});
     }
     return tags;
   }
@@ -142,7 +141,7 @@ function createSeedData(size: number): void {
 
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
-  
+
   const outputDir = path.resolve(__dirname, '../../data');
   fs.mkdirSync(outputDir, { recursive: true });
   fs.writeFileSync(

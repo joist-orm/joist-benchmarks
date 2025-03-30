@@ -2,8 +2,7 @@ import { defineConfig, PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { DB_CONFIG } from 'shared-utils';
 import { Author, Book, BookReview, Tag } from './entities';
 
-
-const config = defineConfig({
+export const config = defineConfig({
   entities: [Author, Book, BookReview, Tag],
   dbName: DB_CONFIG.database,
   host: DB_CONFIG.host,
@@ -13,5 +12,3 @@ const config = defineConfig({
   driver: PostgreSqlDriver,
   debug: false,
 });
-
-export default config;

@@ -1,45 +1,28 @@
 export interface Author {
-  id?: number;
+  id: number;
   firstName: string;
   lastName: string;
   email: string;
-  books?: Book[];
 }
 
 export interface Book {
-  id?: number;
+  id: number;
   title: string;
-  authorId?: number;
-  author?: Author;
-  published?: Date;
+  authorId: number;
+  published: Date;
   pages: number;
-  reviews?: BookReview[];
-  tags?: Tag[];
 }
 
 export interface BookReview {
-  id?: number;
-  bookId?: number;
-  book?: Book;
+  id: number;
+  bookId: number;
   rating: number;
-  text?: string;
+  text: string;
 }
 
 export interface Tag {
-  id?: number;
+  id: number;
   name: string;
-  books?: Book[];
-}
-
-export interface BenchmarkData {
-  authorCount: number;
-  booksPerAuthor: number;
-  reviewsPerBook: number;
-  tagsPerBook: number;
-  totalAuthors: number;
-  totalBooks: number;
-  totalReviews: number;
-  totalTags: number;
 }
 
 export interface BenchmarkResult {

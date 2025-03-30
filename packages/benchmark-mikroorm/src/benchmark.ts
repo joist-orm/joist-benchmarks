@@ -2,7 +2,7 @@ import { MikroORM } from '@mikro-orm/core';
 import { Author, Book, BookReview, Tag } from './entities';
 import { benchmark, measure, getDataPath } from 'shared-utils';
 import fs from 'fs';
-import config from './mikro-orm.config';
+import { config } from './mikro-orm.config';
 
 let orm: MikroORM;
 

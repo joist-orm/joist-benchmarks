@@ -8,8 +8,6 @@ import {
   ManyToMany,
   Cascade,
   Unique,
-  Index,
-  Type,
   types
 } from '@mikro-orm/core';
 
@@ -48,12 +46,6 @@ export class Book {
 
   @ManyToOne(() => Author, { joinColumn: 'author_id', nullable: true })
   author?: Author;
-  
-  // Virtual property that maps to the same column as the relation
-  @Property({ type: types.integer, persist: false })
-  get authorId(): number {
-    return this.author?.id || 0;
-  }
 
   @Property({ type: types.datetime, nullable: true })
   published?: Date;
@@ -81,12 +73,6 @@ export class BookReview {
 
   @ManyToOne(() => Book, { joinColumn: 'book_id', nullable: true })
   book?: Book;
-  
-  // Virtual property that maps to the same column as the relation
-  @Property({ type: types.integer, persist: false })
-  get bookId(): number {
-    return this.book?.id || 0;
-  }
 
   @Property({ type: types.integer })
   rating!: number;

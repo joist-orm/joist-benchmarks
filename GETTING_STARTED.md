@@ -57,7 +57,7 @@ yarn mikroorm:bench
 
 ## Project Structure
 
-- `packages/shared-utils`: Common utilities and interfaces
+- `packages/seed-data`: Common utilities and interfaces
 - `packages/benchmark-prisma`: Prisma implementation
 - `packages/benchmark-typeorm`: TypeORM implementation
 - `packages/benchmark-mikroorm`: MikroORM implementation

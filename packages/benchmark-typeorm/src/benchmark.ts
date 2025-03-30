@@ -1,12 +1,12 @@
 import { AppDataSource } from './db';
 import { Author, Book, BookReview, Tag } from './entities';
-import { benchmark, measure, getDataPath } from 'shared-utils';
+import { benchmark, measure, getDataPath } from 'seed-data';
 import fs from 'fs';
 
 async function loadData(size: number): Promise<number> {
   return measure(async () => {
     const authorRepository = AppDataSource.getRepository(Author);
-    
+
     const authors = await authorRepository.find({
       take: size,
       relations: {
@@ -19,7 +19,7 @@ async function loadData(size: number): Promise<number> {
         id: 'ASC'
       }
     });
-    
+
     console.log(`Loaded ${authors.length} authors with their books, reviews, and tags`);
   });
 }
@@ -30,21 +30,21 @@ async function saveData(size: number): Promise<number> {
   if (!fs.existsSync(seedFile)) {
     throw new Error(`Seed file not found: ${seedFile}`);
   }
-  
+
   const seedData = JSON.parse(fs.readFileSync(seedFile, 'utf8'));
-  
+
   return measure(async () => {
     // Use a query runner with transaction
     const queryRunner = AppDataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
-    
+
     try {
       const authorRepository = queryRunner.manager.getRepository(Author);
       const bookRepository = queryRunner.manager.getRepository(Book);
       const reviewRepository = queryRunner.manager.getRepository(BookReview);
       const tagRepository = queryRunner.manager.getRepository(Tag);
-      
+
       // Insert authors
       for (const authorData of seedData.authors) {
         const author = authorRepository.create({
@@ -55,7 +55,7 @@ async function saveData(size: number): Promise<number> {
         });
         await authorRepository.save(author);
       }
-      
+
       // Insert books
       for (const bookData of seedData.books) {
         const book = bookRepository.create({
@@ -67,7 +67,7 @@ async function saveData(size: number): Promise<number> {
         });
         await bookRepository.save(book);
       }
-      
+
       // Insert reviews
       for (const reviewData of seedData.reviews) {
         const review = reviewRepository.create({
@@ -78,7 +78,7 @@ async function saveData(size: number): Promise<number> {
         });
         await reviewRepository.save(review);
       }
-      
+
       // Insert tags
       for (const tagData of seedData.tags) {
         const tag = tagRepository.create({
@@ -87,7 +87,7 @@ async function saveData(size: number): Promise<number> {
         });
         await tagRepository.save(tag);
       }
-      
+
       // Insert book-tag relationships
       if (seedData.bookTags.length > 0) {
         // Filter out duplicate book-tag pairs
@@ -119,7 +119,7 @@ async function saveData(size: number): Promise<number> {
           }
         }
       }
-      
+
       await queryRunner.commitTransaction();
       console.log(`Saved ${seedData.authors.length} authors with their books, reviews, and tags`);
     } catch (error) {
@@ -160,18 +160,18 @@ async function runBenchmarks(): Promise<void> {
   try {
     await AppDataSource.initialize();
     console.log('Database connection initialized');
-    
+
     const sizes = [1, 10, 100, 1000];
-    
+
     // Clean the database before starting
     await cleanDatabase();
-    
+
     // Save data benchmarks
     await benchmark('TypeORM - Save Data', sizes, saveData);
-    
+
     // Load data benchmarks
     await benchmark('TypeORM - Load Data', sizes, loadData);
-    
+
   } catch (error) {
     console.error('Benchmark error:', error);
   } finally {

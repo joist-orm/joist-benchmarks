@@ -10,7 +10,7 @@ This project benchmarks the performance of various TypeScript ORMs:
 
 The repository is set up as a Yarn v4 workspace with the following projects:
 
-- `packages/shared-utils`: Common utilities and database schema definitions
+- `packages/seed-data`: Common utilities and database schema definitions
 - `packages/benchmark-prisma`: Prisma benchmark implementation
 - `packages/benchmark-typeorm`: TypeORM benchmark implementation
 - `packages/benchmark-mikroorm`: MikroORM benchmark implementation

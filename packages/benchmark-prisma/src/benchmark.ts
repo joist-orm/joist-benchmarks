@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { benchmark, measure, getDataPath } from 'shared-utils';
+import { benchmark, measure, getDataPath } from 'seed-data';
 import fs from 'fs';
 
 const prisma = new PrismaClient();
@@ -21,7 +21,7 @@ async function loadData(size: number): Promise<number> {
         }
       }
     });
-    
+
     console.log(`Loaded ${authors.length} authors with their books, reviews, and tags`);
   });
 }
@@ -32,16 +32,16 @@ async function saveData(size: number): Promise<number> {
   if (!fs.existsSync(seedFile)) {
     throw new Error(`Seed file not found: ${seedFile}`);
   }
-  
+
   const seedData = JSON.parse(fs.readFileSync(seedFile, 'utf8'));
-  
+
   return measure(async () => {
     // Use a transaction for atomicity
     await prisma.$transaction(async (tx: typeof prisma) => {
       // Insert authors
       for (const authorData of seedData.authors) {
         const { id, firstName, lastName, email } = authorData;
-        
+
         await tx.author.create({
           data: {
             id,
@@ -51,11 +51,11 @@ async function saveData(size: number): Promise<number> {
           }
         });
       }
-      
+
       // Insert books
       for (const bookData of seedData.books) {
         const { id, title, authorId, published, pages } = bookData;
-        
+
         await tx.book.create({
           data: {
             id,
@@ -66,11 +66,11 @@ async function saveData(size: number): Promise<number> {
           }
         });
       }
-      
+
       // Insert reviews
       for (const reviewData of seedData.reviews) {
         const { id, bookId, rating, text } = reviewData;
-        
+
         await tx.bookReview.create({
           data: {
             id,
@@ -80,11 +80,11 @@ async function saveData(size: number): Promise<number> {
           }
         });
       }
-      
+
       // Insert tags
       for (const tagData of seedData.tags) {
         const { id, name } = tagData;
-        
+
         await tx.tag.create({
           data: {
             id,
@@ -92,7 +92,7 @@ async function saveData(size: number): Promise<number> {
           }
         });
       }
-      
+
       // Insert book-tag relationships
       for (const { bookId, tagId } of seedData.bookTags) {
         await tx.bookTag.create({
@@ -103,7 +103,7 @@ async function saveData(size: number): Promise<number> {
         });
       }
     });
-    
+
     console.log(`Saved ${seedData.authors.length} authors with their books, reviews, and tags`);
   });
 }
@@ -122,16 +122,16 @@ async function cleanDatabase(): Promise<void> {
 async function runBenchmarks(): Promise<void> {
   try {
     const sizes = [1, 10, 100, 1000];
-    
+
     // Clean the database before starting
     await cleanDatabase();
-    
+
     // Save data benchmarks
     await benchmark('Prisma - Save Data', sizes, saveData);
-    
+
     // Load data benchmarks
     await benchmark('Prisma - Load Data', sizes, loadData);
-    
+
   } catch (error) {
     console.error('Benchmark error:', error);
   } finally {

@@ -1,5 +1,5 @@
 {
-  "name": "shared-utils",
+  "name": "seed-data",
   "version": "1.0.0",
   "private": true,
   "main": "dist/index.js",

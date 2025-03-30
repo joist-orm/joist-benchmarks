@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { Author, Book, BookReview, Tag, BookTag } from './entities';
-import { DB_CONFIG } from 'shared-utils';
+import { DB_CONFIG } from 'seed-data';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',

@@ -3,7 +3,7 @@
   "packageManager": "yarn@4.7.0",
   "private": true,
   "scripts": {
-    "generate-seed-data": "yarn workspace shared-utils generate",
+    "generate-seed-data": "yarn workspace seed-data generate",
     "build": "tsc",
     "build-all": "yarn workspaces foreach --all run build",
     "db:up": "docker compose up -d",

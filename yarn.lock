@@ -493,7 +493,7 @@ __metadata:
     "@mikro-orm/postgresql": "npm:^6.4.11"
     "@types/node": "npm:^22.13.14"
     pg: "npm:^8.14.1"
-    shared-utils: "workspace:^"
+    seed-data: "workspace:^"
     typescript: "npm:^5.8.2"
   languageName: unknown
   linkType: soft
@@ -505,7 +505,7 @@ __metadata:
     "@prisma/client": "npm:6.5.0"
     "@types/node": "npm:^22.13.14"
     prisma: "npm:6.5.0"
-    shared-utils: "workspace:^"
+    seed-data: "workspace:^"
     typescript: "npm:^5.8.2"
   languageName: unknown
   linkType: soft
@@ -517,7 +517,7 @@ __metadata:
     "@types/node": "npm:^22.13.14"
     pg: "npm:^8.14.1"
     reflect-metadata: "npm:^0.2.2"
-    shared-utils: "workspace:^"
+    seed-data: "workspace:^"
     typeorm: "npm:^0.3.21"
     typescript: "npm:^5.8.2"
   languageName: unknown
@@ -1794,6 +1794,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"seed-data@workspace:^, seed-data@workspace:packages/seed-data":
+  version: 0.0.0-use.local
+  resolution: "seed-data@workspace:packages/seed-data"
+  dependencies:
+    "@faker-js/faker": "npm:^9.6.0"
+    "@types/node": "npm:^22.13.14"
+    typescript: "npm:^5.8.2"
+  languageName: unknown
+  linkType: soft
+
 "semver@npm:^7.3.5":
   version: 7.7.1
   resolution: "semver@npm:7.7.1"
@@ -1814,16 +1824,6 @@ __metadata:
   checksum: 10c0/b7a371bca8821c9cc98a0aeff67444a03d48d745cb103f17228b96793f455f0eb0a691941b89ea1e60f6359207e36081d9be193252b0f128e0daf9cfea2815a5
   languageName: node
   linkType: hard
-
-"shared-utils@workspace:^, shared-utils@workspace:packages/shared-utils":
-  version: 0.0.0-use.local
-  resolution: "shared-utils@workspace:packages/shared-utils"
-  dependencies:
-    "@faker-js/faker": "npm:^9.6.0"
-    "@types/node": "npm:^22.13.14"
-    typescript: "npm:^5.8.2"
-  languageName: unknown
-  linkType: soft
 
 "shebang-command@npm:^2.0.0":
   version: 2.0.0

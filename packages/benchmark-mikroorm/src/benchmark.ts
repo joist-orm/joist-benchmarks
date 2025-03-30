@@ -1,6 +1,6 @@
 import { MikroORM } from '@mikro-orm/core';
 import { Author, Book, BookReview, Tag } from './entities';
-import { benchmark, measure, getDataPath } from 'shared-utils';
+import { benchmark, measure, getDataPath } from 'seed-data';
 import fs from 'fs';
 import { config } from './mikro-orm.config';
 

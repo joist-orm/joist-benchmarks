@@ -1,5 +1,5 @@
 import { defineConfig, PostgreSqlDriver } from '@mikro-orm/postgresql';
-import { DB_CONFIG } from 'shared-utils';
+import { DB_CONFIG } from 'seed-data';
 import { Author, Book, BookReview, Tag } from './entities';
 
 export const config = defineConfig({

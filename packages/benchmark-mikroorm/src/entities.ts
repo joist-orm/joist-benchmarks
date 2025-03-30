@@ -26,7 +26,7 @@ export class Author {
   @Unique()
   email!: string;
 
-  @OneToMany(() => Book, book => book.author, { cascade: [Cascade.REMOVE] })
+  @OneToMany(() => Book, (book) => book.author, { cascade: [Cascade.REMOVE] })
   books = new Collection<Book>(this);
 
   @Property({ type: types.datetime, defaultRaw: "now()", fieldName: "created_at" })
@@ -53,7 +53,7 @@ export class Book {
   @Property({ type: types.integer, default: 0 })
   pages = 0;
 
-  @OneToMany(() => BookReview, review => review.book, { cascade: [Cascade.REMOVE] })
+  @OneToMany(() => BookReview, (review) => review.book, { cascade: [Cascade.REMOVE] })
   reviews = new Collection<BookReview>(this);
 
   @ManyToMany({ entity: () => Tag, pivotTable: "book_tag", joinColumn: "book_id", inverseJoinColumn: "tag_id" })
@@ -96,7 +96,7 @@ export class Tag {
   @Unique()
   name!: string;
 
-  @ManyToMany(() => Book, book => book.tags)
+  @ManyToMany(() => Book, (book) => book.tags)
   books = new Collection<Book>(this);
 
   @Property({ type: types.datetime, defaultRaw: "now()", fieldName: "created_at" })

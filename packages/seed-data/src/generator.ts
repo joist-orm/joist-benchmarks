@@ -122,8 +122,8 @@ export class DataGenerator {
 
     // Assign tags to books
     const bookTags = this.assignTagsToBooks(
-      books.map(b => b.id!).filter(Boolean),
-      tags.map(t => t.id!).filter(Boolean),
+      books.map((b) => b.id!).filter(Boolean),
+      tags.map((t) => t.id!).filter(Boolean),
       tagsPerBook,
     );
 
@@ -156,6 +156,6 @@ function createSeedData(size: number): void {
 
 // Generate seed data for all benchmark sizes
 const sizes = [1, 10, 100, 1000];
-sizes.forEach(size => createSeedData(size));
+sizes.forEach((size) => createSeedData(size));
 
 console.trace("All seed data generated successfully!");

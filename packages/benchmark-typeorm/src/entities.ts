@@ -27,7 +27,7 @@ export class Author {
   @Column({ unique: true })
   email!: string;
 
-  @OneToMany(() => Book, book => book.author)
+  @OneToMany(() => Book, (book) => book.author)
   books!: Book[];
 
   @CreateDateColumn({ name: "created_at" })
@@ -49,7 +49,7 @@ export class Book {
   @Index()
   authorId!: number;
 
-  @ManyToOne(() => Author, author => author.books, { onDelete: "CASCADE" })
+  @ManyToOne(() => Author, (author) => author.books, { onDelete: "CASCADE" })
   @JoinColumn({ name: "author_id" })
   author!: Author;
 
@@ -59,10 +59,10 @@ export class Book {
   @Column({ default: 0 })
   pages!: number;
 
-  @OneToMany(() => BookReview, review => review.book)
+  @OneToMany(() => BookReview, (review) => review.book)
   reviews!: BookReview[];
 
-  @ManyToMany(() => Tag, tag => tag.books)
+  @ManyToMany(() => Tag, (tag) => tag.books)
   @JoinTable({
     name: "book_tag",
     joinColumn: { name: "book_id", referencedColumnName: "id" },
@@ -86,7 +86,7 @@ export class BookReview {
   @Index()
   bookId!: number;
 
-  @ManyToOne(() => Book, book => book.reviews, { onDelete: "CASCADE" })
+  @ManyToOne(() => Book, (book) => book.reviews, { onDelete: "CASCADE" })
   @JoinColumn({ name: "book_id" })
   book!: Book;
 
@@ -111,7 +111,7 @@ export class Tag {
   @Column({ unique: true })
   name!: string;
 
-  @ManyToMany(() => Book, book => book.tags)
+  @ManyToMany(() => Book, (book) => book.tags)
   books!: Book[];
 
   @CreateDateColumn({ name: "created_at" })

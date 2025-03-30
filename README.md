@@ -44,7 +44,7 @@ Each benchmark suite tests:
 
 ```bash
 # Start the database
-docker-compose up -d
+docker compose up -d
 
 # Run all benchmarks
 yarn bench:all

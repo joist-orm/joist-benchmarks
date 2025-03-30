@@ -19,7 +19,7 @@ yarn install
 2. Start PostgreSQL database:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 3. Generate seed data for benchmarks:

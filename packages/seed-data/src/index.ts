@@ -12,7 +12,7 @@ export const DB_CONFIG = {
   database: "benchmark",
 };
 
-type SeedData = {
+export type SeedData = {
   authors: Author[];
   books: Book[];
   reviews: BookReview[];

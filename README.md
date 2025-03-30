@@ -55,3 +55,23 @@ yarn prisma:bench
 yarn typeorm:bench
 yarn mikroorm:bench
 ```
+
+---
+
+Test x sizes:
+
+- bulk-create (1, 10, 100, 1000)
+  - Setup: Clean database, load seed data `n` into memory
+  - Test: Insert the `n` rows
+- bulk-update (1, 10, 100, 1000)
+  - Setup: Clean database, save the seed `n`
+  - Test: Load all `n` rows, and update each one
+- bulk-load (1, 10, 100, 1000)
+  - Setup: Clean database, save the seed `n`
+  - Test: Load the seed data `n` tree of data
+- loop-load (1, 10, 100, 1000)
+  - Setup: Clean database, save the seed `n`
+  - Test: Load the seed data `n` in a loop
+- dup-some (1, 10, 100, 1000)
+  - Setup: Clean database, save the seed `n`
+  - Test: Load max(rand(1%-5%, 1)) of the data

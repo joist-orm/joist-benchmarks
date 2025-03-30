@@ -1,0 +1,37 @@
+{
+  "name": "benchmark",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/benchmark.js",
+  "types": "dist/benchmark.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "@source": "./src/benchmark.ts",
+        "default": "./dist/benchmark.js",
+        "types": "./dist/benchmark.d.ts"
+      },
+      "require": {
+        "@source": "./src/benchmark.ts",
+        "default": "./dist/benchmark.js",
+        "types": "./dist/benchmark.d.ts"
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "benchmark": "node --import=tsx --conditions=@source src/benchmark.ts"
+  },
+  "dependencies": {
+    "benchmark-mikroorm": "workspace:^",
+    "benchmark-prisma": "workspace:^",
+    "benchmark-typeorm": "workspace:^",
+    "cli-table3": "^0.6.3",
+    "colors": "^1.4.0",
+    "seed-data": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.14",
+    "typescript": "^5.8.2"
+  }
+}

@@ -10,7 +10,8 @@
     "db:down": "docker compose down",
     "db:connect": "docker exec -it joist-benchmarks-db-1 psql -U postgres -d benchmark",
     "db:ps": "docker ps | grep postgres",
-    "format": "prettier --write \"**/*.{ts,js,json,md,yml}\""
+    "format": "prettier --write \"**/*.{ts,js,json,md,yml}\"",
+    "benchmark": "yarn workspace benchmark benchmark"
   },
   "devDependencies": {
     "prettier": "^3.5.3",

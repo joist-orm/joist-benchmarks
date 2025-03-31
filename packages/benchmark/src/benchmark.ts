@@ -25,13 +25,11 @@ const results: BenchmarkResult[] = [];
 
 async function runBenchmark(ormPackageName: string): Promise<void> {
   console.log(`\n${colors.cyan("Running benchmarks for")} ${colors.yellow(ormPackageName)}...\n`);
-
   // Execute the benchmark command
   const result = spawnSync("yarn", ["workspace", ormPackageName, "bench"], {
     stdio: "inherit",
     encoding: "utf-8",
   });
-
   if (result.status !== 0) {
     console.error(`${colors.red("Error running benchmark for")} ${colors.yellow(ormPackageName)}`);
   }
@@ -126,15 +124,12 @@ function displayResults(): void {
 async function runAllBenchmarks(): Promise<void> {
   try {
     console.log(colors.green.bold("\n=== ORM BENCHMARKS ===\n"));
-
     // Run each ORM's benchmark
     for (const orm of orms) {
       await runBenchmark(orm.packageName);
     }
-
     // Collect and aggregate the results
     await collectResults();
-
     // Display the results
     displayResults();
   } catch (error) {

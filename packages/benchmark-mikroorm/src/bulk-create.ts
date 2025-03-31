@@ -1,23 +1,9 @@
-import { MikroORM } from "@mikro-orm/core";
-import { SeedData } from "seed-data";
 import { Author, Book, BookReview, Tag } from "./entities";
+import { cleanDatabase, MikroOperation } from "./index";
 
-type Context = {
-  size: number;
-  seedData: SeedData;
-  cleanDatabase: () => Promise<void>;
-};
-
-type Operation<C extends Context> = {
-  beforeEach(ctx: C): Promise<void>;
-  run(ctx: C): Promise<void>;
-};
-
-type MikroContext = Context & { orm: MikroORM };
-
-export const bulkCreate: Operation<MikroContext> = {
+export const bulkCreate: MikroOperation = {
   async beforeEach(ctx) {
-    await ctx.cleanDatabase();
+    await cleanDatabase(ctx.orm);
   },
 
   async run(ctx) {

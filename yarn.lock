@@ -499,6 +499,7 @@ __metadata:
     "@mikro-orm/core": "npm:^6.4.11"
     "@mikro-orm/postgresql": "npm:^6.4.11"
     "@types/node": "npm:^22.13.14"
+    benchmark: "workspace:^"
     pg: "npm:^8.14.1"
     seed-data: "workspace:^"
     typescript: "npm:^5.8.2"
@@ -530,7 +531,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"benchmark@workspace:packages/benchmark":
+"benchmark@workspace:^, benchmark@workspace:packages/benchmark":
   version: 0.0.0-use.local
   resolution: "benchmark@workspace:packages/benchmark"
   dependencies:

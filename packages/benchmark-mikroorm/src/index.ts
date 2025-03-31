@@ -1,7 +1,6 @@
 import { MikroORM } from "@mikro-orm/core";
 import { defineConfig, PostgreSqlDriver } from "@mikro-orm/postgresql";
-import { AllOperations, Context, Operation } from "benchmark";
-import { DB_CONFIG } from "seed-data";
+import { AllOperations, Context, DB_CONFIG, Operation } from "seed-data";
 import { bulkCreate } from "./bulk-create";
 import { bulkLoad } from "./bulk-load";
 import { Author, Book, BookReview, Tag } from "./entities";
@@ -9,7 +8,7 @@ import { Author, Book, BookReview, Tag } from "./entities";
 export type MikroContext = Context & { orm: MikroORM };
 export type MikroOperation = Operation<MikroContext>;
 
-export async function getOperations(): Promise<AllOperations<MikroContext>> {
+export async function getContext(): Promise<any> {
   const config = defineConfig({
     entities: [Author, Book, BookReview, Tag],
     dbName: DB_CONFIG.database,
@@ -20,13 +19,15 @@ export async function getOperations(): Promise<AllOperations<MikroContext>> {
     driver: PostgreSqlDriver,
     debug: false,
   });
-
   const orm: MikroORM = await MikroORM.init(config);
+  const shutdown = () => orm.close();
+  return { orm, shutdown };
+}
 
+export function getOperations(): AllOperations<MikroContext> {
   return {
     bulkCreate,
     bulkLoad,
-    shutdown: () => orm.close(),
   };
 }
 

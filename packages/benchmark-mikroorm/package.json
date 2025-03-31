@@ -2,25 +2,25 @@
   "name": "benchmark-mikroorm",
   "version": "1.0.0",
   "private": true,
-  "main": "dist/benchmark.js",
-  "types": "dist/benchmark.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": {
-        "@source": "./src/benchmark.ts",
-        "default": "./dist/benchmark.js",
-        "types": "./dist/benchmark.d.ts"
+        "@source": "./src/index.ts",
+        "default": "./dist/index.js",
+        "types": "./dist/index.d.ts"
       },
       "require": {
-        "@source": "./src/benchmark.ts",
-        "default": "./dist/benchmark.js",
-        "types": "./dist/benchmark.d.ts"
+        "@source": "./src/index.ts",
+        "default": "./dist/index.js",
+        "types": "./dist/index.d.ts"
       }
     }
   },
   "scripts": {
     "build": "tsc",
-    "bench": "node --import=tsx --conditions=@source src/benchmark.ts"
+    "bench": "node --import=tsx --conditions=@source src/index.ts"
   },
   "dependencies": {
     "@mikro-orm/core": "^6.4.11",

@@ -1,13 +1,12 @@
 import Table from "cli-table3";
 import colors from "colors";
 import * as mikro from "benchmark-mikroorm";
+import * as prisma from "benchmark-prisma";
 import { Context, getData, operations } from "seed-data";
 
 const orms = {
-  mikro: {
-    getContext: mikro.getContext,
-    getOperations: mikro.getOperations,
-  },
+  mikro: { getContext: mikro.getContext, getOperations: mikro.getOperations },
+  prisma: { getContext: prisma.getContext, getOperations: prisma.getOperations },
 };
 
 // I want a table of

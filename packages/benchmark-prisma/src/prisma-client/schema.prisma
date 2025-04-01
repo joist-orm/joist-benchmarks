@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/prisma-client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:postgres@localhost:5432/benchmark"
+}
+
+model Author {
+  id        Int      @id @default(autoincrement())
+  firstName String   @map("first_name")
+  lastName  String   @map("last_name")
+  email     String   @unique
+  books     Book[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  @@map("author")
+}
+
+model Book {
+  id        Int          @id @default(autoincrement())
+  title     String
+  author    Author       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  Int          @map("author_id")
+  published DateTime?
+  pages     Int          @default(0)
+  reviews   BookReview[]
+  tags      BookTag[]
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @default(now()) @map("updated_at")
+
+  @@index([authorId])
+  @@map("book")
+}
+
+model BookReview {
+  id        Int      @id @default(autoincrement())
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  bookId    Int      @map("book_id")
+  rating    Int
+  text      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  @@index([bookId])
+  @@map("book_review")
+}
+
+model Tag {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  books     BookTag[]
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @map("updated_at")
+
+  @@map("tag")
+}
+
+model BookTag {
+  book   Book @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  bookId Int  @map("book_id")
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId  Int  @map("tag_id")
+
+  @@id([bookId, tagId])
+  @@index([bookId])
+  @@index([tagId])
+  @@map("book_tag")
+}

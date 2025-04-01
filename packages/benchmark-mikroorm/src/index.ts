@@ -24,7 +24,7 @@ export async function getContext(): Promise<any> {
       password: DB_CONFIG.password,
       driver: PostgreSqlDriver,
       // metadataProvider: TsMorphMetadataProvider,
-      debug: true,
+      // debug: true,
     });
 
     const orm: MikroORM = await MikroORM.init(config);
@@ -45,5 +45,4 @@ export function getOperations(): AllOperations<MikroContext> {
 
 export async function cleanDatabase(orm: MikroORM): Promise<void> {
   await orm.em.getConnection().execute("TRUNCATE book_tag, book_review, book, author, tag RESTART IDENTITY CASCADE");
-  console.log("Database cleaned");
 }

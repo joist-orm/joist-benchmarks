@@ -13,6 +13,7 @@ export const bulkCreate: MikroOperation = {
     await em.begin();
 
     try {
+      // Create authors
       for (const authorData of seedData.authors) {
         em.create(Author, {
           id: authorData.id,
@@ -58,45 +59,14 @@ export const bulkCreate: MikroOperation = {
         });
       }
 
-      // Need to flush now to ensure tags are in the database
-      await em.flush();
-
-      // Insert book-tag relationships
-      if (seedData.bookTags.length > 0) {
-        // Filter out duplicate book-tag pairs
-        const uniquePairs = new Set<string>();
-        const uniqueBookTags = seedData.bookTags.filter((bt: { bookId: number; tagId: number }) => {
-          const pairKey = `${bt.bookId}-${bt.tagId}`;
-          if (uniquePairs.has(pairKey)) {
-            return false;
-          }
-          uniquePairs.add(pairKey);
-          return true;
-        });
-
-        // Process in chunks of 100 to avoid query size limits
-        const chunkSize = 100;
-        for (let i = 0; i < uniqueBookTags.length; i += chunkSize) {
-          const chunk = uniqueBookTags.slice(i, i + chunkSize);
-          if (chunk.length > 0) {
-            try {
-              await em
-                .getConnection()
-                .execute(
-                  `INSERT INTO book_tag (book_id, tag_id) VALUES ${chunk
-                    .map((bt: { bookId: number; tagId: number }) => `(${bt.bookId}, ${bt.tagId})`)
-                    .join(", ")}`,
-                );
-            } catch (err) {
-              console.error(`Error inserting book-tag chunk ${i} to ${i + chunk.length}:`, err);
-              // Continue with the next chunk
-            }
-          }
-        }
+      for (const { bookId, tagId } of seedData.bookTags) {
+        const book = em.getReference(Book, bookId);
+        const tag = em.getReference(Tag, tagId);
+        book.tags.add(tag);
       }
 
+      // Commit the transaction
       await em.commit();
-      console.log(`Saved ${seedData.authors.length} authors with their books, reviews, and tags`);
     } catch (error) {
       await em.rollback();
       throw error;

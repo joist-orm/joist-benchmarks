@@ -1,15 +1,53 @@
-import { bulkCreate } from "./benchmark";
+import { Author, Book, BookReview, EntityManager, Tag } from "./entities/index.ts";
+import { cleanDatabase, JoistOperation } from "./index.ts";
 
-// Get the size from command line arguments
-const size = parseInt(process.argv[2] || "100", 10);
+export const bulkCreate: JoistOperation = {
+  async beforeEach(ctx) {
+    await cleanDatabase(ctx);
+  },
 
-// Run the benchmark
-bulkCreate(size)
-  .then((time) => {
-    console.log(`Bulk create time: ${time.toFixed(2)} ms`);
-    process.exit(0);
-  })
-  .catch((error) => {
-    console.error("Error:", error);
-    process.exit(1);
-  });
+  async run(ctx) {
+    const { driver, seedData } = ctx;
+    const em = new EntityManager({}, { driver });
+
+    for (const row of seedData.authors) {
+      em.create(Author, {
+        id: row.id,
+        firstName: row.firstName,
+        lastName: row.lastName,
+        email: row.email,
+      });
+    }
+
+    for (const row of seedData.books) {
+      em.create(Book, {
+        id: row.id,
+        title: row.title,
+        author: em.getEntity(`a:${row.authorId}`) as Author,
+        published: new Date(row.published),
+        pages: row.pages,
+      });
+    }
+
+    for (const row of seedData.reviews) {
+      em.create(BookReview, {
+        id: row.id,
+        book: em.getEntity(`b:${row.bookId}`) as Book,
+        rating: row.rating,
+        text: row.text,
+      });
+    }
+
+    for (const row of seedData.tags) {
+      em.create(Tag, { id: row.id, name: row.name });
+    }
+
+    for (const { bookId, tagId } of seedData.bookTags) {
+      const book = em.getEntity(`b:${bookId}`) as Book;
+      const tag = em.getEntity(`t:${tagId}`) as Tag;
+      book.tags.add(tag);
+    }
+
+    await em.flush();
+  },
+};

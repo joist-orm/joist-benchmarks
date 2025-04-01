@@ -1162,7 +1162,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"benchmark-joist-v1@workspace:packages/benchmark-joist-v1":
+"benchmark-joist-v1@workspace:^, benchmark-joist-v1@workspace:packages/benchmark-joist-v1":
   version: 0.0.0-use.local
   resolution: "benchmark-joist-v1@workspace:packages/benchmark-joist-v1"
   dependencies:
@@ -1221,6 +1221,7 @@ __metadata:
   resolution: "benchmark@workspace:packages/benchmark"
   dependencies:
     "@types/node": "npm:^22.13.16"
+    benchmark-joist-v1: "workspace:^"
     benchmark-mikroorm: "workspace:^"
     benchmark-prisma: "workspace:^"
     benchmark-typeorm: "workspace:^"

@@ -45,7 +45,7 @@ import {
   type Entity,
   EntityManager,
   newBookReview,
-} from "../entities";
+} from "../entities.js";
 
 export type BookReviewId = Flavor<string, "BookReview">;
 

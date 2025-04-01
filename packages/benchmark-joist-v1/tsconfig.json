@@ -2,14 +2,8 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "rootDir": "src"
   },
   "include": ["src/**/*"],
-  "references": [
-    {
-      "path": "../seed-data"
-    }
-  ]
+  "references": [{ "path": "../seed-data" }]
 }

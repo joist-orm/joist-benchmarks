@@ -54,7 +54,7 @@ import {
   Tag,
   type TagId,
   tagMeta,
-} from "../entities";
+} from "../entities.js";
 
 export type BookId = Flavor<string, "Book">;
 

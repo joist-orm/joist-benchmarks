@@ -1,6 +1,4 @@
-import { TagCodegen } from "./entities";
-
-import { tagConfig as config } from "./entities";
+import { TagCodegen, tagConfig as config } from "./entities.ts";
 
 export class Tag extends TagCodegen {}
 

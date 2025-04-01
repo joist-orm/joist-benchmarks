@@ -2,25 +2,25 @@
   "name": "benchmark-joist-v1",
   "version": "1.0.0",
   "private": true,
-  "main": "dist/benchmark.js",
-  "types": "dist/benchmark.d.ts",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": {
-        "@source": "./src/benchmark.ts",
-        "default": "./dist/benchmark.js",
-        "types": "./dist/benchmark.d.ts"
+        "@source": "./src/index.ts",
+        "default": "./dist/index.js",
+        "types": "./dist/index.d.ts"
       },
       "require": {
-        "@source": "./src/benchmark.ts",
-        "default": "./dist/benchmark.js",
-        "types": "./dist/benchmark.d.ts"
+        "@source": "./src/index.ts",
+        "default": "./dist/index.js",
+        "types": "./dist/index.d.ts"
       }
     }
   },
   "scripts": {
     "build": "tsc",
-    "bench": "node --import=tsx --conditions=@source src/benchmark.ts",
     "generate": "joist-codegen -f ./joist-config.json"
   },
   "dependencies": {

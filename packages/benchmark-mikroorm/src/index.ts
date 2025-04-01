@@ -8,7 +8,7 @@ import { Author, Book, BookReview, Tag } from "./entities.ts";
 export type MikroContext = Context & { orm: MikroORM };
 export type MikroOperation = Operation<MikroContext>;
 
-export async function getContext(): Promise<any> {
+export async function getContext(): Promise<Pick<MikroContext, "orm" | "shutdown">> {
   const config = defineConfig({
     entities: [Author, Book, BookReview, Tag],
     dbName: DB_CONFIG.database,

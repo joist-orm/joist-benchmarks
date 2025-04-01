@@ -8,5 +8,6 @@
     "Tag": { "tag": "t" }
   },
   "entitiesDirectory": "./src/entities",
+  "esm": true,
   "version": "0.0.0"
 }

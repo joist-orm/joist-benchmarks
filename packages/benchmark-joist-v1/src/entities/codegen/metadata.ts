@@ -1,9 +1,9 @@
 import { configureMetadata, DateSerde, type Entity as Entity2, EntityManager as EntityManager1, type EntityMetadata, KeySerde, PrimitiveSerde, setRuntimeConfig } from "joist-orm";
-import { Author } from "../Author";
-import { Book } from "../Book";
-import { BookReview } from "../BookReview";
-import { Tag } from "../Tag";
-import { authorConfig, bookConfig, bookReviewConfig, newAuthor, newBook, newBookReview, newTag, tagConfig } from "../entities";
+import { Author } from "../Author.js";
+import { Book } from "../Book.js";
+import { BookReview } from "../BookReview.js";
+import { Tag } from "../Tag.js";
+import { authorConfig, bookConfig, bookReviewConfig, newAuthor, newBook, newBookReview, newTag, tagConfig } from "../entities.js";
 
 setRuntimeConfig({ temporal: false });
 

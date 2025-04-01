@@ -4,17 +4,17 @@
 // when the subclasses extend the base classes, see:
 // https://medium.com/visual-development/how-to-fix-nasty-circular-dependency-issues-once-and-for-all-in-javascript-typescript-a04c987cf0de
 
-export * from "./codegen/AuthorCodegen";
-export * from "./codegen/BookCodegen";
-export * from "./codegen/BookReviewCodegen";
-export * from "./codegen/TagCodegen";
-export * from "./Author";
-export * from "./Book";
-export * from "./BookReview";
-export * from "./Tag";
+export * from "./codegen/AuthorCodegen.js";
+export * from "./codegen/BookCodegen.js";
+export * from "./codegen/BookReviewCodegen.js";
+export * from "./codegen/TagCodegen.js";
+export * from "./Author.js";
+export * from "./Book.js";
+export * from "./BookReview.js";
+export * from "./Tag.js";
 
-export * from "./factories/newAuthor";
-export * from "./factories/newBook";
-export * from "./factories/newBookReview";
-export * from "./factories/newTag";
-export * from "./codegen/metadata";
+export * from "./factories/newAuthor.js";
+export * from "./factories/newBook.js";
+export * from "./factories/newBookReview.js";
+export * from "./factories/newTag.js";
+export * from "./codegen/metadata.js";

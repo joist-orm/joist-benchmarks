@@ -24,6 +24,7 @@
     "benchmark": "node --loader ts-node/esm --conditions=@source src/benchmark.ts"
   },
   "dependencies": {
+    "benchmark-joist-v1": "workspace:^",
     "benchmark-mikroorm": "workspace:^",
     "benchmark-prisma": "workspace:^",
     "benchmark-typeorm": "workspace:^",

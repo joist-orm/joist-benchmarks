@@ -123,5 +123,4 @@ async function saveData(size: number): Promise<void> {
 
 async function cleanDatabase(): Promise<void> {
   await AppDataSource.query("TRUNCATE book_tag, book_review, book, author, tag RESTART IDENTITY CASCADE");
-  console.log("Database cleaned");
 }

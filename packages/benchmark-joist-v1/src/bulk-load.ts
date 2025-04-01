@@ -1,15 +1,15 @@
-import { bulkLoad } from "./benchmark";
+import { bulkCreate } from "./bulk-create.ts";
+import { Author, EntityManager } from "./entities/index.ts";
+import { cleanDatabase, JoistOperation } from "./index.ts";
 
-// Get the size from command line arguments
-const size = parseInt(process.argv[2] || "100", 10);
+export const bulkLoad: JoistOperation = {
+  async beforeEach(ctx) {
+    await cleanDatabase(ctx);
+    await bulkCreate.run(ctx);
+  },
 
-// Run the benchmark
-bulkLoad(size)
-  .then((time) => {
-    console.log(`Bulk load time: ${time.toFixed(2)} ms`);
-    process.exit(0);
-  })
-  .catch((error) => {
-    console.error("Error:", error);
-    process.exit(1);
-  });
+  async run({ driver }) {
+    const em = new EntityManager({}, { driver });
+    await em.find(Author, {}, { populate: { books: ["reviews", "tags"] } });
+  },
+};

@@ -14,7 +14,6 @@ export const bulkLoad: MikroOperation = {
     await authorRepository.find(
       {},
       {
-        limit: size,
         populate: ["books", "books.reviews", "books.tags"],
         orderBy: { id: "ASC" },
       },

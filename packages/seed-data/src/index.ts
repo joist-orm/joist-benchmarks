@@ -1,5 +1,6 @@
 import fs from "fs";
-import { resolve } from "path";
+import { fileURLToPath } from "url";
+import path from "path";
 import { Author, Book, BookReview, Tag } from "./interfaces.ts";
 
 export * from "./interfaces.ts";
@@ -22,6 +23,10 @@ export type SeedData = {
 };
 
 export function getData(size: number): SeedData {
-  const seedFile = resolve(__dirname, `./seed-${size}.json`);
+  // Get the directory name of the current module in ESM
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+
+  const seedFile = path.resolve(__dirname, `../seed-${size}.json`);
   return JSON.parse(fs.readFileSync(seedFile, "utf8"));
 }

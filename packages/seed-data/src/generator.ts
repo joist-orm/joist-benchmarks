@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 import { Author, Book, BookReview, Tag } from "./interfaces";
 
 export class DataGenerator {
@@ -137,6 +138,10 @@ function createSeedData(size: number): void {
   const tagsPerBook = 3;
 
   const data = generator.generateDataSet(size, booksPerAuthor, reviewsPerBook, tagsPerBook);
+
+  // Get the directory name of the current module in ESM
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
 
   const outputDir = path.resolve(__dirname, "../");
   fs.writeFileSync(path.join(outputDir, `seed-${size}.json`), JSON.stringify(data, null, 2));

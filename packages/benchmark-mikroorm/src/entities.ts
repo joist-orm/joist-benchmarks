@@ -1,4 +1,14 @@
-import { Entity, PrimaryKey, Property, ManyToOne, Collection, OneToMany, ManyToMany, Cascade, Unique } from "@mikro-orm/core";
+import {
+  Entity,
+  PrimaryKey,
+  Property,
+  ManyToOne,
+  Collection,
+  OneToMany,
+  ManyToMany,
+  Cascade,
+  Unique,
+} from "@mikro-orm/core";
 
 /**
  * Note: For MikroORM 6.x running on Node.js 23.x, we need to be careful with decorators.
@@ -20,7 +30,7 @@ export class Author {
   @Unique()
   email: string;
 
-  @OneToMany(() => Book, book => book.author, { cascade: [Cascade.REMOVE] })
+  @OneToMany(() => Book, (book) => book.author, { cascade: [Cascade.REMOVE] })
   books = new Collection<Book>(this);
 
   @Property({ fieldName: "created_at" })
@@ -31,9 +41,9 @@ export class Author {
 
   constructor() {
     this.id = 0;
-    this.firstName = '';
-    this.lastName = '';
-    this.email = '';
+    this.firstName = "";
+    this.lastName = "";
+    this.email = "";
   }
 }
 
@@ -54,7 +64,7 @@ export class Book {
   @Property()
   pages = 0;
 
-  @OneToMany(() => BookReview, review => review.book, { cascade: [Cascade.REMOVE] })
+  @OneToMany(() => BookReview, (review) => review.book, { cascade: [Cascade.REMOVE] })
   reviews = new Collection<BookReview>(this);
 
   @ManyToMany({ entity: () => Tag, pivotTable: "book_tag", joinColumn: "book_id", inverseJoinColumn: "tag_id" })
@@ -68,7 +78,7 @@ export class Book {
 
   constructor() {
     this.id = 0;
-    this.title = '';
+    this.title = "";
   }
 }
 
@@ -107,7 +117,7 @@ export class Tag {
   @Unique()
   name: string;
 
-  @ManyToMany(() => Book, book => book.tags)
+  @ManyToMany(() => Book, (book) => book.tags)
   books = new Collection<Book>(this);
 
   @Property({ fieldName: "created_at" })
@@ -118,6 +128,6 @@ export class Tag {
 
   constructor() {
     this.id = 0;
-    this.name = '';
+    this.name = "";
   }
 }

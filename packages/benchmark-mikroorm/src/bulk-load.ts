@@ -7,7 +7,8 @@ export const bulkLoad: MikroOperation = {
   },
 
   async run({ orm, size }) {
-    const authorRepository = orm.em.getRepository(Author);
+    const em = orm.em.fork();
+    const authorRepository = em.getRepository(Author);
     const authors = await authorRepository.find(
       {},
       {

@@ -1,9 +1,9 @@
 import fs from "fs";
 import { resolve } from "path";
-import { Author, Book, BookReview, Tag } from "./interfaces";
+import { Author, Book, BookReview, Tag } from "./interfaces.ts";
 
-export * from "./interfaces";
-export * from "./operations";
+export * from "./interfaces.ts";
+export * from "./operations.ts";
 
 export const DB_CONFIG = {
   host: "localhost",
@@ -25,4 +25,3 @@ export function getData(size: number): SeedData {
   const seedFile = resolve(__dirname, `./seed-${size}.json`);
   return JSON.parse(fs.readFileSync(seedFile, "utf8"));
 }
-

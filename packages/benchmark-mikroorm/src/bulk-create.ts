@@ -1,5 +1,5 @@
-import { Author, Book, BookReview, Tag } from "./entities";
-import { cleanDatabase, MikroOperation } from "./index";
+import { Author, Book, BookReview, Tag } from "./entities.ts";
+import { cleanDatabase, MikroOperation } from "./index.ts";
 
 export const bulkCreate: MikroOperation = {
   async beforeEach(ctx) {

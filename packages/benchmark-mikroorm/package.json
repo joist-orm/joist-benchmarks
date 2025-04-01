@@ -2,6 +2,7 @@
   "name": "benchmark-mikroorm",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
@@ -25,6 +26,7 @@
   "dependencies": {
     "@mikro-orm/core": "^6.4.11",
     "@mikro-orm/postgresql": "^6.4.11",
+    "@mikro-orm/reflection": "^6.4.11",
     "benchmark": "workspace:^",
     "pg": "^8.14.1",
     "seed-data": "workspace:^"

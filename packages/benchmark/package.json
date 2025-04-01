@@ -2,6 +2,7 @@
   "name": "benchmark",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
@@ -20,7 +21,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "benchmark": "node --import=tsx --conditions=@source src/benchmark.ts"
+    "benchmark": "node --loader ts-node/esm --conditions=@source src/benchmark.ts"
   },
   "dependencies": {
     "benchmark-mikroorm": "workspace:^",

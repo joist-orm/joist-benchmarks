@@ -1,5 +1,5 @@
 import Table from "cli-table3";
-import colors from "colors/safe";
+import colors from "colors";
 import * as mikro from "benchmark-mikroorm";
 import { getData, operations } from "seed-data";
 
@@ -30,18 +30,30 @@ async function runBenchmark(): Promise<BenchmarkResult[]> {
     for (const size of sizes) {
       const row: Record<string, number> = {};
       for (const [name, config] of Object.entries(orms)) {
-        const ctx = await config.getContext();
-        const o = config.getOperations()[op as keyof typeof operations];
-        if (o) {
-          console.log(`Running ${op} x ${name} x ${size}`);
-          const seedData = getData(size);
-          const runCtx = { ...ctx, size, seedData };
-          await o.beforeEach(runCtx);
-          // Ideally we'd loop to get samples
-          const startTime = performance.now();
-          await o.run(runCtx);
-          const endTime = performance.now();
-          row[name] = endTime - startTime;
+        try {
+          console.log(`Initializing ${name}...`);
+          const ctx = await config.getContext();
+          const o = config.getOperations()[op as keyof typeof operations];
+
+          if (o) {
+            console.log(`Running ${op} x ${name} x ${size}`);
+            const seedData = getData(size);
+            const runCtx = { ...ctx, size, seedData };
+            await o.beforeEach(runCtx);
+            // Ideally we'd loop to get samples
+            const startTime = performance.now();
+            await o.run(runCtx);
+            const endTime = performance.now();
+            row[name] = endTime - startTime;
+          }
+
+          // Close the connection if available
+          if (ctx.shutdown && typeof ctx.shutdown === "function") {
+            await ctx.shutdown();
+          }
+        } catch (error) {
+          console.error(`Error running benchmark for ${name} (${op}, size ${size}):`, error);
+          console.log(`Skipping ${name} for this operation...`);
         }
       }
       results.push({ operation: op, size, orms: row });

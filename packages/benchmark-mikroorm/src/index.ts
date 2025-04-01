@@ -23,7 +23,7 @@ export async function getContext(): Promise<any> {
       user: DB_CONFIG.username,
       password: DB_CONFIG.password,
       driver: PostgreSqlDriver,
-      metadataProvider: TsMorphMetadataProvider,
+      // metadataProvider: TsMorphMetadataProvider,
       debug: true,
     });
 

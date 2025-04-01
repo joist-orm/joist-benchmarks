@@ -1,15 +1,17 @@
+import { bulkCreate } from "./bulk-create.ts";
 import { Author } from "./entities.ts";
 import { cleanDatabase, MikroOperation } from "./index.ts";
 
 export const bulkLoad: MikroOperation = {
   async beforeEach(ctx) {
     await cleanDatabase(ctx.orm);
+    await bulkCreate.run(ctx);
   },
 
   async run({ orm, size }) {
     const em = orm.em.fork();
     const authorRepository = em.getRepository(Author);
-    const authors = await authorRepository.find(
+    await authorRepository.find(
       {},
       {
         limit: size,
@@ -17,6 +19,5 @@ export const bulkLoad: MikroOperation = {
         orderBy: { id: "ASC" },
       },
     );
-    console.log(`Loaded ${authors.length} authors with their books, reviews, and tags`);
   },
 };

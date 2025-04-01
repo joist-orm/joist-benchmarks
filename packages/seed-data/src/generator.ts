@@ -122,8 +122,8 @@ export class DataGenerator {
 
     // Assign tags to books
     const bookTags = this.assignTagsToBooks(
-      books.map((b) => b.id!).filter(Boolean),
-      tags.map((t) => t.id!).filter(Boolean),
+      books.map((b) => b.id),
+      tags.map((t) => t.id),
       tagsPerBook,
     );
 

@@ -3,6 +3,7 @@ import { SeedData } from "./index";
 export type Context = {
   size: number;
   seedData: SeedData;
+  shutdown?: () => Promise<void>;
 };
 
 export type Operation<C extends Context> = {

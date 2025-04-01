@@ -1,7 +1,7 @@
 import Table from "cli-table3";
 import colors from "colors";
 import * as mikro from "benchmark-mikroorm";
-import { getData, operations } from "seed-data";
+import { Context, getData, operations } from "seed-data";
 
 // Define benchmark sizes
 const sizes = [1, 10, 100, 1000];
@@ -24,6 +24,8 @@ type BenchmarkResult = {
   orms: Record<string, number>;
 };
 
+const contexts: Map<string, Context> = new Map();
+
 async function runBenchmark(): Promise<BenchmarkResult[]> {
   const results: BenchmarkResult[] = [];
   for (const [op, sizes] of Object.entries(operations)) {
@@ -31,10 +33,9 @@ async function runBenchmark(): Promise<BenchmarkResult[]> {
       const row: Record<string, number> = {};
       for (const [name, config] of Object.entries(orms)) {
         try {
-          console.log(`Initializing ${name}...`);
-          const ctx = await config.getContext();
+          const ctx = contexts.get(name) ?? (await config.getContext());
+          contexts.set(name, ctx);
           const o = config.getOperations()[op as keyof typeof operations];
-
           if (o) {
             console.log(`Running ${op} x ${name} x ${size}`);
             const seedData = getData(size);
@@ -45,11 +46,6 @@ async function runBenchmark(): Promise<BenchmarkResult[]> {
             await o.run(runCtx);
             const endTime = performance.now();
             row[name] = endTime - startTime;
-          }
-
-          // Close the connection if available
-          if (ctx.shutdown && typeof ctx.shutdown === "function") {
-            await ctx.shutdown();
           }
         } catch (error) {
           console.error(`Error running benchmark for ${name} (${op}, size ${size}):`, error);
@@ -82,6 +78,9 @@ async function runAllBenchmarks(): Promise<void> {
   console.log(colors.green("\n=== ORM BENCHMARKS ===\n"));
   const results = await runBenchmark();
   displayResults(results);
+  for (const [, ctx] of contexts.entries()) {
+    if (ctx.shutdown) await ctx.shutdown();
+  }
 }
 
 runAllBenchmarks().catch(console.error);

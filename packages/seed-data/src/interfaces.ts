@@ -26,7 +26,7 @@ export interface Tag {
 }
 
 export interface BenchmarkResult {
-  orm: "prisma" | "typeorm" | "mikroorm";
+  orm: "prisma" | "typeorm" | "mikroorm" | "joist-v1";
   operation: "load" | "save";
   size: number;
   duration: number; // milliseconds

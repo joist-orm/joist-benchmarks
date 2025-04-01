@@ -1,5 +1,5 @@
 {
-  "name": "benchmark-typeorm",
+  "name": "benchmark-joist-v1",
   "version": "1.0.0",
   "private": true,
   "main": "dist/benchmark.js",
@@ -20,16 +20,18 @@
   },
   "scripts": {
     "build": "tsc",
-    "bench": "node --import=tsx --conditions=@source src/benchmark.ts"
+    "bench": "node --import=tsx --conditions=@source src/benchmark.ts",
+    "generate": "joist-codegen -f ./joist-config.json"
   },
   "dependencies": {
+    "joist-orm": "^1.233.4",
+    "knex": "^3.1.0",
     "pg": "^8.14.1",
-    "reflect-metadata": "^0.2.2",
-    "seed-data": "workspace:^",
-    "typeorm": "^0.3.21"
+    "seed-data": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "^22.13.16",
+    "joist-codegen": "^1.233.4",
     "typescript": "^5.8.2"
   }
 }

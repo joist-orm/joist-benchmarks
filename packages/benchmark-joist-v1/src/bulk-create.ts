@@ -12,7 +12,7 @@ export const bulkCreate: JoistOperation = {
 
     for (const row of seedData.authors) {
       em.create(Author, {
-        id: row.id,
+        id: `a:${row.id}`,
         firstName: row.firstName,
         lastName: row.lastName,
         email: row.email,
@@ -21,7 +21,7 @@ export const bulkCreate: JoistOperation = {
 
     for (const row of seedData.books) {
       em.create(Book, {
-        id: row.id,
+        id: `b:${row.id}`,
         title: row.title,
         author: em.getEntity(`a:${row.authorId}`) as Author,
         published: new Date(row.published),
@@ -31,7 +31,7 @@ export const bulkCreate: JoistOperation = {
 
     for (const row of seedData.reviews) {
       em.create(BookReview, {
-        id: row.id,
+        id: `br:${row.id}`,
         book: em.getEntity(`b:${row.bookId}`) as Book,
         rating: row.rating,
         text: row.text,
@@ -39,7 +39,7 @@ export const bulkCreate: JoistOperation = {
     }
 
     for (const row of seedData.tags) {
-      em.create(Tag, { id: row.id, name: row.name });
+      em.create(Tag, { id: `t:${row.id}`, name: row.name });
     }
 
     for (const { bookId, tagId } of seedData.bookTags) {

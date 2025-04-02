@@ -20,6 +20,7 @@ services:
         condition: service_healthy
     ports:
       - "5432:5432"
+      - "8474:8474"
     volumes:
       - ./toxiproxy.json:/config/toxiproxy.json
     command: "-host=0.0.0.0 -config=/config/toxiproxy.json"

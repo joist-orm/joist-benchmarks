@@ -3,10 +3,6 @@
     "name": "postgres",
     "listen": "0.0.0.0:5432",
     "upstream": "db:5432",
-    "enabled": true,
-    "toxics": [
-      { "type": "latency", "attributes": { "latency": 2000, "jitter": 0 } },
-      { "type": "down", "attributes": { "timeout": 0 } }
-    ]
+    "enabled": true
   }
 ]

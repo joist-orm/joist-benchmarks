@@ -7,6 +7,7 @@ export * from "./interfaces.ts";
 export * from "./operations.ts";
 
 export const DB_CONFIG = {
+  url: "postgres://postgres:postgres@localhost:5432/benchmark",
   host: "localhost",
   port: 5432,
   username: "postgres",

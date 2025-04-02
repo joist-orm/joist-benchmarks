@@ -21,5 +21,9 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "joist-codegen": "https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@1373",
+    "joist-orm": "https://pkg.pr.new/joist-orm/joist-orm/joist-orm@1373"
+  }
 }

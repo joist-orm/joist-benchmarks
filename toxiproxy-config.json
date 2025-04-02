@@ -4,6 +4,6 @@
     "listen": "0.0.0.0:5432",
     "upstream": "db:5432",
     "enabled": true,
-    "toxics": [{ "type": "latency", "name": "default-latency", "attributes": { "latency": 1, "jitter": 0 } }]
+    "toxics": [{ "type": "latency", "attributes": { "latency": 2000, "jitter": 0 } }]
   }
 ]

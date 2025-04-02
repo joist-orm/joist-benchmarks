@@ -24,5 +24,4 @@ export async function cleanDatabase(): Promise<void> {
     prisma.author.deleteMany(),
     prisma.tag.deleteMany(),
   ]);
-  console.log("Database cleaned");
 }

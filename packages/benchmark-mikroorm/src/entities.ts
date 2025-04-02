@@ -1,133 +1,102 @@
-import {
-  Entity,
-  PrimaryKey,
-  Property,
-  ManyToOne,
-  Collection,
-  OneToMany,
-  ManyToMany,
-  Cascade,
-  Unique,
-} from "@mikro-orm/core";
+import { Collection, EntitySchema, type EntityClass } from "@mikro-orm/core";
 
-/**
- * Note: For MikroORM 6.x running on Node.js 23.x, we need to be careful with decorators.
- * The code should be structured to work with the reflection-based metadata system.
- */
-
-@Entity()
 export class Author {
-  @PrimaryKey()
-  id: number;
-
-  @Property({ fieldName: "first_name" })
-  firstName: string;
-
-  @Property({ fieldName: "last_name" })
-  lastName: string;
-
-  @Property()
-  @Unique()
-  email: string;
-
-  @OneToMany(() => Book, (book) => book.author, { cascade: [Cascade.REMOVE] })
+  id: number = 0;
+  firstName: string = "";
+  lastName: string = "";
+  email: string = "";
   books = new Collection<Book>(this);
-
-  @Property({ fieldName: "created_at" })
   createdAt = new Date();
-
-  @Property({ fieldName: "updated_at", onUpdate: () => new Date() })
   updatedAt = new Date();
-
-  constructor() {
-    this.id = 0;
-    this.firstName = "";
-    this.lastName = "";
-    this.email = "";
-  }
 }
 
-@Entity()
 export class Book {
-  @PrimaryKey()
-  id: number;
-
-  @Property()
-  title: string;
-
-  @ManyToOne(() => Author, { nullable: true })
+  id: number = 0;
+  title: string = "";
   author?: Author;
-
-  @Property({ nullable: true })
   published?: Date;
-
-  @Property()
-  pages = 0;
-
-  @OneToMany(() => BookReview, (review) => review.book, { cascade: [Cascade.REMOVE] })
+  pages: number = 0;
   reviews = new Collection<BookReview>(this);
-
-  @ManyToMany({ entity: () => Tag, pivotTable: "book_tag", joinColumn: "book_id", inverseJoinColumn: "tag_id" })
   tags = new Collection<Tag>(this);
-
-  @Property({ fieldName: "created_at" })
   createdAt = new Date();
-
-  @Property({ fieldName: "updated_at", onUpdate: () => new Date() })
   updatedAt = new Date();
-
-  constructor() {
-    this.id = 0;
-    this.title = "";
-  }
 }
 
-@Entity({ tableName: "book_review" })
 export class BookReview {
-  @PrimaryKey()
-  id: number;
-
-  @ManyToOne(() => Book, { nullable: true })
+  id: number = 0;
   book?: Book;
-
-  @Property()
-  rating: number;
-
-  @Property({ nullable: true })
+  rating: number = 0;
   text?: string;
-
-  @Property({ fieldName: "created_at" })
   createdAt = new Date();
-
-  @Property({ fieldName: "updated_at", onUpdate: () => new Date() })
   updatedAt = new Date();
-
-  constructor() {
-    this.id = 0;
-    this.rating = 0;
-  }
 }
 
-@Entity()
 export class Tag {
-  @PrimaryKey()
-  id: number;
-
-  @Property()
-  @Unique()
-  name: string;
-
-  @ManyToMany(() => Book, (book) => book.tags)
+  id: number = 0;
+  name: string = "";
   books = new Collection<Book>(this);
-
-  @Property({ fieldName: "created_at" })
   createdAt = new Date();
-
-  @Property({ fieldName: "updated_at", onUpdate: () => new Date() })
   updatedAt = new Date();
+}
 
-  constructor() {
-    this.id = 0;
-    this.name = "";
-  }
+export const AuthorSchema = new EntitySchema<Author>({
+  class: Author,
+  properties: {
+    id: { primary: true, type: "number" },
+    firstName: { type: "string", fieldName: "first_name" },
+    lastName: { type: "string", fieldName: "last_name" },
+    email: { type: "string", unique: true },
+    books: { kind: "1:m", entity: () => Book, mappedBy: (book) => book.author },
+    createdAt: { type: "Date", fieldName: "created_at" },
+    updatedAt: { type: "Date", fieldName: "updated_at", onCreate: now, onUpdate: now },
+  },
+});
+
+export const BookSchema = new EntitySchema<Book>({
+  class: Book,
+  properties: {
+    id: { primary: true, type: "number" },
+    title: { type: "string" },
+    author: { kind: "m:1", entity: () => Author, nullable: false },
+    published: { type: "Date", nullable: true },
+    pages: { type: "number" },
+    reviews: { kind: "1:m", entity: () => BookReview, mappedBy: (review) => review.book },
+    tags: {
+      kind: "m:n",
+      entity: () => Tag,
+      pivotTable: "book_tag",
+      joinColumn: "book_id",
+      inverseJoinColumn: "tag_id",
+    },
+    createdAt: { type: "Date", fieldName: "created_at" },
+    updatedAt: { type: "Date", fieldName: "updated_at", onCreate: now, onUpdate: now },
+  },
+});
+
+export const BookReviewSchema = new EntitySchema<BookReview>({
+  class: BookReview,
+  tableName: "book_review",
+  properties: {
+    id: { primary: true, type: "number" },
+    book: { kind: "m:1", entity: () => Book, nullable: false },
+    rating: { type: "number" },
+    text: { type: "string", nullable: true },
+    createdAt: { type: "Date", fieldName: "created_at" },
+    updatedAt: { type: "Date", fieldName: "updated_at", onCreate: now, onUpdate: now },
+  },
+});
+
+export const TagSchema = new EntitySchema<Tag>({
+  class: Tag,
+  properties: {
+    id: { primary: true, type: "number" },
+    name: { type: "string", unique: true },
+    books: { kind: "m:n", entity: () => Book, mappedBy: (book) => book.tags },
+    createdAt: { type: "Date", fieldName: "created_at" },
+    updatedAt: { type: "Date", fieldName: "updated_at", onCreate: now, onUpdate: now },
+  },
+});
+
+function now() {
+  return new Date();
 }

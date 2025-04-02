@@ -3,10 +3,8 @@
   "compilerOptions": {
     "outDir": "./dist",
     "declaration": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "target": "ES2020",
-    "module": "NodeNext"
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
   },
   "include": ["src/**/*"]
 }

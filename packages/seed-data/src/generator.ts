@@ -133,9 +133,9 @@ export class DataGenerator {
 
 function createSeedData(size: number): void {
   const generator = new DataGenerator();
-  const booksPerAuthor = 3;
-  const reviewsPerBook = 3;
-  const tagsPerBook = 3;
+  const booksPerAuthor = 4;
+  const reviewsPerBook = 4;
+  const tagsPerBook = 4;
 
   const data = generator.generateDataSet(size, booksPerAuthor, reviewsPerBook, tagsPerBook);
 

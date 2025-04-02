@@ -5,8 +5,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: benchmark
-    ports:
-      - "5432:5432"
     volumes:
       - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
@@ -14,3 +12,14 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  toxiproxy:
+    image: ghcr.io/shopify/toxiproxy:2.5.0
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./toxiproxy-config.json:/config/toxiproxy.json
+    command: "-host=0.0.0.0 -config=/config/toxiproxy.json"

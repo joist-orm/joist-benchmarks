@@ -3,12 +3,14 @@ import colors from "colors";
 import * as mikro from "benchmark-mikroorm";
 import * as prisma from "benchmark-prisma";
 import * as joist_v1 from "benchmark-joist-v1";
+import * as joist_v2 from "benchmark-joist-v2";
 import { Context, getData, operations } from "seed-data";
 
 const orms = {
   mikro: { getContext: mikro.getContext, getOperations: mikro.getOperations },
   prisma: { getContext: prisma.getContext, getOperations: prisma.getOperations },
   joist_v1: { getContext: joist_v1.getContext, getOperations: joist_v1.getOperations },
+  joist_v2: { getContext: joist_v2.getContext, getOperations: joist_v2.getOperations },
 };
 
 // I want a table of

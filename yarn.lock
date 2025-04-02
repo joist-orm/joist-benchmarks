@@ -1176,6 +1176,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"benchmark-joist-v2@workspace:^, benchmark-joist-v2@workspace:packages/benchmark-joist-v2":
+  version: 0.0.0-use.local
+  resolution: "benchmark-joist-v2@workspace:packages/benchmark-joist-v2"
+  dependencies:
+    "@types/node": "npm:^22.13.16"
+    joist-codegen: "https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@1373"
+    joist-orm: "https://pkg.pr.new/joist-orm/joist-orm/joist-orm@1373"
+    knex: "npm:^3.1.0"
+    pg: "npm:^8.14.1"
+    seed-data: "workspace:^"
+    typescript: "npm:^5.8.2"
+  languageName: unknown
+  linkType: soft
+
 "benchmark-mikroorm@workspace:^, benchmark-mikroorm@workspace:packages/benchmark-mikroorm":
   version: 0.0.0-use.local
   resolution: "benchmark-mikroorm@workspace:packages/benchmark-mikroorm"
@@ -1222,6 +1236,7 @@ __metadata:
   dependencies:
     "@types/node": "npm:^22.13.16"
     benchmark-joist-v1: "workspace:^"
+    benchmark-joist-v2: "workspace:^"
     benchmark-mikroorm: "workspace:^"
     benchmark-prisma: "workspace:^"
     benchmark-typeorm: "workspace:^"
@@ -2329,6 +2344,33 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"joist-codegen@https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@1373":
+  version: 1.233.0
+  resolution: "joist-codegen@https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@1373"
+  dependencies:
+    "@dprint/formatter": "npm:^0.2.1"
+    "@dprint/json": "npm:0.15.6"
+    "@types/inquirer": "npm:^9.0.7"
+    "@types/jscodeshift": "npm:^0.12.0"
+    "@types/pg": "npm:^8.11.11"
+    "@types/pluralize": "npm:^0.0.33"
+    "@types/semver": "npm:^7.5.8"
+    change-case: "npm:^4.1.2"
+    fast-glob: "npm:^3.3.3"
+    inquirer: "npm:^9.3.7"
+    joist-utils: "https://pkg.pr.new/joist-orm/joist-orm/joist-utils@f60048c8c236d21e4b6aa6a29718704fa30e7758"
+    jscodeshift: "npm:^17.1.2"
+    knex: "npm:^3.1.0"
+    pg: "npm:^8.13.3"
+    pg-structure: "npm:^7.15.3"
+    pluralize: "npm:^8.0.0"
+    semver: "npm:^7.7.1"
+    ts-poet: "npm:^6.11.0"
+    zod: "npm:^3.24.2"
+  checksum: 10c0/a788178389acb2ef75fbbb407a6b784c38405e56a4142003f4de7b574ddc300f862a306f960b128e7ec41b3a7e921a21b7d5b9f4f11b5dc2dc50f1e0f5b90ed9
+  languageName: node
+  linkType: hard
+
 "joist-codegen@npm:^1.234.1":
   version: 1.234.1
   resolution: "joist-codegen@npm:1.234.1"
@@ -2357,6 +2399,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"joist-orm@https://pkg.pr.new/joist-orm/joist-orm/joist-orm@1373":
+  version: 1.233.0
+  resolution: "joist-orm@https://pkg.pr.new/joist-orm/joist-orm/joist-orm@1373"
+  dependencies:
+    "@types/object-hash": "npm:^3.0.6"
+    ansis: "npm:^3.15.0"
+    dataloader: "npm:^2.2.3"
+    joist-utils: "https://pkg.pr.new/joist-orm/joist-orm/joist-utils@f60048c8c236d21e4b6aa6a29718704fa30e7758"
+    object-hash: "npm:^3.0.0"
+    pg-types: "npm:^4.0.2"
+    postgres: "github:stephenh/postgres"
+  checksum: 10c0/e55a53378d0241c9203bd58eb3879365d527cc24e79a7e9b94a89947776f79e7105c6fb98943b0adf7186c0fb8d42a59bce4ee8eae861decaf618f252d853b2c
+  languageName: node
+  linkType: hard
+
 "joist-orm@npm:^1.234.1":
   version: 1.234.1
   resolution: "joist-orm@npm:1.234.1"
@@ -2371,6 +2428,15 @@ __metadata:
     pg: "npm:^8.13.3"
     pg-types: "npm:^4.0.2"
   checksum: 10c0/cc52f175682c3968e9d805ac0150fd1bd14652c68c951966011136af5ab552824b7f3c3ce2b0118b7e23b8430d8ba939d8e13d75faec1aa81b64aa809f4b7747
+  languageName: node
+  linkType: hard
+
+"joist-utils@https://pkg.pr.new/joist-orm/joist-orm/joist-utils@f60048c8c236d21e4b6aa6a29718704fa30e7758":
+  version: 1.233.0
+  resolution: "joist-utils@https://pkg.pr.new/joist-orm/joist-orm/joist-utils@f60048c8c236d21e4b6aa6a29718704fa30e7758"
+  dependencies:
+    pg-connection-string: "npm:^2.7.0"
+  checksum: 10c0/6e3685bbea260dc79758dab08faed4ec96d4addef3c2b2a55e02cecd208ee8b284f289b5f8a70e817c201990bdd7985e0c23d123db82707d9a5f7fdbdbd4e735
   languageName: node
   linkType: hard
 
@@ -3215,6 +3281,13 @@ __metadata:
   version: 1.1.4
   resolution: "postgres-range@npm:1.1.4"
   checksum: 10c0/254494ef81df208e0adeae6b66ce394aba37914ea14c7ece55a45fb6691b7db04bee74c825380a47c887a9f87158fd3d86f758f9cc60b76d3a38ce5aca7912e8
+  languageName: node
+  linkType: hard
+
+"postgres@github:stephenh/postgres":
+  version: 3.4.5
+  resolution: "postgres@https://github.com/stephenh/postgres.git#commit=ede9db4a5337797dad83f81b0404529513430414"
+  checksum: 10c0/eec45cdfdb4f47322a22548c7cd89cf7a6e058ec8a2ef14cffc2c9fc1e0d5754cd7c20a40543ae09b12da38078fbbbaeee7892297d50368e5775b4ee26082fb9
   languageName: node
   linkType: hard
 

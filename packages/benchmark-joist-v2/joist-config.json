@@ -1,0 +1,13 @@
+{
+  "codegenPlugins": [],
+  "databaseUrl": "postgresql://postgres:postgres@localhost:5432/benchmark",
+  "entities": {
+    "Author": { "tag": "a" },
+    "Book": { "tag": "b" },
+    "BookReview": { "tag": "br" },
+    "Tag": { "tag": "t" }
+  },
+  "entitiesDirectory": "./src/entities",
+  "esm": true,
+  "version": "1.233.0"
+}

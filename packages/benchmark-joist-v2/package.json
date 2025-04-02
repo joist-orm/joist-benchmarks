@@ -1,5 +1,5 @@
 {
-  "name": "benchmark",
+  "name": "benchmark-joist-v2",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -21,21 +21,17 @@
   },
   "scripts": {
     "build": "tsc",
-    "benchmark-2": "node --loader ts-node/esm --conditions=@source src/benchmark.ts",
-    "benchmark": "node --import tsx --conditions=@source src/benchmark.ts"
+    "generate": "node ./node_modules/joist-codegen -f ./joist-config.json"
   },
   "dependencies": {
-    "benchmark-joist-v1": "workspace:^",
-    "benchmark-joist-v2": "workspace:^",
-    "benchmark-mikroorm": "workspace:^",
-    "benchmark-prisma": "workspace:^",
-    "benchmark-typeorm": "workspace:^",
-    "cli-table3": "^0.6.5",
-    "colors": "^1.4.0",
+    "joist-orm": "https://pkg.pr.new/joist-orm/joist-orm/joist-orm@1373",
+    "knex": "^3.1.0",
+    "pg": "^8.14.1",
     "seed-data": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "^22.13.16",
+    "joist-codegen": "https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@1373",
     "typescript": "^5.8.2"
   }
 }

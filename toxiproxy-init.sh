@@ -5,6 +5,6 @@ curl -X POST http://localhost:8474/proxies/postgres/toxics -d '{
   "name": "latency_downstream",
   "type": "latency",
   "stream": "downstream",
-  "attributes": { "latency": 5 }
+  "attributes": { "latency": 2 }
 }'
 

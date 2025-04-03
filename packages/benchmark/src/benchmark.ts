@@ -4,7 +4,9 @@ import * as mikro from "benchmark-mikroorm";
 import * as prisma from "benchmark-prisma";
 import * as joist_v1 from "benchmark-joist-v1";
 import * as joist_v2 from "benchmark-joist-v2";
-import { Context, getData, operations } from "seed-data";
+import postgres from "postgres";
+import { Context, getData, operations, DB_CONFIG } from "seed-data";
+import fs from "fs/promises";
 
 const orms = {
   mikro: { getContext: mikro.getContext, getOperations: mikro.getOperations },
@@ -12,6 +14,8 @@ const orms = {
   joist_v1: { getContext: joist_v1.getContext, getOperations: joist_v1.getOperations },
   joist_v2: { getContext: joist_v2.getContext, getOperations: joist_v2.getOperations },
 };
+
+const sql = postgres(DB_CONFIG.url);
 
 // I want a table of
 // opOne_1    mikro | joist | etc. | fastest
@@ -21,7 +25,7 @@ const orms = {
 type BenchmarkResult = {
   operation: string;
   size: number;
-  orms: Record<string, number[]>;
+  orms: Record<string, { durations: number[]; queries: number }>;
 };
 
 // Track the connection pools to shutdown
@@ -33,7 +37,7 @@ async function runBenchmark(): Promise<BenchmarkResult[]> {
   const results: BenchmarkResult[] = [];
   for (const [op, sizes] of Object.entries(operations)) {
     for (const size of sizes) {
-      const row: Record<string, number[]> = {};
+      const row: Record<string, { durations: number[]; queries: number }> = {};
       for (const [name, config] of Object.entries(orms)) {
         try {
           const ctx = contexts.get(name) ?? (await config.getContext());
@@ -45,14 +49,32 @@ async function runBenchmark(): Promise<BenchmarkResult[]> {
             const runCtx = { ...ctx, size, seedData };
             // Loop to get some samples
             const durations: number[] = [];
+            let queries = 0;
             for (const _ of samples) {
               await o.beforeEach(runCtx);
+              await sql`SELECT pg_stat_statements_reset()`;
+
+              // Run the operation and measure the time taken
               const startTime = performance.now();
               await o.run(runCtx);
               const endTime = performance.now();
+
+              // Get the number of queries issued
+              const stats = await sql`
+                select sum(calls) as calls from pg_stat_statements
+                where query not like '%pg_stat%' and query not like '%pg_catalog%'
+              `;
               durations.push(endTime - startTime);
+              queries += Number(stats[0].calls);
+
+              // Save the queries issued to a file
+              const debug = await sql`
+                select query from pg_stat_statements
+                where query not like '%pg_stat%' and query not like '%pg_catalog%'
+              `;
+              await fs.writeFile(`./queries-${name}-${op}-${size}.sql`, debug.map((d) => d.query).join("\n"));
             }
-            row[name] = durations;
+            row[name] = { durations, queries: Math.round(queries / samples.length) };
           }
         } catch (error) {
           console.error(`Error running benchmark for ${name} (${op}, size ${size}):`, error);
@@ -74,8 +96,8 @@ function displayResults(results: BenchmarkResult[]): void {
   for (const result of results) {
     const row = [result.operation, result.size];
     for (const ormName of ormNames) {
-      const times = result.orms[ormName];
-      row.push(times ? averageMilliseconds(times) : "N/A");
+      const stats = result.orms[ormName];
+      row.push(stats ? `${averageMilliseconds(stats.durations)}ms (${stats.queries})` : "N/A");
     }
     table.push(row);
   }
@@ -100,4 +122,6 @@ function averageMilliseconds(durations: number[]): string {
   return average.toFixed(2);
 }
 
-runAllBenchmarks().catch(console.error);
+runAllBenchmarks()
+  .catch(console.error)
+  .finally(() => sql.end());

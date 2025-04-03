@@ -17,6 +17,8 @@ export type AllOperations<C extends Context> = {
 };
 
 export const operations = {
-  bulkCreate: [1, 10, 100, 1000],
-  bulkLoad: [1, 10, 100, 1000],
+  // bulkCreate: [1, 10, 100, 1000],
+  // bulkLoad: [1, 10, 100, 1000],
+  bulkCreate: [1, 10, 100],
+  bulkLoad: [1, 10, 100],
 };

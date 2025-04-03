@@ -1,3 +1,5 @@
+CREATE EXTENSION pg_stat_statements;
+
 CREATE TABLE IF NOT EXISTS author (
   id SERIAL PRIMARY KEY,
   first_name TEXT NOT NULL,

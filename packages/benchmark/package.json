@@ -22,7 +22,8 @@
   "scripts": {
     "build": "tsc",
     "benchmark-2": "node --loader ts-node/esm --conditions=@source src/benchmark.ts",
-    "benchmark": "node --import tsx --conditions=@source src/benchmark.ts"
+    "benchmark": "node --import tsx --conditions=@source src/benchmark.ts",
+    "pipeline": "node --expose-gc --import tsx --conditions=@source src/pipeline.ts"
   },
   "dependencies": {
     "benchmark-joist-v1": "workspace:^",
@@ -32,6 +33,7 @@
     "benchmark-typeorm": "workspace:^",
     "cli-table3": "^0.6.5",
     "colors": "^1.4.0",
+    "mitata": "^1.0.34",
     "seed-data": "workspace:^"
   },
   "devDependencies": {

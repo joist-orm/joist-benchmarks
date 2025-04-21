@@ -13,6 +13,13 @@ services:
       - "pg_stat_statements.track=all"
     volumes:
       - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    # fsync=off gives pipeline's sequential w/30 statements ~1.5ms/iteration, while
+    # leaving it on doubles it to 3.5ms, both going through toxiproxy but w/0ms latency
+    # Granted, we "want latency" for our tests, but deterministic latency.
+    command:
+      - postgres
+      - -c
+      - fsync=off
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s

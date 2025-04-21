@@ -11,15 +11,13 @@ services:
       - "shared_preload_libraries=pg_stat_statements"
       - "-c"
       - "pg_stat_statements.track=all"
+      # fsync=off gives pipeline's sequential w/30 statements ~1.5ms/iteration, while
+      # leaving it on doubles it to 3.5ms, both going through toxiproxy but w/0ms latency
+      # Granted, we "want latency" for our tests, but deterministic latency.
+      - "-c"
+      - fsync=off
     volumes:
       - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
-    # fsync=off gives pipeline's sequential w/30 statements ~1.5ms/iteration, while
-    # leaving it on doubles it to 3.5ms, both going through toxiproxy but w/0ms latency
-    # Granted, we "want latency" for our tests, but deterministic latency.
-    command:
-      - postgres
-      - -c
-      - fsync=off
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s

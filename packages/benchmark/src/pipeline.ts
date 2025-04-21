@@ -3,6 +3,7 @@ import { run, bench, summary } from "mitata";
 import { DB_CONFIG } from "seed-data";
 import { setToxiproxyLatency } from "./toxi-init.ts";
 
+// yarn pipeline
 // node --expose-gc --import tsx --env-file=.env ./pipeline.cjs
 
 // Number of statements (i.e. INSERT author, UPDATE book, etc)

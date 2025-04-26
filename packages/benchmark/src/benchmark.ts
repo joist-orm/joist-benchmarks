@@ -7,6 +7,7 @@ import * as joist_v2 from "benchmark-joist-v2";
 import postgres from "postgres";
 import { Context, getData, operations, DB_CONFIG } from "seed-data";
 import fs from "fs/promises";
+import { setToxiproxyLatency } from "./toxi-init.ts";
 
 const orms = {
   mikro: { getContext: mikro.getContext, getOperations: mikro.getOperations },
@@ -107,6 +108,7 @@ function displayResults(results: BenchmarkResult[]): void {
 
 async function runAllBenchmarks(): Promise<void> {
   console.log(colors.green("\n=== ORM BENCHMARKS ===\n"));
+  await setToxiproxyLatency(2);
   const results = await runBenchmark();
   displayResults(results);
   for (const [, ctx] of contexts.entries()) {

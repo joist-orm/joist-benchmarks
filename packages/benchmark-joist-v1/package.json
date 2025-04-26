@@ -21,17 +21,17 @@
   },
   "scripts": {
     "build": "tsc",
-    "generate": "joist-codegen -f ./joist-config.json"
+    "codegen": "joist-codegen -f ./joist-config.json"
   },
   "dependencies": {
-    "joist-orm": "^1.234.1",
+    "joist-orm": "^1.242.0",
     "knex": "^3.1.0",
-    "pg": "^8.14.1",
+    "pg": "^8.15.6",
     "seed-data": "workspace:^"
   },
   "devDependencies": {
-    "@types/node": "^22.13.16",
-    "joist-codegen": "^1.234.1",
-    "typescript": "^5.8.2"
+    "@types/node": "^22.15.2",
+    "joist-codegen": "^1.242.0",
+    "typescript": "^5.8.3"
   }
 }

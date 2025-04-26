@@ -12,13 +12,14 @@
     "db:ps": "docker ps | grep postgres",
     "format": "prettier --write \"**/*.{ts,js,json,md,yml}\"",
     "benchmark": "yarn workspace benchmark benchmark",
-    "pipeline": "yarn workspace benchmark pipeline"
+    "pipeline": "yarn workspace benchmark pipeline",
+    "codegen": "yarn workspaces --all run codegen"
   },
   "devDependencies": {
     "prettier": "^3.5.3",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.3",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
   "workspaces": [
     "packages/*"

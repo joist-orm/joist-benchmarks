@@ -21,17 +21,17 @@
   },
   "scripts": {
     "build": "tsc",
-    "generate": "node ./node_modules/joist-codegen -f ./joist-config.json"
+    "codegen": "node ./node_modules/joist-codegen -f ./joist-config.json"
   },
   "dependencies": {
-    "joist-orm": "https://pkg.pr.new/joist-orm/joist-orm/joist-orm@e647b62",
+    "joist-orm": "https://pkg.pr.new/joist-orm/joist-orm/joist-orm@641b09d",
     "knex": "^3.1.0",
-    "pg": "^8.14.1",
+    "pg": "^8.15.6",
     "seed-data": "workspace:^"
   },
   "devDependencies": {
-    "@types/node": "^22.13.16",
-    "joist-codegen": "https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@e647b62",
-    "typescript": "^5.8.2"
+    "@types/node": "^22.15.2",
+    "joist-codegen": "https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@641b09d",
+    "typescript": "^5.8.3"
   }
 }

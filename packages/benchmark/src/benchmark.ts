@@ -31,7 +31,8 @@ type BenchmarkResult = {
 // Track the connection pools to shutdown
 const contexts: Map<string, Context> = new Map();
 
-const samples = Array(5);
+// How many times to run each operation; we'll take the average
+const samples = Array(10);
 
 async function runBenchmark(): Promise<BenchmarkResult[]> {
   const results: BenchmarkResult[] = [];
@@ -113,12 +114,15 @@ async function runAllBenchmarks(): Promise<void> {
   }
 }
 
+/** Given the durations (based on the number of samples), return the average in milliseconds. */
 function averageMilliseconds(durations: number[]): string {
   if (durations.length === 0) {
     return "0.00";
   }
-  const sum = durations.reduce((total, duration) => total + duration, 0);
-  const average = sum / durations.length;
+  // Sort and remove the two highest & two lowest values
+  const copy = [...durations].sort().slice(2, -2);
+  const sum = copy.reduce((total, duration) => total + duration, 0);
+  const average = sum / copy.length;
   return average.toFixed(2);
 }
 

@@ -75,7 +75,7 @@ async function runBenchmark(): Promise<BenchmarkResult[]> {
                 select query from pg_stat_statements
                 where query not like '%pg_stat%' and query not like '%pg_catalog%'
               `;
-              await fs.writeFile(`./queries-${name}-${op}-${size}.sql`, debug.map((d) => d.query).join("\n"));
+              await fs.writeFile(`./queries/${name}-${op}-${size}.sql`, debug.map((d) => d.query).join("\n"));
             }
             row[name] = { durations, queries: Math.round(queries / samples.length) };
           }

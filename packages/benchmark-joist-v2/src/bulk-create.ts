@@ -1,3 +1,4 @@
+import { JsonAggregatePreloader } from "joist-plugin-join-preloading";
 import { Author, Book, BookReview, EntityManager, Tag } from "./entities/index.ts";
 import { cleanDatabase, JoistOperation } from "./index.ts";
 
@@ -7,8 +8,9 @@ export const bulkCreate: JoistOperation = {
   },
 
   async run(ctx) {
-    const { driver, seedData } = ctx;
-    const em = new EntityManager({}, { driver });
+    const { driver, seedData, preload } = ctx;
+    const preloadPlugin = preload ? new JsonAggregatePreloader() : undefined;
+    const em = new EntityManager({}, { driver, preloadPlugin });
 
     for (const row of seedData.authors) {
       em.create(Author, {

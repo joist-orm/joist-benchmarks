@@ -4,13 +4,19 @@ import { AllOperations, Context, DB_CONFIG, Operation } from "seed-data";
 import { bulkCreate } from "./bulk-create.ts";
 import { bulkLoad } from "./bulk-load.ts";
 
-export type JoistContext = Context & { sql: Sql; driver: PostgresDriver };
+export type JoistContext = Context & { sql: Sql; driver: PostgresDriver; preload: boolean };
 export type JoistOperation = Operation<JoistContext>;
 
-export async function getContext(): Promise<Pick<JoistContext, "driver" | "shutdown" | "sql">> {
+export async function getContext(): Promise<Pick<JoistContext, "driver" | "shutdown" | "sql" | "preload">> {
   const sql = postgres(DB_CONFIG.url);
   const driver = new PostgresDriver(sql);
-  return { sql, driver, shutdown: () => sql.end() };
+  return { sql, driver, shutdown: () => sql.end(), preload: false };
+}
+
+export async function getContextPreload(): Promise<Pick<JoistContext, "driver" | "shutdown" | "sql" | "preload">> {
+  const sql = postgres(DB_CONFIG.url);
+  const driver = new PostgresDriver(sql);
+  return { sql, driver, shutdown: () => sql.end(), preload: true };
 }
 
 export function getOperations(): AllOperations<JoistContext> {

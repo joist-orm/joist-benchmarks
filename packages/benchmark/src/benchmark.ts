@@ -14,6 +14,7 @@ const orms = {
   prisma: { getContext: prisma.getContext, getOperations: prisma.getOperations },
   joist_v1: { getContext: joist_v1.getContext, getOperations: joist_v1.getOperations },
   joist_v2: { getContext: joist_v2.getContext, getOperations: joist_v2.getOperations },
+  joist_v2_pre: { getContext: joist_v2.getContextPreload, getOperations: joist_v2.getOperations },
 };
 
 const sql = postgres(DB_CONFIG.url);

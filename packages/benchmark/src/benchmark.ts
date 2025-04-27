@@ -38,7 +38,7 @@ const samples = Array(10);
 
 async function runBenchmark(): Promise<BenchmarkResult[]> {
   const results: BenchmarkResult[] = [];
-  for (const [op, sizes] of Object.entries(operations)) {
+  for (const [op, { sizes }] of Object.entries(operations)) {
     for (const size of sizes) {
       const row: Record<string, { durations: number[]; queries: number }> = {};
       for (const [name, config] of Object.entries(orms)) {
@@ -93,11 +93,13 @@ async function runBenchmark(): Promise<BenchmarkResult[]> {
 function displayResults(results: BenchmarkResult[]): void {
   const ormNames = Object.keys(orms);
   const table = new Table({
-    head: ["Operation", "Size", ...ormNames.map((orm) => colors.cyan(orm))],
-    colAligns: ["left", "right", ...ormNames.map(() => "right" as const)],
+    head: ["Operation", "Size", "Description", ...ormNames.map((orm) => colors.cyan(orm))],
+    colAligns: ["left", "right", "left", ...ormNames.map(() => "right" as const)],
   });
   for (const result of results) {
-    const row = [result.operation, result.size];
+    // Start the table row with `op x size x description`
+    const row = [result.operation, result.size, (operations as any)[result.operation].description(result.size)];
+    // Then all the ORM results
     for (const ormName of ormNames) {
       const stats = result.orms[ormName];
       row.push(stats ? `${averageMilliseconds(stats.durations)}ms (${stats.queries})` : "N/A");

@@ -87,12 +87,7 @@ export class DataGenerator {
     return bookTags;
   }
 
-  generateDataSet(
-    authorCount: number,
-    booksPerAuthor: number,
-    reviewsPerBook: number,
-    tagsPerBook: number,
-  ): {
+  generateDataSet(authorCount: number): {
     authors: Author[];
     books: Book[];
     reviews: BookReview[];
@@ -128,11 +123,8 @@ export class DataGenerator {
 
 function createSeedData(authorCount: number): void {
   const generator = new DataGenerator();
-  const booksPerAuthor = 10;
-  const reviewsPerBook = 10;
-  const tagsPerBook = 5;
 
-  const data = generator.generateDataSet(authorCount, booksPerAuthor, reviewsPerBook, tagsPerBook);
+  const data = generator.generateDataSet(authorCount);
 
   // Get the directory name of the current module in ESM
   const __filename = fileURLToPath(import.meta.url);
@@ -148,6 +140,10 @@ function createSeedData(authorCount: number): void {
   console.log(`- ${data.tags.length} tags`);
   console.log(`- ${data.bookTags.length} book-tag relationships`);
 }
+
+export const booksPerAuthor = 10;
+export const reviewsPerBook = 10;
+export const tagsPerBook = 5;
 
 // Generate seed data for all benchmark sizes
 const sizes = [1, 10, 100, 1000];

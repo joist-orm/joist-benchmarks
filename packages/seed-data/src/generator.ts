@@ -104,22 +104,17 @@ export class DataGenerator {
     let reviews: BookReview[] = [];
     // Generate books and reviews
     for (const author of authors) {
-      if (author.id) {
-        const authorBooks = this.generateBooks(author.id, booksPerAuthor);
-        books = [...books, ...authorBooks];
-        for (const book of authorBooks) {
-          if (book.id) {
-            const bookReviews = this.generateReviews(book.id, reviewsPerBook);
-            reviews = [...reviews, ...bookReviews];
-          }
-        }
+      const authorBooks = this.generateBooks(author.id, booksPerAuthor);
+      books = [...books, ...authorBooks];
+      for (const book of authorBooks) {
+        const bookReviews = this.generateReviews(book.id, reviewsPerBook);
+        reviews = [...reviews, ...bookReviews];
       }
     }
 
     // Generate tags
     const uniqueTagCount = Math.min(50, authorCount * booksPerAuthor); // Limit tag count to avoid too many
     const tags = this.generateTags(uniqueTagCount);
-
     // Assign tags to books
     const bookTags = this.assignTagsToBooks(
       books.map((b) => b.id),
@@ -131,22 +126,22 @@ export class DataGenerator {
   }
 }
 
-function createSeedData(size: number): void {
+function createSeedData(authorCount: number): void {
   const generator = new DataGenerator();
-  const booksPerAuthor = 4;
-  const reviewsPerBook = 4;
-  const tagsPerBook = 4;
+  const booksPerAuthor = 10;
+  const reviewsPerBook = 10;
+  const tagsPerBook = 5;
 
-  const data = generator.generateDataSet(size, booksPerAuthor, reviewsPerBook, tagsPerBook);
+  const data = generator.generateDataSet(authorCount, booksPerAuthor, reviewsPerBook, tagsPerBook);
 
   // Get the directory name of the current module in ESM
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
 
   const outputDir = path.resolve(__dirname, "../");
-  fs.writeFileSync(path.join(outputDir, `seed-${size}.json`), JSON.stringify(data, null, 2));
+  fs.writeFileSync(path.join(outputDir, `seed-${authorCount}.json`), JSON.stringify(data, null, 2));
 
-  console.log(`Generated seed data for size ${size} with:`);
+  console.log(`Generated seed data for size ${authorCount} with:`);
   console.log(`- ${data.authors.length} authors`);
   console.log(`- ${data.books.length} books`);
   console.log(`- ${data.reviews.length} reviews`);

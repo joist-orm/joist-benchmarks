@@ -32,14 +32,15 @@ async function testPipelining() {
     });
 
     // "Concurrent" execution with Promise.all  ==> 15ms
-    // This is expensive b/c each statement is waiting on the connection pool
-    bench("concurrent", async () => {
-      const promises = [];
-      for (let i = 0; i < numStatements; i++) {
-        promises.push(sql`INSERT INTO tag (name)VALUES (${`value-${nextTag++}`})`);
-      }
-      await Promise.all(promises);
-    });
+    // This is actually the fastest b/c writes are parallelized on the pg side (seems like
+    // it would create thrashing b/c commits have to be serial :thinking:)
+    // bench("concurrent", async () => {
+    //   const promises = [];
+    //   for (let i = 0; i < numStatements; i++) {
+    //     promises.push(sql`INSERT INTO tag (name)VALUES (${`value-${nextTag++}`})`);
+    //   }
+    //   await Promise.all(promises);
+    // });
 
     // Now use sql.begin so we have a reserved connection => can pipeline
     bench("pipeline (return string[])", async () => {

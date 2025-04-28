@@ -12,7 +12,6 @@ export const bulkLoad: TypeOrmOperation = {
   async run({ dataSource, size }) {
     const authorRepository = dataSource.getRepository(Author);
     await authorRepository.find({
-      take: size,
       relations: {
         books: {
           reviews: true,

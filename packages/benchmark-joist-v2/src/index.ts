@@ -9,13 +9,13 @@ export type JoistOperation = Operation<JoistContext>;
 
 export async function getContext(): Promise<Pick<JoistContext, "driver" | "shutdown" | "sql" | "preload">> {
   const sql = postgres(DB_CONFIG.url);
-  const driver = new PostgresDriver(sql as any);
+  const driver = new PostgresDriver(sql);
   return { sql, driver, shutdown: () => sql.end(), preload: false };
 }
 
 export async function getContextPreload(): Promise<Pick<JoistContext, "driver" | "shutdown" | "sql" | "preload">> {
   const sql = postgres(DB_CONFIG.url);
-  const driver = new PostgresDriver(sql as any);
+  const driver = new PostgresDriver(sql);
   return { sql, driver, shutdown: () => sql.end(), preload: true };
 }
 

@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "composite": true,
     "target": "ES2022",
     "module": "preserve",
     "moduleResolution": "bundler",
@@ -7,10 +8,13 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "allowImportingTsExtensions": true,
-    "forceConsistentCasingInFileNames": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "customConditions": ["@source"],
-    "noEmit": true
+    "noEmit": true,
+    "customConditions": ["@source"]
+  },
+  "ts-node": {
+    "esm": true,
+    "transpileOnly": true
   }
 }

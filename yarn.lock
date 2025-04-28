@@ -1191,9 +1191,9 @@ __metadata:
   resolution: "benchmark-joist-v2@workspace:packages/benchmark-joist-v2"
   dependencies:
     "@types/node": "npm:^22.15.2"
-    joist-codegen: "https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@88a28ad"
-    joist-orm: "https://pkg.pr.new/joist-orm/joist-orm/joist-orm@88a28ad"
-    joist-plugin-join-preloading: "https://pkg.pr.new/joist-orm/joist-orm/joist-plugin-join-preloading@88a28ad"
+    joist-codegen: "https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@88a28ad9d7ffa8c16243efb3bb6122e36ce74d69"
+    joist-orm: "https://pkg.pr.new/joist-orm/joist-orm/joist-orm@88a28ad9d7ffa8c16243efb3bb6122e36ce74d69"
+    joist-plugin-join-preloading: "https://pkg.pr.new/joist-orm/joist-orm/joist-plugin-join-preloading@88a28ad9d7ffa8c16243efb3bb6122e36ce74d69"
     knex: "npm:^3.1.0"
     pg: "npm:^8.15.6"
     seed-data: "workspace:^"
@@ -2385,9 +2385,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"joist-codegen@https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@88a28ad":
+"joist-codegen@https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@88a28ad9d7ffa8c16243efb3bb6122e36ce74d69":
   version: 1.242.0
-  resolution: "joist-codegen@https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@88a28ad"
+  resolution: "joist-codegen@https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@88a28ad9d7ffa8c16243efb3bb6122e36ce74d69"
   dependencies:
     "@dprint/formatter": "npm:^0.2.1"
     "@dprint/json": "npm:0.15.6"
@@ -2457,9 +2457,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"joist-orm@https://pkg.pr.new/joist-orm/joist-orm/joist-orm@88a28ad":
+"joist-orm@https://pkg.pr.new/joist-orm/joist-orm/joist-orm@88a28ad9d7ffa8c16243efb3bb6122e36ce74d69":
   version: 1.242.0
-  resolution: "joist-orm@https://pkg.pr.new/joist-orm/joist-orm/joist-orm@88a28ad"
+  resolution: "joist-orm@https://pkg.pr.new/joist-orm/joist-orm/joist-orm@88a28ad9d7ffa8c16243efb3bb6122e36ce74d69"
   dependencies:
     "@types/object-hash": "npm:^3.0.6"
     ansis: "npm:^3.15.0"
@@ -2489,9 +2489,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"joist-plugin-join-preloading@https://pkg.pr.new/joist-orm/joist-orm/joist-plugin-join-preloading@88a28ad":
+"joist-plugin-join-preloading@https://pkg.pr.new/joist-orm/joist-orm/joist-plugin-join-preloading@88a28ad9d7ffa8c16243efb3bb6122e36ce74d69":
   version: 1.116.1
-  resolution: "joist-plugin-join-preloading@https://pkg.pr.new/joist-orm/joist-orm/joist-plugin-join-preloading@88a28ad"
+  resolution: "joist-plugin-join-preloading@https://pkg.pr.new/joist-orm/joist-orm/joist-plugin-join-preloading@88a28ad9d7ffa8c16243efb3bb6122e36ce74d69"
   peerDependencies:
     joist-orm: "workspace:*"
   checksum: 10c0/72ca17637f5837263a730b044e88e7c512925b8de47c6e6db2d34cbaa1c39d1256f7810f62fd4d22f36ba06731fe9fbc3b2b295984d5da4081858c965cc8d1da

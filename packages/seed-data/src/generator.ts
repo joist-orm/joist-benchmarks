@@ -2,14 +2,17 @@ import { faker } from "@faker-js/faker";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { Author, Book, BookReview, Tag } from "./interfaces";
+import { Author, Book, BookReview, Tag } from "./interfaces.ts";
 
 export class DataGenerator {
   private authorIds: number[] = [];
   private bookIds: number[] = [];
   private tagIds: number[] = [];
+  private readonly startId: number;
 
-  constructor(private readonly startId = 1) {}
+  constructor(startId = 1) {
+    this.startId = startId;
+  }
 
   generateAuthors(count: number): Author[] {
     const authors: Author[] = [];

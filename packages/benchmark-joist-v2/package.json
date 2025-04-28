@@ -24,15 +24,15 @@
     "codegen": "node ./node_modules/joist-codegen -f ./joist-config.json"
   },
   "dependencies": {
-    "joist-orm": "https://pkg.pr.new/joist-orm/joist-orm/joist-orm@88a28ad",
-    "joist-plugin-join-preloading": "https://pkg.pr.new/joist-orm/joist-orm/joist-plugin-join-preloading@88a28ad",
+    "joist-orm": "https://pkg.pr.new/joist-orm/joist-orm/joist-orm@88a28ad9d7ffa8c16243efb3bb6122e36ce74d69",
+    "joist-plugin-join-preloading": "https://pkg.pr.new/joist-orm/joist-orm/joist-plugin-join-preloading@88a28ad9d7ffa8c16243efb3bb6122e36ce74d69",
     "knex": "^3.1.0",
     "pg": "^8.15.6",
     "seed-data": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "^22.15.2",
-    "joist-codegen": "https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@88a28ad",
+    "joist-codegen": "https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@88a28ad9d7ffa8c16243efb3bb6122e36ce74d69",
     "typescript": "^5.8.3"
   }
 }

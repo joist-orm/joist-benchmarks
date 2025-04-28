@@ -21,8 +21,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "benchmark-2": "node --loader ts-node/esm --conditions=@source src/benchmark.ts",
-    "benchmark": "node --import tsx --conditions=@source src/benchmark.ts",
+    "benchmark": "node --conditions=@source --loader ts-node/esm --no-experimental-strip-types src/benchmark.ts",
+    "benchmark-tsx": "node --import tsx --conditions=@source src/benchmark.ts",
     "pipeline": "node --expose-gc --import tsx --conditions=@source src/pipeline.ts"
   },
   "dependencies": {

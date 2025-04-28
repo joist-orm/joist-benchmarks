@@ -9,6 +9,7 @@ export type TypeOrmOperation = Operation<TypeOrmContext>;
 
 export async function getContext(): Promise<Pick<TypeOrmContext, "dataSource" | "shutdown">> {
   const dataSource = AppDataSource;
+  await AppDataSource.initialize();
   return { dataSource, shutdown: () => dataSource.destroy() };
 }
 

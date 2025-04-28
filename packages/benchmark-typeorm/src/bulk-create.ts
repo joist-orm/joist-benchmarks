@@ -20,74 +20,49 @@ export const bulkCreate: TypeOrmOperation = {
     const tagRepository = queryRunner.manager.getRepository(Tag);
 
     // Insert authors
-    for (const authorData of seedData.authors) {
-      const author = authorRepository.create({
+    const authors = seedData.authors.map((authorData) => {
+      return authorRepository.create({
         id: authorData.id,
         firstName: authorData.firstName,
         lastName: authorData.lastName,
         email: authorData.email,
       });
-      await authorRepository.save(author);
-    }
+    });
+    await authorRepository.save(authors);
 
     // Insert books
-    for (const bookData of seedData.books) {
-      const book = bookRepository.create({
+    const books = seedData.books.map((bookData) => {
+      return bookRepository.create({
         id: bookData.id,
         title: bookData.title,
         authorId: bookData.authorId,
-        published: bookData.published ? new Date(bookData.published) : null,
+        published: new Date(bookData.published),
         pages: bookData.pages,
       });
-      await bookRepository.save(book);
-    }
+    });
+    await bookRepository.save(books);
 
     // Insert reviews
-    for (const reviewData of seedData.reviews) {
-      const review = reviewRepository.create({
+    const reviews = seedData.reviews.map((reviewData) => {
+      return reviewRepository.create({
         id: reviewData.id,
         bookId: reviewData.bookId,
         rating: reviewData.rating,
         text: reviewData.text,
       });
-      await reviewRepository.save(review);
-    }
+    });
+    await reviewRepository.save(reviews);
 
     // Insert tags
-    for (const tagData of seedData.tags) {
-      const tag = tagRepository.create({
+    const tags = seedData.tags.map((tagData) => {
+      return tagRepository.create({
         id: tagData.id,
         name: tagData.name,
       });
-      await tagRepository.save(tag);
-    }
+    });
+    await tagRepository.save(tags);
 
-    // Insert book-tag relationships
-    if (seedData.bookTags.length > 0) {
-      // Filter out duplicate book-tag pairs
-      const uniquePairs = new Set<string>();
-      const uniqueBookTags = seedData.bookTags.filter((bt: { bookId: number; tagId: number }) => {
-        const pairKey = `${bt.bookId}-${bt.tagId}`;
-        if (uniquePairs.has(pairKey)) {
-          return false;
-        }
-        uniquePairs.add(pairKey);
-        return true;
-      });
-
-      // Process in chunks of 100 to avoid query size limits
-      const chunkSize = 100;
-      for (let i = 0; i < uniqueBookTags.length; i += chunkSize) {
-        const chunk = uniqueBookTags.slice(i, i + chunkSize);
-        if (chunk.length > 0) {
-          await queryRunner.query(
-            `INSERT INTO book_tag ("bookId", "tagId") VALUES ${chunk
-              .map((bt: { bookId: number; tagId: number }) => `(${bt.bookId}, ${bt.tagId})`)
-              .join(", ")}`,
-          );
-        }
-      }
-    }
+    // Insert book tags
 
     await queryRunner.commitTransaction();
     await queryRunner.release();

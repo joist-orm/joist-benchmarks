@@ -5,5 +5,4 @@
     "declaration": true
   },
   "include": ["src/**/*"]
-  //  "references": [{ "path": "../seed-data" }]
 }

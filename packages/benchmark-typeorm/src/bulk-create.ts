@@ -1,36 +1,19 @@
-import { AppDataSource } from "./db";
-import { Author, Book, BookReview, Tag } from "./entities";
-import { getData } from "seed-data";
+import { Author, Book, BookReview, Tag } from "./entities.ts";
+import { cleanDatabase, TypeOrmOperation } from "./index.ts";
 
-// await AppDataSource.initialize();
+export const bulkCreate: TypeOrmOperation = {
+  async beforeEach(ctx) {
+    await cleanDatabase(ctx.dataSource);
+  },
 
-async function loadData(size: number): Promise<void> {
-  const authorRepository = AppDataSource.getRepository(Author);
-  const authors = await authorRepository.find({
-    take: size,
-    relations: {
-      books: {
-        reviews: true,
-        tags: true,
-      },
-    },
-    order: {
-      id: "ASC",
-    },
-  });
-  console.log(`Loaded ${authors.length} authors with their books, reviews, and tags`);
-}
+  async run(ctx) {
+    const { dataSource, seedData } = ctx;
 
-async function saveData(size: number): Promise<void> {
-  // Load the generated seed data
-  const seedData = getData(size);
+    // Use a query runner with transaction
+    const queryRunner = dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-  // Use a query runner with transaction
-  const queryRunner = AppDataSource.createQueryRunner();
-  await queryRunner.connect();
-  await queryRunner.startTransaction();
-
-  try {
     const authorRepository = queryRunner.manager.getRepository(Author);
     const bookRepository = queryRunner.manager.getRepository(Book);
     const reviewRepository = queryRunner.manager.getRepository(BookReview);
@@ -97,30 +80,16 @@ async function saveData(size: number): Promise<void> {
       for (let i = 0; i < uniqueBookTags.length; i += chunkSize) {
         const chunk = uniqueBookTags.slice(i, i + chunkSize);
         if (chunk.length > 0) {
-          try {
-            await queryRunner.query(
-              `INSERT INTO book_tag ("bookId", "tagId") VALUES ${chunk
-                .map((bt: { bookId: number; tagId: number }) => `(${bt.bookId}, ${bt.tagId})`)
-                .join(", ")}`,
-            );
-          } catch (err) {
-            console.error(`Error inserting book-tag chunk ${i} to ${i + chunk.length}:`, err);
-            // Continue with the next chunk
-          }
+          await queryRunner.query(
+            `INSERT INTO book_tag ("bookId", "tagId") VALUES ${chunk
+              .map((bt: { bookId: number; tagId: number }) => `(${bt.bookId}, ${bt.tagId})`)
+              .join(", ")}`,
+          );
         }
       }
     }
 
     await queryRunner.commitTransaction();
-    console.log(`Saved ${seedData.authors.length} authors with their books, reviews, and tags`);
-  } catch (error) {
-    await queryRunner.rollbackTransaction();
-    throw error;
-  } finally {
     await queryRunner.release();
-  }
-}
-
-async function cleanDatabase(): Promise<void> {
-  await AppDataSource.query("TRUNCATE book_tag, book_review, book, author, tag RESTART IDENTITY CASCADE");
-}
+  },
+};

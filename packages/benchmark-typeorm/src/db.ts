@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { Author, Book, BookReview, Tag, BookTag } from "./entities";
+import { Author, Book, BookReview, Tag, BookTag } from "./entities.ts";
 import { DB_CONFIG } from "seed-data";
 
 export const AppDataSource = new DataSource({

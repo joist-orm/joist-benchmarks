@@ -1,7 +1,8 @@
 import Table from "cli-table3";
 import colors from "colors";
-import * as mikro from "benchmark-mikroorm";
 import * as prisma from "benchmark-prisma";
+import * as mikro from "benchmark-mikroorm";
+import * as typeorm from "benchmark-typeorm";
 import * as joist_v1 from "benchmark-joist-v1";
 import * as joist_v2 from "benchmark-joist-v2";
 import postgres from "postgres";
@@ -10,6 +11,7 @@ import fs from "fs/promises";
 import { setToxiproxyLatency } from "./toxi-init.ts";
 
 const orms = {
+  typeorm: { getContext: typeorm.getContext, getOperations: typeorm.getOperations },
   mikro: { getContext: mikro.getContext, getOperations: mikro.getOperations },
   prisma: { getContext: prisma.getContext, getOperations: prisma.getOperations },
   joist_v1: { getContext: joist_v1.getContext, getOperations: joist_v1.getOperations },

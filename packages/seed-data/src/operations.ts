@@ -44,12 +44,12 @@ export const operations = {
   // bulkCreate: [1, 10, 100, 1000],
   // bulkLoad: [1, 10, 100, 1000],
   bulkCreate: {
-    sizes: [1, 10, 100],
+    sizes: [1],
     description: (n: number) =>
       `Creates ${n} authors, ${n * booksPerAuthor} books, ${n * booksPerAuthor * reviewsPerBook} reviews, ${n * booksPerAuthor * tagsPerBook} tags`,
   },
   bulkLoad: {
-    sizes: [1, 10, 100],
+    sizes: [1],
     description: (n: number) =>
       `Loads ${n} authors, ${n * booksPerAuthor} books, ${n * booksPerAuthor * reviewsPerBook} reviews, ${n * booksPerAuthor * tagsPerBook} tags`,
   },

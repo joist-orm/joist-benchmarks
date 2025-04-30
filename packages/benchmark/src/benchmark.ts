@@ -5,6 +5,7 @@ import * as mikro from "benchmark-mikroorm";
 import * as typeorm from "benchmark-typeorm";
 import * as joist_v1 from "benchmark-joist-v1";
 import * as joist_v2 from "benchmark-joist-v2";
+import * as drizzle from "benchmark-drizzle";
 import postgres from "postgres";
 import { Context, getData, operations, DB_CONFIG } from "seed-data";
 import fs from "fs/promises";
@@ -14,6 +15,7 @@ const orms = {
   typeorm: { getContext: typeorm.getContext, getOperations: typeorm.getOperations },
   mikro: { getContext: mikro.getContext, getOperations: mikro.getOperations },
   prisma: { getContext: prisma.getContext, getOperations: prisma.getOperations },
+  drizzle: { getContext: drizzle.getContext, getOperations: drizzle.getOperations },
   joist_v1: { getContext: joist_v1.getContext, getOperations: joist_v1.getOperations },
   joist_v2: { getContext: joist_v2.getContext, getOperations: joist_v2.getOperations },
   joist_v2_pre: { getContext: joist_v2.getContextPreload, getOperations: joist_v2.getOperations },

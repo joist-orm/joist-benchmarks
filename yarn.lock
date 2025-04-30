@@ -1172,6 +1172,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"benchmark-drizzle@workspace:^, benchmark-drizzle@workspace:packages/benchmark-drizzle":
+  version: 0.0.0-use.local
+  resolution: "benchmark-drizzle@workspace:packages/benchmark-drizzle"
+  dependencies:
+    drizzle-orm: "npm:^0.30.3"
+    postgres: "npm:^3.4.4"
+    seed-data: "workspace:*"
+    typescript: "npm:^5.8.3"
+  languageName: unknown
+  linkType: soft
+
 "benchmark-joist-v1@workspace:^, benchmark-joist-v1@workspace:packages/benchmark-joist-v1":
   version: 0.0.0-use.local
   resolution: "benchmark-joist-v1@workspace:packages/benchmark-joist-v1"
@@ -1246,6 +1257,7 @@ __metadata:
   resolution: "benchmark@workspace:packages/benchmark"
   dependencies:
     "@types/node": "npm:^22.15.2"
+    benchmark-drizzle: "workspace:^"
     benchmark-joist-v1: "workspace:^"
     benchmark-joist-v2: "workspace:^"
     benchmark-mikroorm: "workspace:^"
@@ -1684,6 +1696,90 @@ __metadata:
   dependencies:
     detect-libc: "npm:^1.0.3"
   checksum: 10c0/39c1f8511833226cde773129afc5862dfd05babe062375e6b1f5824e221a5743a4d9c48626f32f7c2080113566270fe80521a50acb9029a20a2e80a3cd5e4106
+  languageName: node
+  linkType: hard
+
+"drizzle-orm@npm:^0.30.3":
+  version: 0.30.10
+  resolution: "drizzle-orm@npm:0.30.10"
+  peerDependencies:
+    "@aws-sdk/client-rds-data": ">=3"
+    "@cloudflare/workers-types": ">=3"
+    "@electric-sql/pglite": ">=0.1.1"
+    "@libsql/client": "*"
+    "@neondatabase/serverless": ">=0.1"
+    "@op-engineering/op-sqlite": ">=2"
+    "@opentelemetry/api": ^1.4.1
+    "@planetscale/database": ">=1"
+    "@types/better-sqlite3": "*"
+    "@types/pg": "*"
+    "@types/react": ">=18"
+    "@types/sql.js": "*"
+    "@vercel/postgres": ">=0.8.0"
+    "@xata.io/client": "*"
+    better-sqlite3: ">=7"
+    bun-types: "*"
+    expo-sqlite: ">=13.2.0"
+    knex: "*"
+    kysely: "*"
+    mysql2: ">=2"
+    pg: ">=8"
+    postgres: ">=3"
+    react: ">=18"
+    sql.js: ">=1"
+    sqlite3: ">=5"
+  peerDependenciesMeta:
+    "@aws-sdk/client-rds-data":
+      optional: true
+    "@cloudflare/workers-types":
+      optional: true
+    "@electric-sql/pglite":
+      optional: true
+    "@libsql/client":
+      optional: true
+    "@neondatabase/serverless":
+      optional: true
+    "@op-engineering/op-sqlite":
+      optional: true
+    "@opentelemetry/api":
+      optional: true
+    "@planetscale/database":
+      optional: true
+    "@types/better-sqlite3":
+      optional: true
+    "@types/pg":
+      optional: true
+    "@types/react":
+      optional: true
+    "@types/sql.js":
+      optional: true
+    "@vercel/postgres":
+      optional: true
+    "@xata.io/client":
+      optional: true
+    better-sqlite3:
+      optional: true
+    bun-types:
+      optional: true
+    expo-sqlite:
+      optional: true
+    knex:
+      optional: true
+    kysely:
+      optional: true
+    mysql2:
+      optional: true
+    pg:
+      optional: true
+    postgres:
+      optional: true
+    react:
+      optional: true
+    sql.js:
+      optional: true
+    sqlite3:
+      optional: true
+  checksum: 10c0/d6ceedbe6b9c6e5908cd242a939b0de4c909344da8616bdf4474fa7a2bc1a659453c5530a275bd66c1b762d08b08a689175f38212575e24b2fbde2e000f83ff9
   languageName: node
   linkType: hard
 
@@ -3396,6 +3492,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"postgres@npm:^3.4.4":
+  version: 3.4.5
+  resolution: "postgres@npm:3.4.5"
+  checksum: 10c0/53415acea77e97bdc1eeb861048f34964e2236e4d4d42f408fc9b901e62bfcf7443a487ebfdad18b57b468c6e297bf8d22097106a200f62eb1262eb5a71355df
+  languageName: node
+  linkType: hard
+
 "prettier@npm:^3.5.3":
   version: 3.5.3
   resolution: "prettier@npm:3.5.3"
@@ -3623,7 +3726,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"seed-data@workspace:^, seed-data@workspace:packages/seed-data":
+"seed-data@workspace:*, seed-data@workspace:^, seed-data@workspace:packages/seed-data":
   version: 0.0.0-use.local
   resolution: "seed-data@workspace:packages/seed-data"
   dependencies:

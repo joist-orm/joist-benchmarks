@@ -103,13 +103,28 @@ function displayResults(results: BenchmarkResult[]): void {
   for (const result of results) {
     // Start the table row with `op x size x description`
     const row = [result.operation, result.size, (operations as any)[result.operation].description(result.size)];
+
+    // stats sorted by time
+    const sorted = Object.entries(result.orms).sort((a, b) => {
+      const aAvg = averageMilliseconds(a[1].durations);
+      const bAvg = averageMilliseconds(b[1].durations);
+      return aAvg - bAvg;
+    });
+
     // Then all the ORM results
     for (const ormName of ormNames) {
-      const stats = result.orms[ormName];
-      row.push(stats ? `${averageMilliseconds(stats.durations)}ms (${stats.queries})` : "N/A");
+      const mine = result.orms[ormName];
+      const place = sorted.findIndex(([name]) => name === ormName) + 1;
+      const colorFn = place === 1 ? colors.bold.green : (s: string) => s;
+      row.push(
+        mine
+          ? colorFn(`#${place} ${averageMilliseconds(mine.durations).toFixed(1)}ms`) + ` (q=${mine.queries})`
+          : "N/A",
+      );
     }
     table.push(row);
   }
+
   console.log(table.toString());
 }
 
@@ -124,15 +139,15 @@ async function runAllBenchmarks(): Promise<void> {
 }
 
 /** Given the durations (based on the number of samples), return the average in milliseconds. */
-function averageMilliseconds(durations: number[]): string {
+function averageMilliseconds(durations: number[]): number {
   if (durations.length === 0) {
-    return "0.00";
+    return 0;
   }
   // Sort and remove the two highest & two lowest values
   const copy = [...durations].sort().slice(2, -2);
   const sum = copy.reduce((total, duration) => total + duration, 0);
   const average = sum / copy.length;
-  return average.toFixed(2);
+  return average;
 }
 
 runAllBenchmarks()

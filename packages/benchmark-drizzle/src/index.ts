@@ -17,9 +17,7 @@ export async function getContext(): Promise<Pick<DrizzleOrmContext, "db" | "shut
   const db = drizzle(sql, { schema });
   return {
     db,
-    shutdown: async () => {
-      await sql.end();
-    },
+    shutdown: () => sql.end(),
   };
 }
 

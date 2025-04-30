@@ -1266,6 +1266,7 @@ __metadata:
     cli-table3: "npm:^0.6.5"
     colors: "npm:^1.4.0"
     mitata: "npm:^1.0.34"
+    postgres: "npm:^3.4.5"
     seed-data: "workspace:^"
     typescript: "npm:^5.8.3"
   languageName: unknown

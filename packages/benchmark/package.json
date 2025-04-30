@@ -35,6 +35,7 @@
     "cli-table3": "^0.6.5",
     "colors": "^1.4.0",
     "mitata": "^1.0.34",
+    "postgres": "^3.4.5",
     "seed-data": "workspace:^"
   },
   "devDependencies": {

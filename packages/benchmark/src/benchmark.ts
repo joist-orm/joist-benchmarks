@@ -1,14 +1,14 @@
-import Table from "cli-table3";
-import colors from "colors";
-import * as prisma from "benchmark-prisma";
-import * as mikro from "benchmark-mikroorm";
-import * as typeorm from "benchmark-typeorm";
+import * as drizzle from "benchmark-drizzle";
 import * as joist_v1 from "benchmark-joist-v1";
 import * as joist_v2 from "benchmark-joist-v2";
-import * as drizzle from "benchmark-drizzle";
-import postgres from "postgres";
-import { Context, getData, operations, DB_CONFIG } from "seed-data";
+import * as mikro from "benchmark-mikroorm";
+import * as prisma from "benchmark-prisma";
+import * as typeorm from "benchmark-typeorm";
+import Table from "cli-table3";
+import colors from "colors";
 import fs from "fs/promises";
+import postgres from "postgres";
+import { Context, DB_CONFIG, getData, operations } from "seed-data";
 import { setToxiproxyLatency } from "./toxi-init.ts";
 
 const orms = {

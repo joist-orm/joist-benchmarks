@@ -115,7 +115,7 @@ function displayResults(results: BenchmarkResult[]): void {
     for (const ormName of ormNames) {
       const mine = result.orms[ormName];
       const place = sorted.findIndex(([name]) => name === ormName) + 1;
-      const colorFn = place === 1 ? colors.bold.green : (s: string) => s;
+      const colorFn = place === 1 ? colors.bold.green : place === 2 ? colors.green : (s: string) => s;
       row.push(
         mine
           ? colorFn(`#${place} ${averageMilliseconds(mine.durations).toFixed(1)}ms`) + ` (q=${mine.queries})`

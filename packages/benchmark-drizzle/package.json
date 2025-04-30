@@ -22,8 +22,8 @@
     "build": "tsc"
   },
   "dependencies": {
-    "drizzle-orm": "^0.30.3",
-    "postgres": "^3.4.4",
+    "drizzle-orm": "^0.43.1",
+    "postgres": "^3.4.5",
     "seed-data": "workspace:*"
   },
   "devDependencies": {

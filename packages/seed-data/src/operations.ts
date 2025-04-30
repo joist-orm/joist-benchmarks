@@ -38,6 +38,7 @@ export type Operation<C extends Context> = {
 export type AllOperations<C extends Context> = {
   bulkCreate: Operation<C> | undefined;
   bulkLoad: Operation<C> | undefined;
+  simpleCreate: Operation<C> | undefined;
 };
 
 export const operations = {
@@ -50,5 +51,9 @@ export const operations = {
     sizes: [1, 10, 100],
     description: (n: number) =>
       `Loads ${n} authors, ${n * booksPerAuthor} books, ${n * booksPerAuthor * reviewsPerBook} reviews, ${n * booksPerAuthor * tagsPerBook} tags`,
+  },
+  simpleCreate: {
+    sizes: [1, 10, 100, 1000],
+    description: (n: number) => `Creates ${n} authors`,
   },
 };

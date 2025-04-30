@@ -2,6 +2,7 @@ import { AllOperations, Context, Operation } from "seed-data";
 import { DataSource } from "typeorm";
 import { bulkCreate } from "./bulk-create.ts";
 import { bulkLoad } from "./bulk-load.ts";
+import { simpleCreate } from "./simple-create.ts";
 import { AppDataSource } from "./db.ts";
 
 export type TypeOrmContext = Context & { dataSource: DataSource };
@@ -17,6 +18,7 @@ export function getOperations(): AllOperations<TypeOrmContext> {
   return {
     bulkCreate,
     bulkLoad,
+    simpleCreate,
   };
 }
 

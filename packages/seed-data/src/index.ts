@@ -6,14 +6,9 @@ import { Author, Book, BookReview, Tag } from "./interfaces.ts";
 export * from "./interfaces.ts";
 export * from "./operations.ts";
 
-export const DB_CONFIG = {
-  url: "postgres://postgres:postgres@localhost:5432/benchmark",
-  host: "localhost",
-  port: 5432,
-  username: "postgres",
-  password: "postgres",
-  database: "benchmark",
-};
+export function getDatabaseUrl(ormName: string): string {
+  return `postgres://postgres:postgres@localhost:5432/benchmark?application_name=${ormName}`;
+}
 
 export type SeedData = {
   authors: Author[];

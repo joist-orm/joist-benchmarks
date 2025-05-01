@@ -1,6 +1,6 @@
 import { PostgresDriver } from "joist-orm";
 import knex, { type Knex } from "knex";
-import { AllOperations, Context, DB_CONFIG, Operation } from "seed-data";
+import { AllOperations, Context, getDatabaseUrl, Operation } from "seed-data";
 import { bulkCreate } from "./bulk-create.ts";
 import { bulkLoad } from "./bulk-load.ts";
 import { simpleCreate } from "./simple-create.ts";
@@ -11,13 +11,7 @@ export type JoistOperation = Operation<JoistContext>;
 export async function getContext(): Promise<Pick<JoistContext, "driver" | "shutdown" | "knex">> {
   const conn = knex({
     client: "pg",
-    connection: {
-      host: DB_CONFIG.host,
-      port: DB_CONFIG.port,
-      user: DB_CONFIG.username,
-      password: DB_CONFIG.password,
-      database: DB_CONFIG.database,
-    },
+    connection: getDatabaseUrl("joist_v1"),
   });
   const driver = new PostgresDriver(conn);
   return { knex: conn, driver, shutdown: () => conn.destroy() };

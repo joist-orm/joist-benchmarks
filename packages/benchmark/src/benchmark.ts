@@ -8,7 +8,7 @@ import Table from "cli-table3";
 import colors from "colors";
 import fs from "fs/promises";
 import postgres from "postgres";
-import { Context, DB_CONFIG, getData, operations } from "seed-data";
+import { Context, getDatabaseUrl, getData, operations } from "seed-data";
 import { setToxiproxyLatency } from "./toxi-init.ts";
 
 const orms = {
@@ -21,7 +21,7 @@ const orms = {
   joist_v2_pre: { getContext: joist_v2.getContextPreload, getOperations: joist_v2.getOperations },
 };
 
-const sql = postgres(DB_CONFIG.url);
+const sql = postgres(getDatabaseUrl("driver"));
 
 // I want a table of
 // opOne_1    mikro | joist | etc. | fastest

@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:postgres@localhost:5432/benchmark"
+  url      = "postgresql://postgres:postgres@localhost:5432/benchmark?application_name=prisma"
 }
 
 model Author {

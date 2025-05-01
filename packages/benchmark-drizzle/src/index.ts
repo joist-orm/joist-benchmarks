@@ -1,4 +1,4 @@
-import { AllOperations, Context, DB_CONFIG, Operation } from "seed-data";
+import { AllOperations, Context, getDatabaseUrl, Operation } from "seed-data";
 import { bulkCreate } from "./bulk-create.ts";
 import { bulkLoad } from "./bulk-load.ts";
 import { simpleCreate } from "./simple-create.ts";
@@ -14,7 +14,7 @@ export function getOperations(): AllOperations<DrizzleOrmContext> {
 }
 
 export async function getContext(): Promise<Pick<DrizzleOrmContext, "db" | "shutdown">> {
-  const sql = postgres(DB_CONFIG.url);
+  const sql = postgres(getDatabaseUrl("drizzle"));
   const db = drizzle(sql, { schema });
   return { db, shutdown: () => sql.end() };
 }

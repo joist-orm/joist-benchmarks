@@ -1,6 +1,6 @@
 import { PostgresDriver } from "joist-orm";
 import postgres, { type Sql } from "postgres";
-import { AllOperations, Context, DB_CONFIG, Operation } from "seed-data";
+import { AllOperations, Context, getDatabaseUrl, Operation } from "seed-data";
 import { bulkCreate } from "./bulk-create.ts";
 import { bulkLoad } from "./bulk-load.ts";
 import { simpleCreate } from "./simple-create.ts";
@@ -9,13 +9,13 @@ export type JoistContext = Context & { sql: Sql; driver: PostgresDriver; preload
 export type JoistOperation = Operation<JoistContext>;
 
 export async function getContext(): Promise<Pick<JoistContext, "driver" | "shutdown" | "sql" | "preload">> {
-  const sql = postgres(DB_CONFIG.url);
+  const sql = postgres(getDatabaseUrl("joist_v2"));
   const driver = new PostgresDriver(sql);
   return { sql, driver, shutdown: () => sql.end(), preload: false };
 }
 
 export async function getContextPreload(): Promise<Pick<JoistContext, "driver" | "shutdown" | "sql" | "preload">> {
-  const sql = postgres(DB_CONFIG.url);
+  const sql = postgres(getDatabaseUrl("joist_v2_pre"));
   const driver = new PostgresDriver(sql);
   return { sql, driver, shutdown: () => sql.end(), preload: true };
 }

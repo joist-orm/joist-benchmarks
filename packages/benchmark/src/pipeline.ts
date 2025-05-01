@@ -1,6 +1,6 @@
 import postgres from "postgres";
 import { run, bench, summary } from "mitata";
-import { DB_CONFIG } from "seed-data";
+import { getDatabaseUrl } from "seed-data";
 import { setToxiproxyLatency } from "./toxi-init.ts";
 
 // yarn pipeline
@@ -10,7 +10,7 @@ import { setToxiproxyLatency } from "./toxi-init.ts";
 const numStatements = 10;
 
 // url: "postgres://postgres:postgres@localhost:5432/benchmark",
-const sql = postgres(DB_CONFIG.url, {
+const sql = postgres(getDatabaseUrl("pipeline"), {
   onnotice(n) {
     if (n.severity !== "NOTICE") {
       console.error(n);

@@ -1,6 +1,6 @@
 import { MikroORM } from "@mikro-orm/core";
 import { defineConfig, PostgreSqlDriver } from "@mikro-orm/postgresql";
-import { AllOperations, Context, DB_CONFIG, Operation } from "seed-data";
+import { AllOperations, Context, getDatabaseUrl, Operation } from "seed-data";
 import { bulkCreate } from "./bulk-create.ts";
 import { bulkLoad } from "./bulk-load.ts";
 import { simpleCreate } from "./simple-create.ts";
@@ -12,11 +12,7 @@ export type MikroOperation = Operation<MikroContext>;
 export async function getContext(): Promise<Pick<MikroContext, "orm" | "shutdown">> {
   const config = defineConfig({
     entities: [AuthorSchema, BookSchema, BookReviewSchema, TagSchema],
-    dbName: DB_CONFIG.database,
-    host: DB_CONFIG.host,
-    port: DB_CONFIG.port,
-    user: DB_CONFIG.username,
-    password: DB_CONFIG.password,
+    clientUrl: getDatabaseUrl("mikroorm"),
     driver: PostgreSqlDriver,
     // debug: true,
   });

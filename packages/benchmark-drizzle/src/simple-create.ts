@@ -2,8 +2,8 @@ import { cleanDatabase, DrizzleOperation } from "./index.ts";
 import * as schema from "./schema.ts";
 
 export const simpleCreate: DrizzleOperation = {
-  async beforeEach() {
-    await cleanDatabase();
+  async beforeEach(ctx) {
+    await cleanDatabase(ctx);
   },
 
   async run({ db, seedData }) {

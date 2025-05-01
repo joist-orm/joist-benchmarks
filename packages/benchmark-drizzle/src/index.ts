@@ -16,14 +16,10 @@ export function getOperations(): AllOperations<DrizzleOrmContext> {
 export async function getContext(): Promise<Pick<DrizzleOrmContext, "db" | "shutdown">> {
   const sql = postgres(DB_CONFIG.url);
   const db = drizzle(sql, { schema });
-  return {
-    db,
-    shutdown: () => sql.end(),
-  };
+  return { db, shutdown: () => sql.end() };
 }
 
-export async function cleanDatabase(): Promise<void> {
-  const ctx = await getContext();
+export async function cleanDatabase(ctx: DrizzleOrmContext): Promise<void> {
   await ctx.db.delete(schema.bookTags);
   await ctx.db.delete(schema.bookReviews);
   await ctx.db.delete(schema.books);

@@ -2,17 +2,17 @@ import { cleanDatabase, DrizzleOperation } from "./index.ts";
 import * as schema from "./schema.ts";
 
 export const bulkCreate: DrizzleOperation = {
-  async beforeEach() {
-    await cleanDatabase();
+  async beforeEach(ctx) {
+    await cleanDatabase(ctx);
   },
 
   async run({ db, seedData }) {
     // Convert string dates back to Date objects
-    const books = seedData.books.map(book => ({
+    const books = seedData.books.map((book) => ({
       ...book,
-      published: book.published ? new Date(book.published) : null
+      published: book.published ? new Date(book.published) : null,
     }));
-    
+
     await db.transaction(async (tx) => {
       await tx.insert(schema.authors).values(seedData.authors);
       await tx.insert(schema.books).values(books);

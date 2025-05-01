@@ -3,7 +3,7 @@ import { cleanDatabase, DrizzleOperation } from "./index.ts";
 
 export const bulkLoad: DrizzleOperation = {
   async beforeEach(ctx) {
-    await cleanDatabase();
+    await cleanDatabase(ctx);
     await bulkCreate.run(ctx);
   },
 

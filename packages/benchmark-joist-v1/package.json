@@ -24,14 +24,14 @@
     "codegen": "joist-codegen -f ./joist-config.json"
   },
   "dependencies": {
-    "joist-orm": "^1.244.2",
+    "joist-orm": "^1.246.0",
     "knex": "^3.1.0",
     "pg": "^8.15.6",
     "seed-data": "workspace:^"
   },
   "devDependencies": {
-    "@types/node": "^22.15.2",
-    "joist-codegen": "^1.244.2",
+    "@types/node": "^22.15.3",
+    "joist-codegen": "^1.246.0",
     "typescript": "^5.8.3"
   }
 }

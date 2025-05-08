@@ -3,6 +3,7 @@ import knex, { type Knex } from "knex";
 import { AllOperations, Context, getDatabaseUrl, Operation } from "seed-data";
 import { bulkCreate } from "./bulk-create.ts";
 import { bulkLoad } from "./bulk-load.ts";
+import { loadInLoop } from "./load-in-loop.ts";
 import { simpleCreate } from "./simple-create.ts";
 
 export type JoistContext = Context & { knex: Knex; driver: PostgresDriver };
@@ -18,7 +19,7 @@ export async function getContext(): Promise<Pick<JoistContext, "driver" | "shutd
 }
 
 export function getOperations(): AllOperations<JoistContext> {
-  return { bulkCreate, bulkLoad, simpleCreate };
+  return { bulkCreate, bulkLoad, simpleCreate, loadInLoop };
 }
 
 export async function cleanDatabase(ctx: JoistContext): Promise<void> {

@@ -3,6 +3,7 @@ import { defineConfig, PostgreSqlDriver } from "@mikro-orm/postgresql";
 import { AllOperations, Context, getDatabaseUrl, Operation } from "seed-data";
 import { bulkCreate } from "./bulk-create.ts";
 import { bulkLoad } from "./bulk-load.ts";
+import { loadInLoop } from "./load-in-loop.ts";
 import { simpleCreate } from "./simple-create.ts";
 import { AuthorSchema, BookReviewSchema, BookSchema, TagSchema } from "./entities.ts";
 
@@ -25,6 +26,7 @@ export function getOperations(): AllOperations<MikroContext> {
     bulkCreate,
     bulkLoad,
     simpleCreate,
+    loadInLoop,
   };
 }
 

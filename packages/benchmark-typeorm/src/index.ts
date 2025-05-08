@@ -2,6 +2,7 @@ import { AllOperations, Context, Operation } from "seed-data";
 import { DataSource } from "typeorm";
 import { bulkCreate } from "./bulk-create.ts";
 import { bulkLoad } from "./bulk-load.ts";
+import { loadInLoop } from "./load-in-loop.ts";
 import { simpleCreate } from "./simple-create.ts";
 import { AppDataSource } from "./db.ts";
 
@@ -19,6 +20,7 @@ export function getOperations(): AllOperations<TypeOrmContext> {
     bulkCreate,
     bulkLoad,
     simpleCreate,
+    loadInLoop,
   };
 }
 

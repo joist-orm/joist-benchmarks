@@ -1,6 +1,7 @@
 import { AllOperations, Context, Operation } from "seed-data";
 import { bulkCreate } from "./bulk-create.ts";
 import { bulkLoad } from "./bulk-load.ts";
+import { loadInLoop } from "./load-in-loop.ts";
 import { simpleCreate } from "./simple-create.ts";
 import { PrismaClient } from "./prisma-client/index.js";
 
@@ -10,7 +11,7 @@ export type PrismaOperation = Operation<PrismaContext>;
 const prisma = new PrismaClient();
 
 export function getOperations(): AllOperations<PrismaContext> {
-  return { bulkCreate, bulkLoad, simpleCreate };
+  return { bulkCreate, bulkLoad, simpleCreate, loadInLoop };
 }
 
 export async function getContext(): Promise<any> {

@@ -1,6 +1,7 @@
 import { AllOperations, Context, getDatabaseUrl, Operation } from "seed-data";
 import { bulkCreate } from "./bulk-create.ts";
 import { bulkLoad } from "./bulk-load.ts";
+import { loadInLoop } from "./load-in-loop.ts";
 import { simpleCreate } from "./simple-create.ts";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
@@ -10,7 +11,7 @@ export type DrizzleOrmContext = Context & { db: ReturnType<typeof drizzle<typeof
 export type DrizzleOperation = Operation<DrizzleOrmContext>;
 
 export function getOperations(): AllOperations<DrizzleOrmContext> {
-  return { bulkCreate, bulkLoad, simpleCreate };
+  return { bulkCreate, bulkLoad, simpleCreate, loadInLoop };
 }
 
 export async function getContext(): Promise<Pick<DrizzleOrmContext, "db" | "shutdown">> {

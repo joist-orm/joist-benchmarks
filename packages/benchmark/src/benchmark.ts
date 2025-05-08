@@ -70,18 +70,13 @@ async function runBenchmark(ops: string[], _sizes: number[] | undefined): Promis
 
               // Get the number of queries issued
               const stats = await sql`
-                select sum(calls) as calls from pg_stat_statements
+                select sum(calls) as calls, query from pg_stat_statements
                 where query not like '%pg_stat%' and query not like '%pg_catalog%'
+                group by query
               `;
               durations.push(endTime - startTime);
-              queries += Number(stats[0].calls);
-
-              // Save the queries issued to a file
-              const debug = await sql`
-                select query from pg_stat_statements
-                where query not like '%pg_stat%' and query not like '%pg_catalog%'
-              `;
-              await fs.writeFile(`./queries/${name}-${op}-${size}.sql`, debug.map((d) => d.query).join("\n"));
+              queries += Number(stats.map((s) => s.calls).reduce((a, b) => a + b));
+              await fs.writeFile(`./queries/${name}-${op}-${size}.sql`, stats.map((s) => `num=${s.calls} sql=${s.query}`).join("\n"));
             }
             row[name] = { durations, queries: Math.round(queries / samples.length) };
           }

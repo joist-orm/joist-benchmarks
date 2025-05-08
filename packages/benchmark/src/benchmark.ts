@@ -1,3 +1,4 @@
+import { parseCliArguments } from "@cloud-copilot/cli";
 import * as drizzle from "benchmark-drizzle";
 import * as joist_v1 from "benchmark-joist-v1";
 import * as joist_v2 from "benchmark-joist-v2";
@@ -40,9 +41,10 @@ const contexts: Map<string, Context> = new Map();
 // How many times to run each operation; we'll take the average
 const samples = Array(10);
 
-async function runBenchmark(): Promise<BenchmarkResult[]> {
+async function runBenchmark(ops: string[], _sizes: number[] | undefined): Promise<BenchmarkResult[]> {
   const results: BenchmarkResult[] = [];
-  for (const [op, { sizes }] of Object.entries(operations)) {
+  for (const op of ops) {
+    const sizes = _sizes || (operations as any)[op].sizes;
     for (const size of sizes) {
       const row: Record<string, { durations: number[]; queries: number }> = {};
       for (const [name, config] of Object.entries(orms)) {
@@ -129,9 +131,29 @@ function displayResults(results: BenchmarkResult[]): void {
 }
 
 async function runAllBenchmarks(): Promise<void> {
+  const cli = parseCliArguments(
+    "benchmark",
+    {},
+    {
+      op: {
+        type: "string",
+        values: "multiple",
+        description: "operations to run",
+        validValues: Object.keys(operations),
+        default: Object.keys(operations),
+      },
+      size: { type: "number", values: "multiple", description: "sizes to invoke each operation with" },
+      latency: { type: "number", values: "single", description: "latency of SQL operation in millis", default: 2 },
+    },
+  );
+
   console.log(colors.green("\n=== ORM BENCHMARKS ===\n"));
-  await setToxiproxyLatency(2);
-  const results = await runBenchmark();
+  const ops = cli.args.op ?? Object.keys(operations);
+  // cli.args.size is `number[]` but I expected `number[] | undefined` b/c it doesn't have a default
+  const sizes = cli.args.size ?? undefined;
+  // cli.args.latency is `number | undefined`, but I expected `number` b/c it has a default
+  await setToxiproxyLatency(cli.args.latency ?? 2);
+  const results = await runBenchmark(ops, sizes);
   displayResults(results);
   for (const [, ctx] of contexts.entries()) {
     if (ctx.shutdown) await ctx.shutdown();

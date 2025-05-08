@@ -420,6 +420,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cloud-copilot/cli@npm:^0.1.25":
+  version: 0.1.25
+  resolution: "@cloud-copilot/cli@npm:0.1.25"
+  checksum: 10c0/7398244dffba320b7d3ed2065110e0ac5877a20b32a2dbdc6e30293116865432cdb135a846d433c0977aab32bbb7772bb175596b15c0ab649cf66dc8fb79586c
+  languageName: node
+  linkType: hard
+
 "@colors/colors@npm:1.5.0":
   version: 1.5.0
   resolution: "@colors/colors@npm:1.5.0"
@@ -1237,6 +1244,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "benchmark@workspace:packages/benchmark"
   dependencies:
+    "@cloud-copilot/cli": "npm:^0.1.25"
     "@types/node": "npm:^22.15.3"
     benchmark-drizzle: "workspace:^"
     benchmark-joist-v1: "workspace:^"

@@ -33,3 +33,5 @@ yarn-debug.log*
 yarn-error.log*
 
 packages/data/
+
+**/.claude/settings.local.json

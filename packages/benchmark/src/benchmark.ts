@@ -76,7 +76,7 @@ async function runBenchmark(ops: string[], _sizes: number[] | undefined): Promis
                 group by query
               `;
               durations.push(endTime - startTime);
-              queries += Number(stats.map((s) => s.calls).reduce((a, b) => a + b));
+              queries += Number(stats.map((s) => Number(s.calls)).reduce((a, b) => a + b));
               await fs.writeFile(
                 `./queries/${name}-${op}-${size}.sql`,
                 stats.map((s) => `num=${s.calls} sql=${s.query}`).join("\n"),

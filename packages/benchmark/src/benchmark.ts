@@ -42,7 +42,6 @@ const contexts: Map<string, Context> = new Map();
 const samples = Array(10);
 
 async function runBenchmark(ops: string[], _sizes: number[] | undefined): Promise<BenchmarkResult[]> {
-  console.log({ ops, _sizes });
   const results: BenchmarkResult[] = [];
   for (const op of ops) {
     const sizes = _sizes || (operations as any)[op].sizes;

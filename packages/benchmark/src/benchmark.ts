@@ -146,12 +146,18 @@ async function runAllBenchmarks(): Promise<void> {
     },
   );
 
-  console.log(colors.green("\n=== ORM BENCHMARKS ===\n"));
-  const ops = cli.args.op ?? Object.keys(operations);
+  const ops = cli.args.op && cli.args.op.length > 0 ? cli.args.op : Object.keys(operations);
   // cli.args.size is `number[]` but I expected `number[] | undefined` b/c it doesn't have a default
-  const sizes = cli.args.size ?? undefined;
+  const sizes = cli.args.size && cli.args.size.length > 0 ? cli.args.size : undefined;
   // cli.args.latency is `number | undefined`, but I expected `number` b/c it has a default
-  await setToxiproxyLatency(cli.args.latency ?? 2);
+  const latency = cli.args.latency ?? 2;
+
+  console.log(colors.green("=== ORM BENCHMARKS ==="));
+  console.log(colors.green("ops=") + ops);
+  console.log(colors.green("sizes=") + (sizes ?? "defaults"));
+  console.log(colors.green("latency=") + latency);
+  console.log("");
+  await setToxiproxyLatency(latency);
   const results = await runBenchmark(ops, sizes);
   displayResults(results);
   for (const [, ctx] of contexts.entries()) {

@@ -8,7 +8,7 @@ export async function setToxiproxyLatency(millis: number) {
       attributes: { latency: millis },
     });
   }
-  console.log(`toxiproxy configured with ${millis}ms latency`);
+  // console.log(`toxiproxy configured with ${millis}ms latency`);
 }
 
 async function post(path: string, data: object = {}): Promise<void> {

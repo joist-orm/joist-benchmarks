@@ -40,6 +40,7 @@ export type AllOperations<C extends Context> = {
   bulkLoad: Operation<C> | undefined;
   simpleCreate: Operation<C> | undefined;
   loadInLoop: Operation<C> | undefined;
+  findInLoop: Operation<C> | undefined;
 };
 
 export const operations = {
@@ -53,13 +54,17 @@ export const operations = {
     description: (n: number) =>
       `Loads ${n} authors, ${n * booksPerAuthor} books, ${n * booksPerAuthor * reviewsPerBook} reviews, ${n * booksPerAuthor * tagsPerBook} tags`,
   },
+  findInLoop: {
+    sizes: [1, 10, 100],
+    description: (n: number) =>
+      `Loads ${n} authors and performs ${n} find operations in an async map to find reviews with specific ratings`,
+  },
   simpleCreate: {
     sizes: [1, 10, 100, 1000],
     description: (n: number) => `Creates ${n} authors`,
   },
   loadInLoop: {
     sizes: [1, 10, 100],
-    description: (n: number) =>
-      `Loads ${n} authors and each author's books individually in a loop`,
+    description: (n: number) => `Loads ${n} authors and each author's books individually in a loop`,
   },
 };

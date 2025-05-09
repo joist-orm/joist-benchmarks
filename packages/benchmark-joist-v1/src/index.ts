@@ -5,6 +5,7 @@ import { bulkCreate } from "./bulk-create.ts";
 import { bulkLoad } from "./bulk-load.ts";
 import { loadInLoop } from "./load-in-loop.ts";
 import { simpleCreate } from "./simple-create.ts";
+import { findInLoop } from "./find-in-loop.ts";
 
 export type JoistContext = Context & { knex: Knex; driver: PostgresDriver };
 export type JoistOperation = Operation<JoistContext>;
@@ -19,7 +20,7 @@ export async function getContext(): Promise<Pick<JoistContext, "driver" | "shutd
 }
 
 export function getOperations(): AllOperations<JoistContext> {
-  return { bulkCreate, bulkLoad, simpleCreate, loadInLoop };
+  return { bulkCreate, bulkLoad, simpleCreate, loadInLoop, findInLoop };
 }
 
 export async function cleanDatabase(ctx: JoistContext): Promise<void> {

@@ -5,6 +5,7 @@ import { bulkCreate } from "./bulk-create.ts";
 import { bulkLoad } from "./bulk-load.ts";
 import { loadInLoop } from "./load-in-loop.ts";
 import { simpleCreate } from "./simple-create.ts";
+import { findInLoop } from "./find-in-loop.ts";
 import { AuthorSchema, BookReviewSchema, BookSchema, TagSchema } from "./entities.ts";
 
 export type MikroContext = Context & { orm: MikroORM };
@@ -22,12 +23,7 @@ export async function getContext(): Promise<Pick<MikroContext, "orm" | "shutdown
 }
 
 export function getOperations(): AllOperations<MikroContext> {
-  return {
-    bulkCreate,
-    bulkLoad,
-    simpleCreate,
-    loadInLoop,
-  };
+  return { bulkCreate, bulkLoad, simpleCreate, loadInLoop, findInLoop };
 }
 
 export async function cleanDatabase(orm: MikroORM): Promise<void> {

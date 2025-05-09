@@ -4,6 +4,7 @@ import { bulkCreate } from "./bulk-create.ts";
 import { bulkLoad } from "./bulk-load.ts";
 import { loadInLoop } from "./load-in-loop.ts";
 import { simpleCreate } from "./simple-create.ts";
+import { findInLoop } from "./find-in-loop.ts";
 import { AppDataSource } from "./db.ts";
 
 export type TypeOrmContext = Context & { dataSource: DataSource };
@@ -16,12 +17,7 @@ export async function getContext(): Promise<Pick<TypeOrmContext, "dataSource" | 
 }
 
 export function getOperations(): AllOperations<TypeOrmContext> {
-  return {
-    bulkCreate,
-    bulkLoad,
-    simpleCreate,
-    loadInLoop,
-  };
+  return { bulkCreate, bulkLoad, simpleCreate, loadInLoop, findInLoop };
 }
 
 export async function cleanDatabase(dataSource: DataSource): Promise<void> {

@@ -4,6 +4,7 @@ import { AllOperations, Context, getDatabaseUrl, Operation } from "seed-data";
 import { bulkCreate } from "./bulk-create.ts";
 import { bulkLoad } from "./bulk-load.ts";
 import { loadInLoop } from "./load-in-loop.ts";
+import { findInLoop } from "./find-in-loop.ts";
 import { simpleCreate } from "./simple-create.ts";
 
 export type JoistContext = Context & { sql: Sql; driver: PostgresDriver; preload: boolean };
@@ -22,7 +23,7 @@ export async function getContextPreload(): Promise<Pick<JoistContext, "driver" |
 }
 
 export function getOperations(): AllOperations<JoistContext> {
-  return { bulkCreate, bulkLoad, simpleCreate, loadInLoop };
+  return { bulkCreate, bulkLoad, simpleCreate, loadInLoop, findInLoop };
 }
 
 export async function cleanDatabase(ctx: JoistContext): Promise<void> {

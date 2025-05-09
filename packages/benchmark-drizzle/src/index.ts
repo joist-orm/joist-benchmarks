@@ -3,6 +3,7 @@ import { bulkCreate } from "./bulk-create.ts";
 import { bulkLoad } from "./bulk-load.ts";
 import { loadInLoop } from "./load-in-loop.ts";
 import { simpleCreate } from "./simple-create.ts";
+import { findInLoop } from "./find-in-loop.ts";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema.ts";
@@ -11,7 +12,7 @@ export type DrizzleOrmContext = Context & { db: ReturnType<typeof drizzle<typeof
 export type DrizzleOperation = Operation<DrizzleOrmContext>;
 
 export function getOperations(): AllOperations<DrizzleOrmContext> {
-  return { bulkCreate, bulkLoad, simpleCreate, loadInLoop };
+  return { bulkCreate, bulkLoad, simpleCreate, loadInLoop, findInLoop };
 }
 
 export async function getContext(): Promise<Pick<DrizzleOrmContext, "db" | "shutdown">> {

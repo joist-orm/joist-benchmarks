@@ -42,6 +42,7 @@ const contexts: Map<string, Context> = new Map();
 const samples = Array(10);
 
 async function runBenchmark(ops: string[], _sizes: number[] | undefined): Promise<BenchmarkResult[]> {
+  console.log({ ops, _sizes });
   const results: BenchmarkResult[] = [];
   for (const op of ops) {
     const sizes = _sizes || (operations as any)[op].sizes;
@@ -76,7 +77,10 @@ async function runBenchmark(ops: string[], _sizes: number[] | undefined): Promis
               `;
               durations.push(endTime - startTime);
               queries += Number(stats.map((s) => s.calls).reduce((a, b) => a + b));
-              await fs.writeFile(`./queries/${name}-${op}-${size}.sql`, stats.map((s) => `num=${s.calls} sql=${s.query}`).join("\n"));
+              await fs.writeFile(
+                `./queries/${name}-${op}-${size}.sql`,
+                stats.map((s) => `num=${s.calls} sql=${s.query}`).join("\n"),
+              );
             }
             row[name] = { durations, queries: Math.round(queries / samples.length) };
           }

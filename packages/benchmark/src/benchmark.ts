@@ -114,6 +114,8 @@ function displayResults(ormNames: string[], results: BenchmarkResult[]): void {
   const table = new Table({
     head: ["Operation", "Size", "Description", ...sortedOrmNames.map((orm) => colors.cyan(orm))],
     colAligns: ["left", "right", "left", ...sortedOrmNames.map(() => "center" as const)],
+    colWidths: [15, 6, 50, ...sortedOrmNames.map(() => 15)],
+    wordWrap: true,
   });
   for (const result of results) {
     // Start the table row with `op x size x description`
@@ -145,6 +147,22 @@ function displayResults(ormNames: string[], results: BenchmarkResult[]): void {
     }
     table.push(row);
   }
+
+  // Add a Total row
+  const totalRow: (string | number)[] = ["Total", "", ""];
+  for (const ormName of sortedOrmNames) {
+    let totalTime = 0;
+    let totalQueries = 0;
+    for (const result of results) {
+      const mine = result.orms[ormName];
+      if (mine) {
+        totalTime += averageMilliseconds(mine.durations);
+        totalQueries += mine.queries;
+      }
+    }
+    totalRow.push(colors.bold(`${totalTime.toFixed(1)}ms\n\n#q=${totalQueries}`));
+  }
+  table.push(totalRow);
 
   console.log(table.toString());
 }

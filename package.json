@@ -14,7 +14,7 @@
     "codegen": "yarn workspaces foreach --all run codegen"
   },
   "devDependencies": {
-    "prettier": "^3.5.3",
+    "prettier": "^3.7.4",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"

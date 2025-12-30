@@ -24,7 +24,7 @@
     "bench": "node --import=tsx --conditions=@source src/benchmark.ts"
   },
   "dependencies": {
-    "pg": "^8.15.6",
+    "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
     "seed-data": "workspace:^",
     "typeorm": "^0.3.22"

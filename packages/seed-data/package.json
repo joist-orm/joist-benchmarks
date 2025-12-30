@@ -24,7 +24,7 @@
     "generate": "node --import=tsx --conditions=@source src/generator.ts"
   },
   "dependencies": {
-    "@faker-js/faker": "^9.7.0"
+    "@faker-js/faker": "^9.9.0"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",

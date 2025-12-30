@@ -11,7 +11,7 @@
     "format": "prettier --write \"**/*.{ts,js,json,md,yml}\"",
     "benchmark": "yarn workspace benchmark benchmark",
     "pipeline": "yarn workspace benchmark pipeline",
-    "codegen": "yarn workspaces --all run codegen"
+    "codegen": "yarn workspaces foreach --all run codegen"
   },
   "devDependencies": {
     "prettier": "^3.5.3",

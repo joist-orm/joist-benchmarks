@@ -112,16 +112,22 @@ function displayResults(ormNames: string[], results: BenchmarkResult[]): void {
       return aAvg - bAvg;
     });
 
+    // Find the slowest time for the bar chart
+    const slowestTime = sorted.length > 0 ? averageMilliseconds(sorted[sorted.length - 1][1].durations) : 0;
+
     // Then all the ORM results
     for (const ormName of ormNames) {
       const mine = result.orms[ormName];
       const place = sorted.findIndex(([name]) => name === ormName) + 1;
       const colorFn = place === 1 ? colors.bold.green : place === 2 ? colors.green : (s: string) => s;
-      row.push(
-        mine
-          ? colorFn(`#${place} ${averageMilliseconds(mine.durations).toFixed(1)}ms`) + ` (q=${mine.queries})`
-          : "N/A",
-      );
+      if (mine) {
+        const avg = averageMilliseconds(mine.durations);
+        const barLength = slowestTime > 0 ? Math.round((avg / slowestTime) * 10) : 0;
+        const bar = "█".repeat(barLength) + "░".repeat(10 - barLength);
+        row.push(colorFn(`#${place} ${avg.toFixed(1)}ms`) + ` (#q=${mine.queries})\n${bar}   `);
+      } else {
+        row.push("N/A");
+      }
     }
     table.push(row);
   }

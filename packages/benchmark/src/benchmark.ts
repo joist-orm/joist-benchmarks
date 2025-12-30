@@ -180,6 +180,20 @@ function getColorFn(place: number, total: number): (s: string) => string {
           : (s: string) => s;
 }
 
+/** Drop each ORM's two slowest durations as likely outliers. */
+function dropOutliers(ormNames: string[], results: BenchmarkResult[]): BenchmarkResult[] {
+  for (const result of results) {
+    for (const ormName of ormNames) {
+      const mine = result.orms[ormName];
+      if (mine && mine.durations.length > 2) {
+        // Sort descending and drop the two slowest
+        mine.durations = [...mine.durations].sort((a, b) => b - a).slice(2);
+      }
+    }
+  }
+  return results;
+}
+
 async function runAllBenchmarks(): Promise<void> {
   const cli = await parseCliArguments(
     "benchmark",
@@ -216,7 +230,8 @@ async function runAllBenchmarks(): Promise<void> {
   console.log("");
   await setToxiproxyLatency(latency);
   const results = await runBenchmark(ormNames, ops, sizes);
-  displayResults(ormNames, results);
+  const filteredResults = dropOutliers(ormNames, results);
+  displayResults(ormNames, filteredResults);
   for (const [, ctx] of contexts.entries()) {
     if (ctx.shutdown) await ctx.shutdown();
   }
@@ -227,10 +242,8 @@ function averageMilliseconds(durations: number[]): number {
   if (durations.length === 0) {
     return 0;
   }
-  // Sort and remove the two highest & two lowest values
-  const copy = [...durations].sort().slice(2, -2);
-  const sum = copy.reduce((total, duration) => total + duration, 0);
-  const average = sum / copy.length;
+  const sum = durations.reduce((total, duration) => total + duration, 0);
+  const average = sum / durations.length;
   return average;
 }
 

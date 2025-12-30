@@ -135,7 +135,8 @@ function displayResults(ormNames: string[], results: BenchmarkResult[]): void {
     for (const ormName of sortedOrmNames) {
       const mine = result.orms[ormName];
       const place = sorted.findIndex(([name]) => name === ormName) + 1;
-      const colorFn = place === 1 ? colors.bold.green : place === 2 ? colors.green : (s: string) => s;
+      const total = sorted.length;
+      const colorFn = getColorFn(place, total)
       if (mine) {
         const avg = averageMilliseconds(mine.durations);
         const barLength = slowestTime > 0 ? Math.round((avg / slowestTime) * 10) : 0;
@@ -165,6 +166,18 @@ function displayResults(ormNames: string[], results: BenchmarkResult[]): void {
   table.push(totalRow);
 
   console.log(table.toString());
+}
+
+function getColorFn(place: number, total: number): (s: string) => string {
+  return place === 1
+    ? colors.green.bold
+    : place === 2
+      ? colors.dim.green
+      : place === total
+        ? colors.red.bold
+        : place === total - 1
+          ? colors.dim.red
+          : (s: string) => s;
 }
 
 async function runAllBenchmarks(): Promise<void> {

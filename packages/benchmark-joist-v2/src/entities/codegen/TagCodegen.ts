@@ -1,7 +1,6 @@
 import {
   BaseEntity,
   type Changes,
-  cleanStringValue,
   type Collection,
   ConfigApi,
   type DeepPartialOrNull,
@@ -35,7 +34,7 @@ import {
   type ValueFilter,
   type ValueGraphQLFilter,
 } from "joist-orm";
-import { Book, type BookId, bookMeta, type Entity, EntityManager, newTag, Tag, tagMeta } from "../entities.js";
+import { type Book, type BookId, type Entity, EntityManager, newTag, type Tag, tagMeta } from "../entities.js";
 
 export type TagId = Flavor<string, "Tag">;
 
@@ -110,10 +109,7 @@ export abstract class TagCodegen extends BaseEntity<EntityManager, string> imple
 
   declare readonly __type: { 0: "Tag" };
 
-  constructor(em: EntityManager, opts: TagOpts) {
-    super(em, opts);
-    setOpts(this as any as Tag, opts, { calledFromConstructor: true });
-  }
+  readonly books: Collection<Tag, Book> = hasManyToMany("book_tag", "tag_id", "tags", "book_id");
 
   get id(): TagId {
     return this.idMaybe || failNoIdYet("Tag");
@@ -136,7 +132,7 @@ export abstract class TagCodegen extends BaseEntity<EntityManager, string> imple
   }
 
   set name(name: string) {
-    setField(this, "name", cleanStringValue(name));
+    setField(this, "name", name);
   }
 
   get createdAt(): Date {
@@ -154,7 +150,7 @@ export abstract class TagCodegen extends BaseEntity<EntityManager, string> imple
    * is left as untouched.
    *
    * Collections are exhaustively set to the new values, however,
-   * {@link https://joist-orm.io/docs/features/partial-update-apis#incremental-collection-updates | Incremental collection updates} are supported.
+   * {@link https://joist-orm.io/features/partial-update-apis#incremental-collection-updates | Incremental collection updates} are supported.
    *
    * @example
    * ```
@@ -164,7 +160,7 @@ export abstract class TagCodegen extends BaseEntity<EntityManager, string> imple
    *   age: null // unset, (i.e. set it as undefined)
    * });
    * ```
-   * @see {@link https://joist-orm.io/docs/features/partial-update-apis | Partial Update APIs} on the Joist docs
+   * @see {@link https://joist-orm.io/features/partial-update-apis | Partial Update APIs} on the Joist docs
    */
   set(opts: Partial<TagOpts>): void {
     setOpts(this as any as Tag, opts);
@@ -177,7 +173,7 @@ export abstract class TagCodegen extends BaseEntity<EntityManager, string> imple
    * is left as untouched.
    *
    * Collections are exhaustively set to the new values, however,
-   * {@link https://joist-orm.io/docs/features/partial-update-apis#incremental-collection-updates | Incremental collection updates} are supported.
+   * {@link https://joist-orm.io/features/partial-update-apis#incremental-collection-updates | Incremental collection updates} are supported.
    *
    * @example
    * ```
@@ -187,7 +183,7 @@ export abstract class TagCodegen extends BaseEntity<EntityManager, string> imple
    *   age: null // unset, (i.e. set it as undefined)
    * });
    * ```
-   * @see {@link https://joist-orm.io/docs/features/partial-update-apis | Partial Update APIs} on the Joist docs
+   * @see {@link https://joist-orm.io/features/partial-update-apis | Partial Update APIs} on the Joist docs
    */
   setPartial(opts: PartialOrNull<TagOpts>): void {
     setOpts(this as any as Tag, opts as OptsOf<Tag>, { partial: true });
@@ -200,7 +196,7 @@ export abstract class TagCodegen extends BaseEntity<EntityManager, string> imple
    * is left as untouched.
    *
    * Collections are exhaustively set to the new values, however,
-   * {@link https://joist-orm.io/docs/features/partial-update-apis#incremental-collection-updates | Incremental collection updates} are supported.
+   * {@link https://joist-orm.io/features/partial-update-apis#incremental-collection-updates | Incremental collection updates} are supported.
    *
    * @example
    * ```
@@ -211,7 +207,7 @@ export abstract class TagCodegen extends BaseEntity<EntityManager, string> imple
    *   books: [{ title: "b1" }], // create a child book
    * });
    * ```
-   * @see {@link https://joist-orm.io/docs/features/partial-update-apis | Partial Update APIs} on the Joist docs
+   * @see {@link https://joist-orm.io/features/partial-update-apis | Partial Update APIs} on the Joist docs
    */
   setDeepPartial(opts: DeepPartialOrNull<Tag>): Promise<void> {
     return updatePartial(this as any as Tag, opts);
@@ -220,7 +216,7 @@ export abstract class TagCodegen extends BaseEntity<EntityManager, string> imple
   /**
    * Details the field changes of the entity within the current unit of work.
    *
-   * @see {@link https://joist-orm.io/docs/features/changed-fields | Changed Fields} on the Joist docs
+   * @see {@link https://joist-orm.io/features/changed-fields | Changed Fields} on the Joist docs
    */
   get changes(): Changes<Tag> {
     return newChangesProxy(this) as any;
@@ -229,7 +225,7 @@ export abstract class TagCodegen extends BaseEntity<EntityManager, string> imple
   /**
    * Traverse from this entity using a lens, and load the result.
    *
-   * @see {@link https://joist-orm.io/docs/advanced/lenses | Lens Traversal} on the Joist docs
+   * @see {@link https://joist-orm.io/advanced/lenses | Lens Traversal} on the Joist docs
    */
   load<U, V>(fn: (lens: Lens<Tag>) => Lens<U, V>, opts: { sql?: boolean } = {}): Promise<V> {
     return loadLens(this as any as Tag, fn, opts);
@@ -238,7 +234,7 @@ export abstract class TagCodegen extends BaseEntity<EntityManager, string> imple
   /**
    * Hydrate this entity using a load hint
    *
-   * @see {@link https://joist-orm.io/docs/features/loading-entities#1-object-graph-navigation | Loading entities} on the Joist docs
+   * @see {@link https://joist-orm.io/features/loading-entities#1-object-graph-navigation | Loading entities} on the Joist docs
    */
   populate<const H extends LoadHint<Tag>>(hint: H): Promise<Loaded<Tag, H>>;
   populate<const H extends LoadHint<Tag>>(opts: { hint: H; forceReload?: boolean }): Promise<Loaded<Tag, H>>;
@@ -275,23 +271,11 @@ export abstract class TagCodegen extends BaseEntity<EntityManager, string> imple
    *   books: { id: true, reviews: { rating: true } }
    * });
    * ```
-   * @see {@link https://joist-orm.io/docs/advanced/json-payloads | Json Payloads} on the Joist docs
+   * @see {@link https://joist-orm.io/advanced/json-payloads | Json Payloads} on the Joist docs
    */
   toJSON(): object;
   toJSON<const H extends ToJsonHint<Tag>>(hint: H): Promise<JsonPayload<Tag, H>>;
   toJSON(hint?: any): object {
     return !hint || typeof hint === "string" ? super.toJSON() : toJSON(this, hint);
-  }
-
-  get books(): Collection<Tag, Book> {
-    return this.__data.relations.books ??= hasManyToMany(
-      this,
-      "book_tag",
-      "books",
-      "tag_id",
-      bookMeta,
-      "tags",
-      "book_id",
-    );
   }
 }

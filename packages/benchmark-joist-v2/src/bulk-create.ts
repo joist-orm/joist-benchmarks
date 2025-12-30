@@ -1,4 +1,4 @@
-import { JsonAggregatePreloader } from "joist-plugin-join-preloading";
+import { JsonAggregatePreloader } from "joist-orm";
 import { Author, Book, BookReview, EntityManager, Tag } from "./entities/index.ts";
 import { cleanDatabase, JoistOperation } from "./index.ts";
 

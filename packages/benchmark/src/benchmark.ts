@@ -1,4 +1,4 @@
-import { parseCliArguments } from "@cloud-copilot/cli";
+import { parseCliArguments, stringArrayArgument, numberArgument, numberArrayArgument } from "@cloud-copilot/cli";
 import * as drizzle from "benchmark-drizzle";
 import * as joist_v1 from "benchmark-joist-v1";
 import * as joist_v2 from "benchmark-joist-v2";
@@ -41,13 +41,15 @@ const contexts: Map<string, Context> = new Map();
 // How many times to run each operation; we'll take the average
 const samples = Array(10);
 
-async function runBenchmark(ops: string[], _sizes: number[] | undefined): Promise<BenchmarkResult[]> {
+async function runBenchmark(ormKeys: string[], ops: string[], _sizes: number[] | undefined): Promise<BenchmarkResult[]> {
   const results: BenchmarkResult[] = [];
   for (const op of ops) {
+    // Use the configured size, otherwise each operation has a default set of sizes
     const sizes = _sizes || (operations as any)[op].sizes;
     for (const size of sizes) {
       const row: Record<string, { durations: number[]; queries: number }> = {};
       for (const [name, config] of Object.entries(orms)) {
+        if (!ormKeys.includes(name)) continue;
         try {
           const ctx = contexts.get(name) ?? (await config.getContext());
           contexts.set(name, ctx);
@@ -94,8 +96,7 @@ async function runBenchmark(ops: string[], _sizes: number[] | undefined): Promis
   return results;
 }
 
-function displayResults(results: BenchmarkResult[]): void {
-  const ormNames = Object.keys(orms);
+function displayResults(ormNames: string[], results: BenchmarkResult[]): void {
   const table = new Table({
     head: ["Operation", "Size", "Description", ...ormNames.map((orm) => colors.cyan(orm))],
     colAligns: ["left", "right", "left", ...ormNames.map(() => "right" as const)],
@@ -129,22 +130,27 @@ function displayResults(results: BenchmarkResult[]): void {
 }
 
 async function runAllBenchmarks(): Promise<void> {
-  const cli = parseCliArguments(
+  const cli = await parseCliArguments(
     "benchmark",
     {},
     {
-      op: {
-        type: "string",
-        values: "multiple",
-        description: "operations to run",
+      orm: stringArrayArgument({
+        description: `orms to run (${Object.keys(orms).join(", ")})`,
+        validValues: Object.keys(orms),
+        defaultValue: Object.keys(orms),
+      }),
+      op: stringArrayArgument({
+        description: "operations to run (" + Object.keys(operations).join(", ") + ")",
         validValues: Object.keys(operations),
-        default: Object.keys(operations),
-      },
-      size: { type: "number", values: "multiple", description: "sizes to invoke each operation with" },
-      latency: { type: "number", values: "single", description: "latency of SQL operation in millis", default: 2 },
+        defaultValue: Object.keys(operations),
+      }),
+      size: numberArrayArgument({ description: "sizes to invoke each operation with" }),
+      latency: numberArgument({  description: "latency of SQL operation in millis", defaultValue: 2 }),
     },
+    { expectOperands: false },
   );
 
+  const ormNames = cli.args.orm && cli.args.orm.length > 0 ? cli.args.orm : Object.keys(orms);
   const ops = cli.args.op && cli.args.op.length > 0 ? cli.args.op : Object.keys(operations);
   // cli.args.size is `number[]` but I expected `number[] | undefined` b/c it doesn't have a default
   const sizes = cli.args.size && cli.args.size.length > 0 ? cli.args.size : undefined;
@@ -152,13 +158,14 @@ async function runAllBenchmarks(): Promise<void> {
   const latency = cli.args.latency ?? 2;
 
   console.log(colors.green("=== ORM BENCHMARKS ==="));
+  console.log(colors.green("orms=") + ormNames);
   console.log(colors.green("ops=") + ops);
   console.log(colors.green("sizes=") + (sizes ?? "defaults"));
   console.log(colors.green("latency=") + latency);
   console.log("");
   await setToxiproxyLatency(latency);
-  const results = await runBenchmark(ops, sizes);
-  displayResults(results);
+  const results = await runBenchmark(ormNames, ops, sizes);
+  displayResults(ormNames, results);
   for (const [, ctx] of contexts.entries()) {
     if (ctx.shutdown) await ctx.shutdown();
   }

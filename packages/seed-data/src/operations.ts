@@ -1,5 +1,4 @@
-import { booksPerAuthor, reviewsPerBook, tagsPerBook } from "./generator.ts";
-import { SeedData } from "./index.ts";
+import { booksPerAuthor, reviewsPerBook, SeedData, tagsPerBook } from "./index.ts";
 
 /**
  * A base cross-run/per-ORM context with stats/info that will

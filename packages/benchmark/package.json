@@ -26,7 +26,7 @@
     "pipeline": "node --expose-gc --import tsx --conditions=@source src/pipeline.ts"
   },
   "dependencies": {
-    "@cloud-copilot/cli": "^0.1.25",
+    "@cloud-copilot/cli": "^0.2.26",
     "benchmark-drizzle": "workspace:^",
     "benchmark-joist-v1": "workspace:^",
     "benchmark-joist-v2": "workspace:^",

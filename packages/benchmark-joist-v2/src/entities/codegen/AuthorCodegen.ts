@@ -1,7 +1,6 @@
 import {
   BaseEntity,
   type Changes,
-  cleanStringValue,
   type Collection,
   ConfigApi,
   type DeepPartialOrNull,
@@ -35,7 +34,7 @@ import {
   type ValueFilter,
   type ValueGraphQLFilter,
 } from "joist-orm";
-import { Author, authorMeta, Book, type BookId, bookMeta, type Entity, EntityManager, newAuthor } from "../entities.js";
+import { type Author, authorMeta, type Book, type BookId, type Entity, EntityManager, newAuthor } from "../entities.js";
 
 export type AuthorId = Flavor<string, "Author">;
 
@@ -122,10 +121,7 @@ export abstract class AuthorCodegen extends BaseEntity<EntityManager, string> im
 
   declare readonly __type: { 0: "Author" };
 
-  constructor(em: EntityManager, opts: AuthorOpts) {
-    super(em, opts);
-    setOpts(this as any as Author, opts, { calledFromConstructor: true });
-  }
+  readonly books: Collection<Author, Book> = hasMany("author", "author_id", undefined);
 
   get id(): AuthorId {
     return this.idMaybe || failNoIdYet("Author");
@@ -148,7 +144,7 @@ export abstract class AuthorCodegen extends BaseEntity<EntityManager, string> im
   }
 
   set firstName(firstName: string) {
-    setField(this, "firstName", cleanStringValue(firstName));
+    setField(this, "firstName", firstName);
   }
 
   get lastName(): string {
@@ -156,7 +152,7 @@ export abstract class AuthorCodegen extends BaseEntity<EntityManager, string> im
   }
 
   set lastName(lastName: string) {
-    setField(this, "lastName", cleanStringValue(lastName));
+    setField(this, "lastName", lastName);
   }
 
   get email(): string {
@@ -164,7 +160,7 @@ export abstract class AuthorCodegen extends BaseEntity<EntityManager, string> im
   }
 
   set email(email: string) {
-    setField(this, "email", cleanStringValue(email));
+    setField(this, "email", email);
   }
 
   get createdAt(): Date {
@@ -182,7 +178,7 @@ export abstract class AuthorCodegen extends BaseEntity<EntityManager, string> im
    * is left as untouched.
    *
    * Collections are exhaustively set to the new values, however,
-   * {@link https://joist-orm.io/docs/features/partial-update-apis#incremental-collection-updates | Incremental collection updates} are supported.
+   * {@link https://joist-orm.io/features/partial-update-apis#incremental-collection-updates | Incremental collection updates} are supported.
    *
    * @example
    * ```
@@ -192,7 +188,7 @@ export abstract class AuthorCodegen extends BaseEntity<EntityManager, string> im
    *   age: null // unset, (i.e. set it as undefined)
    * });
    * ```
-   * @see {@link https://joist-orm.io/docs/features/partial-update-apis | Partial Update APIs} on the Joist docs
+   * @see {@link https://joist-orm.io/features/partial-update-apis | Partial Update APIs} on the Joist docs
    */
   set(opts: Partial<AuthorOpts>): void {
     setOpts(this as any as Author, opts);
@@ -205,7 +201,7 @@ export abstract class AuthorCodegen extends BaseEntity<EntityManager, string> im
    * is left as untouched.
    *
    * Collections are exhaustively set to the new values, however,
-   * {@link https://joist-orm.io/docs/features/partial-update-apis#incremental-collection-updates | Incremental collection updates} are supported.
+   * {@link https://joist-orm.io/features/partial-update-apis#incremental-collection-updates | Incremental collection updates} are supported.
    *
    * @example
    * ```
@@ -215,7 +211,7 @@ export abstract class AuthorCodegen extends BaseEntity<EntityManager, string> im
    *   age: null // unset, (i.e. set it as undefined)
    * });
    * ```
-   * @see {@link https://joist-orm.io/docs/features/partial-update-apis | Partial Update APIs} on the Joist docs
+   * @see {@link https://joist-orm.io/features/partial-update-apis | Partial Update APIs} on the Joist docs
    */
   setPartial(opts: PartialOrNull<AuthorOpts>): void {
     setOpts(this as any as Author, opts as OptsOf<Author>, { partial: true });
@@ -228,7 +224,7 @@ export abstract class AuthorCodegen extends BaseEntity<EntityManager, string> im
    * is left as untouched.
    *
    * Collections are exhaustively set to the new values, however,
-   * {@link https://joist-orm.io/docs/features/partial-update-apis#incremental-collection-updates | Incremental collection updates} are supported.
+   * {@link https://joist-orm.io/features/partial-update-apis#incremental-collection-updates | Incremental collection updates} are supported.
    *
    * @example
    * ```
@@ -239,7 +235,7 @@ export abstract class AuthorCodegen extends BaseEntity<EntityManager, string> im
    *   books: [{ title: "b1" }], // create a child book
    * });
    * ```
-   * @see {@link https://joist-orm.io/docs/features/partial-update-apis | Partial Update APIs} on the Joist docs
+   * @see {@link https://joist-orm.io/features/partial-update-apis | Partial Update APIs} on the Joist docs
    */
   setDeepPartial(opts: DeepPartialOrNull<Author>): Promise<void> {
     return updatePartial(this as any as Author, opts);
@@ -248,7 +244,7 @@ export abstract class AuthorCodegen extends BaseEntity<EntityManager, string> im
   /**
    * Details the field changes of the entity within the current unit of work.
    *
-   * @see {@link https://joist-orm.io/docs/features/changed-fields | Changed Fields} on the Joist docs
+   * @see {@link https://joist-orm.io/features/changed-fields | Changed Fields} on the Joist docs
    */
   get changes(): Changes<Author> {
     return newChangesProxy(this) as any;
@@ -257,7 +253,7 @@ export abstract class AuthorCodegen extends BaseEntity<EntityManager, string> im
   /**
    * Traverse from this entity using a lens, and load the result.
    *
-   * @see {@link https://joist-orm.io/docs/advanced/lenses | Lens Traversal} on the Joist docs
+   * @see {@link https://joist-orm.io/advanced/lenses | Lens Traversal} on the Joist docs
    */
   load<U, V>(fn: (lens: Lens<Author>) => Lens<U, V>, opts: { sql?: boolean } = {}): Promise<V> {
     return loadLens(this as any as Author, fn, opts);
@@ -266,7 +262,7 @@ export abstract class AuthorCodegen extends BaseEntity<EntityManager, string> im
   /**
    * Hydrate this entity using a load hint
    *
-   * @see {@link https://joist-orm.io/docs/features/loading-entities#1-object-graph-navigation | Loading entities} on the Joist docs
+   * @see {@link https://joist-orm.io/features/loading-entities#1-object-graph-navigation | Loading entities} on the Joist docs
    */
   populate<const H extends LoadHint<Author>>(hint: H): Promise<Loaded<Author, H>>;
   populate<const H extends LoadHint<Author>>(opts: { hint: H; forceReload?: boolean }): Promise<Loaded<Author, H>>;
@@ -303,15 +299,11 @@ export abstract class AuthorCodegen extends BaseEntity<EntityManager, string> im
    *   books: { id: true, reviews: { rating: true } }
    * });
    * ```
-   * @see {@link https://joist-orm.io/docs/advanced/json-payloads | Json Payloads} on the Joist docs
+   * @see {@link https://joist-orm.io/advanced/json-payloads | Json Payloads} on the Joist docs
    */
   toJSON(): object;
   toJSON<const H extends ToJsonHint<Author>>(hint: H): Promise<JsonPayload<Author, H>>;
   toJSON(hint?: any): object {
     return !hint || typeof hint === "string" ? super.toJSON() : toJSON(this, hint);
-  }
-
-  get books(): Collection<Author, Book> {
-    return this.__data.relations.books ??= hasMany(this, bookMeta, "books", "author", "author_id", undefined);
   }
 }

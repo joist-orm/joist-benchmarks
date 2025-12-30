@@ -5,6 +5,7 @@ This project benchmarks the performance of various TypeScript ORMs:
 - Prisma
 - TypeORM
 - MikroORM
+- Joist (v1/v2)
 
 ## Project Structure
 
@@ -24,36 +25,45 @@ The benchmark uses a simple schema with four entities:
 - `BookReview`: Reviews of books
 - `Tag`: Tags that can be applied to books
 
-## Benchmarks
-
-Each benchmark suite tests:
-
-1. Loading data:
-
-   - Single author with associated books and reviews
-   - 10 authors with associated books and reviews
-   - 100 authors with associated books and reviews
-   - 1000 authors with associated books and reviews
-
-2. Saving data:
-   - Single new author with associated book and review
-   - 10 new authors with associated books and reviews
-   - 100 new authors with associated books and reviews
-   - 1000 new authors with associated books and reviews
-
-## Running Benchmarks
+## Primary Benchmarks
 
 ```bash
 # Start the database
 docker compose up -d
 
-# Run all benchmarks
-yarn bench:all
+# Generate json files with seed data (one time)
+yarn generate-seed-data
 
-# Run specific benchmark
-yarn prisma:bench
-yarn typeorm:bench
-yarn mikroorm:bench
+# Run all benchmarks
+yarn benchmark
+
+# Or run individual orms/operations
+yarn benchmark --orm joist joist_v2 --op bulkCreate
+```
+
+### Benchmark Operations
+
+Each benchmark suite tests:
+
+1. Loading data:
+
+- Single author with associated books and reviews
+- 10 authors with associated books and reviews
+- 100 authors with associated books and reviews
+- 1000 authors with associated books and reviews
+
+2. Saving data:
+- Single new author with associated book and review
+- 10 new authors with associated books and reviews
+- 100 new authors with associated books and reviews
+- 1000 new authors with associated books and reviews
+
+## Pipeline Benchmarks
+
+There is an additional pipelining-specific benchmark:
+
+```bash
+yarn pipeline
 ```
 
 ---

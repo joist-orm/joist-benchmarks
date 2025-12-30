@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import fs from "fs";
 import path from "path";
+import { booksPerAuthor, reviewsPerBook, tagsPerBook } from "./index.ts";
 import { fileURLToPath } from "url";
 import { Author, Book, BookReview, Tag } from "./interfaces.ts";
 
@@ -136,17 +137,13 @@ function createSeedData(authorCount: number): void {
   const outputDir = path.resolve(__dirname, "../");
   fs.writeFileSync(path.join(outputDir, `seed-${authorCount}.json`), JSON.stringify(data, null, 2));
 
-  console.log(`Generated seed data for size ${authorCount} with:`);
+  console.log(`Generated seed-${authorCount}.json for size ${authorCount} with:`);
   console.log(`- ${data.authors.length} authors`);
   console.log(`- ${data.books.length} books`);
   console.log(`- ${data.reviews.length} reviews`);
   console.log(`- ${data.tags.length} tags`);
   console.log(`- ${data.bookTags.length} book-tag relationships`);
 }
-
-export const booksPerAuthor = 10;
-export const reviewsPerBook = 10;
-export const tagsPerBook = 5;
 
 // Generate seed data for all benchmark sizes
 const sizes = [1, 10, 100, 1000];

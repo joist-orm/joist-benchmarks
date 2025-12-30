@@ -3,6 +3,10 @@ import { fileURLToPath } from "url";
 import path from "path";
 import { Author, Book, BookReview, Tag } from "./interfaces.ts";
 
+export const booksPerAuthor = 10;
+export const reviewsPerBook = 10;
+export const tagsPerBook = 5;
+
 export * from "./interfaces.ts";
 export * from "./operations.ts";
 

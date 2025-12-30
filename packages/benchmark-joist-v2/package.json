@@ -30,6 +30,6 @@
   "devDependencies": {
     "@types/node": "^22.15.3",
     "joist-codegen": "https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@7aa0c71",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.3"
   }
 }

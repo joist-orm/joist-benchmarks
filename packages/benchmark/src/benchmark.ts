@@ -1,4 +1,4 @@
-import { parseCliArguments, stringArrayArgument, numberArgument, numberArrayArgument } from "@cloud-copilot/cli";
+import { parseCliArguments, enumArrayArgument, numberArgument, numberArrayArgument } from "@cloud-copilot/cli";
 import * as drizzle from "benchmark-drizzle";
 import * as joist_v1 from "benchmark-joist-v1";
 import * as joist_v2 from "benchmark-joist-v2";
@@ -154,12 +154,12 @@ async function runAllBenchmarks(): Promise<void> {
     "benchmark",
     {},
     {
-      orm: stringArrayArgument({
+      orm: enumArrayArgument({
         description: `orms to run (${Object.keys(orms).join(", ")})`,
         validValues: Object.keys(orms),
         defaultValue: Object.keys(orms),
       }),
-      op: stringArrayArgument({
+      op: enumArrayArgument({
         description: "operations to run (" + Object.keys(operations).join(", ") + ")",
         validValues: Object.keys(operations),
         defaultValue: Object.keys(operations),

@@ -13,8 +13,4 @@
     "noEmit": true,
     "customConditions": ["@source"]
   },
-  "ts-node": {
-    "esm": true,
-    "transpileOnly": true
-  }
 }

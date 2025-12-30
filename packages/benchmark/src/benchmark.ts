@@ -97,9 +97,23 @@ async function runBenchmark(ormKeys: string[], ops: string[], _sizes: number[] |
 }
 
 function displayResults(ormNames: string[], results: BenchmarkResult[]): void {
+  // Sort ormNames by total duration across all results (fastest first)
+  const totalDurations = new Map<string, number>();
+  for (const ormName of ormNames) {
+    let total = 0;
+    for (const result of results) {
+      const mine = result.orms[ormName];
+      if (mine) {
+        total += averageMilliseconds(mine.durations);
+      }
+    }
+    totalDurations.set(ormName, total);
+  }
+  const sortedOrmNames = [...ormNames].sort((a, b) => totalDurations.get(a)! - totalDurations.get(b)!);
+
   const table = new Table({
-    head: ["Operation", "Size", "Description", ...ormNames.map((orm) => colors.cyan(orm))],
-    colAligns: ["left", "right", "left", ...ormNames.map(() => "right" as const)],
+    head: ["Operation", "Size", "Description", ...sortedOrmNames.map((orm) => colors.cyan(orm))],
+    colAligns: ["left", "right", "left", ...sortedOrmNames.map(() => "center" as const)],
   });
   for (const result of results) {
     // Start the table row with `op x size x description`
@@ -116,7 +130,7 @@ function displayResults(ormNames: string[], results: BenchmarkResult[]): void {
     const slowestTime = sorted.length > 0 ? averageMilliseconds(sorted[sorted.length - 1][1].durations) : 0;
 
     // Then all the ORM results
-    for (const ormName of ormNames) {
+    for (const ormName of sortedOrmNames) {
       const mine = result.orms[ormName];
       const place = sorted.findIndex(([name]) => name === ormName) + 1;
       const colorFn = place === 1 ? colors.bold.green : place === 2 ? colors.green : (s: string) => s;
@@ -124,7 +138,7 @@ function displayResults(ormNames: string[], results: BenchmarkResult[]): void {
         const avg = averageMilliseconds(mine.durations);
         const barLength = slowestTime > 0 ? Math.round((avg / slowestTime) * 10) : 0;
         const bar = "█".repeat(barLength) + "░".repeat(10 - barLength);
-        row.push(colorFn(`#${place} ${avg.toFixed(1)}ms`) + ` (#q=${mine.queries})\n${bar}   `);
+        row.push([colorFn(`#${place} ${avg.toFixed(1)}ms`), bar, `#q=${mine.queries}`].join("\n"));
       } else {
         row.push("N/A");
       }

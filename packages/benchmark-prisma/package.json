@@ -21,7 +21,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "generate": "prisma generate"
+    "codegen": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "6.19.1",

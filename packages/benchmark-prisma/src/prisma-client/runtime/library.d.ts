@@ -21,9 +21,32 @@ declare type AccelerateEngineConfig = {
     accelerateUtils?: AccelerateUtils;
 };
 
+/**
+ * A stripped down interface of `fetch` that `@prisma/extension-accelerate`
+ * relies on. It must be in sync with the corresponding definition in the
+ * Accelerate extension.
+ *
+ * This is the actual interface exposed by the extension. We can't use the
+ * custom fetch function provided by it as normal fetch because the API is
+ * different. Notably, `headers` must be an object and not a `Headers`
+ * instance, and `url` must be a `string` and not a `URL`.
+ *
+ * The return type is `Response` but we can't specify this in an exported type
+ * because it would end up referencing external types from `@types/node` or DOM
+ * which can fail typechecking depending on TypeScript configuration in a user's
+ * project.
+ */
+declare type AccelerateExtensionFetch = (url: string, options: {
+    body?: string;
+    method?: string;
+    headers: Record<string, string>;
+}) => Promise<unknown>;
+
+declare type AccelerateExtensionFetchDecorator = (fetch: AccelerateExtensionFetch) => AccelerateExtensionFetch;
+
 declare type AccelerateUtils = EngineConfig['accelerateUtils'];
 
-export declare type Action = keyof typeof DMMF.ModelAction | 'executeRaw' | 'queryRaw' | 'runCommandRaw';
+export declare type Action = keyof typeof DMMF_2.ModelAction | 'executeRaw' | 'queryRaw' | 'runCommandRaw';
 
 declare type ActiveConnectorType = Exclude<ConnectorType, 'postgres' | 'prisma+postgres'>;
 
@@ -47,6 +70,7 @@ export declare type AllModelsToStringIndex<TypeMap extends TypeMapDef, Args exte
 } : {};
 
 declare class AnyNull extends NullTypesEnumValue {
+    #private;
 }
 
 export declare type ApplyOmit<T, OmitConfig> = Compute<{
@@ -67,12 +91,15 @@ export declare type Args<T, F extends Operation> = T extends {
 
 export declare type Args_3<T, F extends Operation> = Args<T, F>;
 
-/**
- * Original `quaint::ValueType` enum tag from Prisma's `quaint`.
- * Query arguments marked with this type are sanitized before being sent to the database.
- * Notice while a query argument may be `null`, `ArgType` is guaranteed to be defined.
- */
-declare type ArgType = 'Int32' | 'Int64' | 'Float' | 'Double' | 'Text' | 'Enum' | 'EnumArray' | 'Bytes' | 'Boolean' | 'Char' | 'Array' | 'Numeric' | 'Json' | 'Xml' | 'Uuid' | 'DateTime' | 'Date' | 'Time';
+declare type ArgScalarType = 'string' | 'int' | 'bigint' | 'float' | 'decimal' | 'boolean' | 'enum' | 'uuid' | 'json' | 'datetime' | 'bytes' | 'unknown';
+
+declare type ArgType = {
+    scalarType: ArgScalarType;
+    dbType?: string;
+    arity: Arity;
+};
+
+declare type Arity = 'scalar' | 'list';
 
 /**
  * Attributes is a map from string to attribute values.
@@ -91,19 +118,19 @@ declare interface Attributes {
 declare type AttributeValue = string | number | boolean | Array<null | undefined | string> | Array<null | undefined | number> | Array<null | undefined | boolean>;
 
 export declare type BaseDMMF = {
-    readonly datamodel: Omit<DMMF.Datamodel, 'indexes'>;
+    readonly datamodel: Omit<DMMF_2.Datamodel, 'indexes'>;
 };
 
 declare type BatchArgs = {
     queries: BatchQuery[];
     transaction?: {
-        isolationLevel?: IsolationLevel;
+        isolationLevel?: IsolationLevel_2;
     };
 };
 
 declare type BatchInternalParams = {
     requests: RequestParams[];
-    customDataProxyFetch?: CustomDataProxyFetch;
+    customDataProxyFetch?: AccelerateExtensionFetchDecorator;
 };
 
 declare type BatchQuery = {
@@ -122,6 +149,8 @@ declare type BatchQueryOptionsCbArgs = {
     __internalParams: BatchInternalParams;
 };
 
+declare type BatchResponse = MultiBatchResponse | CompactedBatchResponse;
+
 declare type BatchTransactionOptions = {
     isolationLevel?: Transaction_2.IsolationLevel;
 };
@@ -131,6 +160,11 @@ declare interface BinaryTargetsEnvValue {
     value: string;
     native?: boolean;
 }
+
+/**
+ * Equivalent to `Uint8Array` before TypeScript 5.7, and `Uint8Array<ArrayBuffer>` in TypeScript 5.7 and beyond.
+ */
+export declare type Bytes = ReturnType<Uint8Array['slice']>;
 
 export declare type Call<F extends Fn, P> = (F & {
     params: P;
@@ -204,14 +238,23 @@ declare const ColumnTypeEnum: {
     readonly UnknownNumber: 128;
 };
 
+declare type CompactedBatchResponse = {
+    type: 'compacted';
+    plan: QueryPlanNode;
+    arguments: Record<string, {}>[];
+    nestedSelection: string[];
+    keys: string[];
+    expectNonEmpty: boolean;
+};
+
 declare type CompilerWasmLoadingConfig = {
     /**
      * WASM-bindgen runtime for corresponding module
      */
-    getRuntime: () => {
-        __wbg_set_wasm(exports: unknown): any;
+    getRuntime: () => Promise<{
+        __wbg_set_wasm(exports: unknown): void;
         QueryCompiler: QueryCompilerConstructor;
-    };
+    }>;
     /**
      * Loads the raw wasm module for the wasm compiler engine. This configuration is
      * generated specifically for each type of client, eg. Node.js client and Edge
@@ -243,6 +286,7 @@ declare type ComputedFieldsMap = {
 declare type ConnectionInfo = {
     schemaName?: string;
     maxBindValues?: number;
+    supportsRelationJoins: boolean;
 };
 
 declare type ConnectorType = 'mysql' | 'mongodb' | 'sqlite' | 'postgresql' | 'postgres' | 'prisma+postgres' | 'sqlserver' | 'cockroachdb';
@@ -297,37 +341,6 @@ export declare type Count<O> = {
 
 export declare function createParam(name: string): Param<unknown, string>;
 
-/**
- * Custom fetch function for `DataProxyEngine`.
- *
- * We can't use the actual type of `globalThis.fetch` because this will result
- * in API Extractor referencing Node.js type definitions in the `.d.ts` bundle
- * for the client runtime. We can only use such types in internal types that
- * don't end up exported anywhere.
-
- * It's also not possible to write a definition of `fetch` that would accept the
- * actual `fetch` function from different environments such as Node.js and
- * Cloudflare Workers (with their extensions to `RequestInit` and `Response`).
- * `fetch` is used in both covariant and contravariant positions in
- * `CustomDataProxyFetch`, making it invariant, so we need the exact same type.
- * Even if we removed the argument and left `fetch` in covariant position only,
- * then for an extension-supplied function to be assignable to `customDataProxyFetch`,
- * the platform-specific (or custom) `fetch` function needs to be assignable
- * to our `fetch` definition. This, in turn, requires the third-party `Response`
- * to be a subtype of our `Response` (which is not a problem, we could declare
- * a minimal `Response` type that only includes what we use) *and* requires the
- * third-party `RequestInit` to be a supertype of our `RequestInit` (i.e. we
- * have to declare all properties any `RequestInit` implementation in existence
- * could possibly have), which is not possible.
- *
- * Since `@prisma/extension-accelerate` redefines the type of
- * `__internalParams.customDataProxyFetch` to its own type anyway (probably for
- * exactly this reason), our definition is never actually used and is completely
- * ignored, so it doesn't matter, and we can just use `unknown` as the type of
- * `fetch` here.
- */
-declare type CustomDataProxyFetch = (fetch: unknown) => unknown;
-
 declare class DataLoader<T = unknown> {
     private options;
     batches: {
@@ -347,6 +360,35 @@ declare type DataLoaderOptions<T> = {
     batchOrder: (requestA: T, requestB: T) => number;
 };
 
+declare type Datamodel = ReadonlyDeep_2<{
+    models: Model[];
+    enums: DatamodelEnum[];
+    types: Model[];
+    indexes: Index[];
+}>;
+
+declare type DatamodelEnum = ReadonlyDeep_2<{
+    name: string;
+    values: EnumValue[];
+    dbName?: string | null;
+    documentation?: string;
+}>;
+
+declare function datamodelEnumToSchemaEnum(datamodelEnum: DatamodelEnum): SchemaEnum;
+
+declare type DataRule = {
+    type: 'rowCountEq';
+    args: number;
+} | {
+    type: 'rowCountNeq';
+    args: number;
+} | {
+    type: 'affectedRowCountEq';
+    args: number;
+} | {
+    type: 'never';
+};
+
 declare type Datasource = {
     url?: string;
 };
@@ -356,6 +398,7 @@ declare type Datasources = {
 };
 
 declare class DbNull extends NullTypesEnumValue {
+    #private;
 }
 
 export declare const Debug: typeof debugCreate & {
@@ -679,7 +722,13 @@ export declare function defineDmmfProperty(target: object, runtimeDataModel: Run
 
 declare function defineExtension(ext: ExtensionArgs | ((client: Client) => Client)): (client: Client) => Client;
 
-declare const denylist: readonly ["$connect", "$disconnect", "$on", "$transaction", "$use", "$extends"];
+declare const denylist: readonly ["$connect", "$disconnect", "$on", "$transaction", "$extends"];
+
+declare type Deprecation = ReadonlyDeep_2<{
+    sinceVersion: string;
+    reason: string;
+    plannedRemovalVersion?: string;
+}>;
 
 declare type DeserializedResponse = Array<Record<string, unknown>>;
 
@@ -708,264 +757,110 @@ export declare type DevTypeMapFnDef = {
 };
 
 export declare namespace DMMF {
-    export type Document = ReadonlyDeep_2<{
-        datamodel: Datamodel;
-        schema: Schema;
-        mappings: Mappings;
-    }>;
-    export type Mappings = ReadonlyDeep_2<{
-        modelOperations: ModelMapping[];
-        otherOperations: {
-            read: string[];
-            write: string[];
-        };
-    }>;
-    export type OtherOperationMappings = ReadonlyDeep_2<{
-        read: string[];
-        write: string[];
-    }>;
-    export type DatamodelEnum = ReadonlyDeep_2<{
-        name: string;
-        values: EnumValue[];
-        dbName?: string | null;
-        documentation?: string;
-    }>;
-    export type SchemaEnum = ReadonlyDeep_2<{
-        name: string;
-        values: string[];
-    }>;
-    export type EnumValue = ReadonlyDeep_2<{
-        name: string;
-        dbName: string | null;
-    }>;
-    export type Datamodel = ReadonlyDeep_2<{
-        models: Model[];
-        enums: DatamodelEnum[];
-        types: Model[];
-        indexes: Index[];
-    }>;
-    export type uniqueIndex = ReadonlyDeep_2<{
-        name: string;
-        fields: string[];
-    }>;
-    export type PrimaryKey = ReadonlyDeep_2<{
-        name: string | null;
-        fields: string[];
-    }>;
-    export type Model = ReadonlyDeep_2<{
-        name: string;
-        dbName: string | null;
-        schema: string | null;
-        fields: Field[];
-        uniqueFields: string[][];
-        uniqueIndexes: uniqueIndex[];
-        documentation?: string;
-        primaryKey: PrimaryKey | null;
-        isGenerated?: boolean;
-    }>;
-    export type FieldKind = 'scalar' | 'object' | 'enum' | 'unsupported';
-    export type FieldNamespace = 'model' | 'prisma';
-    export type FieldLocation = 'scalar' | 'inputObjectTypes' | 'outputObjectTypes' | 'enumTypes' | 'fieldRefTypes';
-    export type Field = ReadonlyDeep_2<{
-        kind: FieldKind;
-        name: string;
-        isRequired: boolean;
-        isList: boolean;
-        isUnique: boolean;
-        isId: boolean;
-        isReadOnly: boolean;
-        isGenerated?: boolean;
-        isUpdatedAt?: boolean;
-        /**
-         * Describes the data type in the same the way it is defined in the Prisma schema:
-         * BigInt, Boolean, Bytes, DateTime, Decimal, Float, Int, JSON, String, $ModelName
-         */
-        type: string;
-        /**
-         * Native database type, if specified.
-         * For example, `@db.VarChar(191)` is encoded as `['VarChar', ['191']]`,
-         * `@db.Text` is encoded as `['Text', []]`.
-         */
-        nativeType?: [string, string[]] | null;
-        dbName?: string | null;
-        hasDefaultValue: boolean;
-        default?: FieldDefault | FieldDefaultScalar | FieldDefaultScalar[];
-        relationFromFields?: string[];
-        relationToFields?: string[];
-        relationOnDelete?: string;
-        relationOnUpdate?: string;
-        relationName?: string;
-        documentation?: string;
-    }>;
-    export type FieldDefault = ReadonlyDeep_2<{
-        name: string;
-        args: Array<string | number>;
-    }>;
-    export type FieldDefaultScalar = string | boolean | number;
-    export type Index = ReadonlyDeep_2<{
-        model: string;
-        type: IndexType;
-        isDefinedOnField: boolean;
-        name?: string;
-        dbName?: string;
-        algorithm?: string;
-        clustered?: boolean;
-        fields: IndexField[];
-    }>;
-    export type IndexType = 'id' | 'normal' | 'unique' | 'fulltext';
-    export type IndexField = ReadonlyDeep_2<{
-        name: string;
-        sortOrder?: SortOrder;
-        length?: number;
-        operatorClass?: string;
-    }>;
-    export type SortOrder = 'asc' | 'desc';
-    export type Schema = ReadonlyDeep_2<{
-        rootQueryType?: string;
-        rootMutationType?: string;
-        inputObjectTypes: {
-            model?: InputType[];
-            prisma: InputType[];
-        };
-        outputObjectTypes: {
-            model: OutputType[];
-            prisma: OutputType[];
-        };
-        enumTypes: {
-            model?: SchemaEnum[];
-            prisma: SchemaEnum[];
-        };
-        fieldRefTypes: {
-            prisma?: FieldRefType[];
-        };
-    }>;
-    export type Query = ReadonlyDeep_2<{
-        name: string;
-        args: SchemaArg[];
-        output: QueryOutput;
-    }>;
-    export type QueryOutput = ReadonlyDeep_2<{
-        name: string;
-        isRequired: boolean;
-        isList: boolean;
-    }>;
-    export type TypeRef<AllowedLocations extends FieldLocation> = {
-        isList: boolean;
-        type: string;
-        location: AllowedLocations;
-        namespace?: FieldNamespace;
-    };
-    export type InputTypeRef = TypeRef<'scalar' | 'inputObjectTypes' | 'enumTypes' | 'fieldRefTypes'>;
-    export type SchemaArg = ReadonlyDeep_2<{
-        name: string;
-        comment?: string;
-        isNullable: boolean;
-        isRequired: boolean;
-        inputTypes: InputTypeRef[];
-        deprecation?: Deprecation;
-    }>;
-    export type OutputType = ReadonlyDeep_2<{
-        name: string;
-        fields: SchemaField[];
-    }>;
-    export type SchemaField = ReadonlyDeep_2<{
-        name: string;
-        isNullable?: boolean;
-        outputType: OutputTypeRef;
-        args: SchemaArg[];
-        deprecation?: Deprecation;
-        documentation?: string;
-    }>;
-    export type OutputTypeRef = TypeRef<'scalar' | 'outputObjectTypes' | 'enumTypes'>;
-    export type Deprecation = ReadonlyDeep_2<{
-        sinceVersion: string;
-        reason: string;
-        plannedRemovalVersion?: string;
-    }>;
-    export type InputType = ReadonlyDeep_2<{
-        name: string;
-        constraints: {
-            maxNumFields: number | null;
-            minNumFields: number | null;
-            fields?: string[];
-        };
-        meta?: {
-            source?: string;
-        };
-        fields: SchemaArg[];
-    }>;
-    export type FieldRefType = ReadonlyDeep_2<{
-        name: string;
-        allowTypes: FieldRefAllowType[];
-        fields: SchemaArg[];
-    }>;
-    export type FieldRefAllowType = TypeRef<'scalar' | 'enumTypes'>;
-    export type ModelMapping = ReadonlyDeep_2<{
-        model: string;
-        plural: string;
-        findUnique?: string | null;
-        findUniqueOrThrow?: string | null;
-        findFirst?: string | null;
-        findFirstOrThrow?: string | null;
-        findMany?: string | null;
-        create?: string | null;
-        createMany?: string | null;
-        createManyAndReturn?: string | null;
-        update?: string | null;
-        updateMany?: string | null;
-        updateManyAndReturn?: string | null;
-        upsert?: string | null;
-        delete?: string | null;
-        deleteMany?: string | null;
-        aggregate?: string | null;
-        groupBy?: string | null;
-        count?: string | null;
-        findRaw?: string | null;
-        aggregateRaw?: string | null;
-    }>;
-    export enum ModelAction {
-        findUnique = "findUnique",
-        findUniqueOrThrow = "findUniqueOrThrow",
-        findFirst = "findFirst",
-        findFirstOrThrow = "findFirstOrThrow",
-        findMany = "findMany",
-        create = "create",
-        createMany = "createMany",
-        createManyAndReturn = "createManyAndReturn",
-        update = "update",
-        updateMany = "updateMany",
-        updateManyAndReturn = "updateManyAndReturn",
-        upsert = "upsert",
-        delete = "delete",
-        deleteMany = "deleteMany",
-        groupBy = "groupBy",
-        count = "count",// TODO: count does not actually exist, why?
-        aggregate = "aggregate",
-        findRaw = "findRaw",
-        aggregateRaw = "aggregateRaw"
+    export {
+        datamodelEnumToSchemaEnum,
+        Document_2 as Document,
+        Mappings,
+        OtherOperationMappings,
+        DatamodelEnum,
+        SchemaEnum,
+        EnumValue,
+        Datamodel,
+        uniqueIndex,
+        PrimaryKey,
+        Model,
+        FieldKind,
+        FieldNamespace,
+        FieldLocation,
+        Field,
+        FieldDefault,
+        FieldDefaultScalar,
+        Index,
+        IndexType,
+        IndexField,
+        SortOrder,
+        Schema,
+        Query,
+        QueryOutput,
+        TypeRef,
+        InputTypeRef,
+        SchemaArg,
+        OutputType,
+        SchemaField,
+        OutputTypeRef,
+        Deprecation,
+        InputType,
+        FieldRefType,
+        FieldRefAllowType,
+        ModelMapping,
+        ModelAction
     }
 }
 
-export declare function dmmfToRuntimeDataModel(dmmfDataModel: DMMF.Datamodel): RuntimeDataModel;
-
-export declare interface DriverAdapter extends SqlQueryable {
-    /**
-     * Execute multiple SQL statements separated by semicolon.
-     */
-    executeScript(script: string): Promise<void>;
-    /**
-     * Start new transaction.
-     */
-    transactionContext(): Promise<TransactionContext>;
-    /**
-     * Optional method that returns extra connection info
-     */
-    getConnectionInfo?(): ConnectionInfo;
-    /**
-     * Dispose of the connection and release any resources.
-     */
-    dispose(): Promise<void>;
+declare namespace DMMF_2 {
+    export {
+        datamodelEnumToSchemaEnum,
+        Document_2 as Document,
+        Mappings,
+        OtherOperationMappings,
+        DatamodelEnum,
+        SchemaEnum,
+        EnumValue,
+        Datamodel,
+        uniqueIndex,
+        PrimaryKey,
+        Model,
+        FieldKind,
+        FieldNamespace,
+        FieldLocation,
+        Field,
+        FieldDefault,
+        FieldDefaultScalar,
+        Index,
+        IndexType,
+        IndexField,
+        SortOrder,
+        Schema,
+        Query,
+        QueryOutput,
+        TypeRef,
+        InputTypeRef,
+        SchemaArg,
+        OutputType,
+        SchemaField,
+        OutputTypeRef,
+        Deprecation,
+        InputType,
+        FieldRefType,
+        FieldRefAllowType,
+        ModelMapping,
+        ModelAction
+    }
 }
+
+export declare function dmmfToRuntimeDataModel(dmmfDataModel: DMMF_2.Datamodel): RuntimeDataModel;
+
+declare type Document_2 = ReadonlyDeep_2<{
+    datamodel: Datamodel;
+    schema: Schema;
+    mappings: Mappings;
+}>;
+
+/**
+ * A generic driver adapter factory that allows the user to instantiate a
+ * driver adapter. The query and result types are specific to the adapter.
+ */
+declare interface DriverAdapterFactory<Query, Result> extends AdapterInfo {
+    /**
+     * Instantiate a driver adapter.
+     */
+    connect(): Promise<Queryable<Query, Result>>;
+}
+
+declare type DynamicArgType = ArgType | {
+    arity: 'tuple';
+    elements: ArgType[];
+};
 
 /** Client */
 export declare type DynamicClientExtensionArgs<C_, TypeMap extends TypeMapDef, TypeMapCb extends TypeMapCbDef, ExtArgs extends Record<string, any>> = {
@@ -1134,7 +1029,6 @@ declare interface Engine<InteractiveTransactionPayload = unknown> {
 declare interface EngineConfig {
     cwd: string;
     dirname: string;
-    datamodelPath: string;
     enableDebugLogs?: boolean;
     allowTriggerPanic?: boolean;
     prismaPath?: string;
@@ -1161,10 +1055,9 @@ declare interface EngineConfig {
      * rather than Prisma's Rust drivers.
      * @remarks only used by LibraryEngine.ts
      */
-    adapter?: ErrorCapturingSqlConnection;
+    adapter?: SqlDriverAdapterFactory;
     /**
      * The contents of the schema encoded into a string
-     * @remarks only used by DataProxyEngine.ts
      */
     inlineSchema: string;
     /**
@@ -1215,8 +1108,6 @@ declare type EngineEvent<E extends EngineEventType> = E extends QueryEventType ?
 
 declare type EngineEventType = QueryEventType | LogEventType;
 
-declare type EngineProtocol = 'graphql' | 'json';
-
 declare type EngineSpan = {
     id: EngineSpanId;
     parentId: string | null;
@@ -1236,10 +1127,10 @@ declare type EngineWasmLoadingConfig = {
     /**
      * WASM-bindgen runtime for corresponding module
      */
-    getRuntime: () => {
-        __wbg_set_wasm(exports: unknown): any;
+    getRuntime: () => Promise<{
+        __wbg_set_wasm(exports: unknown): void;
         QueryEngine: QueryEngineConstructor;
-    };
+    }>;
     /**
      * Loads the raw wasm module for the wasm query engine. This configuration is
      * generated specifically for each type of client, eg. Node.js client and Edge
@@ -1249,6 +1140,11 @@ declare type EngineWasmLoadingConfig = {
      */
     getQueryEngineWasmModule: () => Promise<unknown>;
 };
+
+declare type EnumValue = ReadonlyDeep_2<{
+    name: string;
+    dbName: string | null;
+}>;
 
 declare type EnvPaths = {
     rootEnvPath: string | null;
@@ -1262,32 +1158,9 @@ declare interface EnvValue {
 
 export declare type Equals<A, B> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2) ? 1 : 0;
 
-declare type Error_2 = {
-    kind: 'GenericJs';
-    id: number;
-} | {
-    kind: 'UnsupportedNativeDataType';
-    type: string;
-} | {
-    kind: 'postgres';
-    code: string;
-    severity: string;
-    message: string;
-    detail: string | undefined;
-    column: string | undefined;
-    hint: string | undefined;
-} | {
-    kind: 'mysql';
-    code: number;
-    message: string;
-    state: string;
-} | {
-    kind: 'sqlite';
-    /**
-     * Sqlite extended error code: https://www.sqlite.org/rescode.html
-     */
-    extendedCode: number;
-    message: string;
+declare type Error_2 = MappedError & {
+    originalCode?: string;
+    originalMessage?: string;
 };
 
 declare type ErrorCapturingFunction<T> = T extends (...args: infer A) => Promise<infer R> ? (...args: A) => Promise<Result_4<ErrorCapturingInterface<R>>> : T extends (...args: infer A) => infer R ? (...args: A) => Result_4<ErrorCapturingInterface<R>> : T;
@@ -1296,7 +1169,7 @@ declare type ErrorCapturingInterface<T> = {
     [K in keyof T]: ErrorCapturingFunction<T[K]>;
 };
 
-declare interface ErrorCapturingSqlConnection extends ErrorCapturingInterface<DriverAdapter> {
+declare interface ErrorCapturingSqlDriverAdapter extends ErrorCapturingInterface<SqlDriverAdapter> {
     readonly errorRegistry: ErrorRegistry;
 }
 
@@ -1354,7 +1227,6 @@ declare type ExtendedSpanOptions = SpanOptions & {
     /** The name of the span */
     name: string;
     internal?: boolean;
-    middleware?: boolean;
     /** Whether it propagates context (?=true) */
     active?: boolean;
     /** The context to append the span to */
@@ -1453,6 +1325,75 @@ export declare type ExtractGlobalOmit<Options, ModelName extends string> = Optio
     };
 } ? GlobalOmit : {};
 
+declare type Field = ReadonlyDeep_2<{
+    kind: FieldKind;
+    name: string;
+    isRequired: boolean;
+    isList: boolean;
+    isUnique: boolean;
+    isId: boolean;
+    isReadOnly: boolean;
+    isGenerated?: boolean;
+    isUpdatedAt?: boolean;
+    /**
+     * Describes the data type in the same the way it is defined in the Prisma schema:
+     * BigInt, Boolean, Bytes, DateTime, Decimal, Float, Int, JSON, String, $ModelName
+     */
+    type: string;
+    /**
+     * Native database type, if specified.
+     * For example, `@db.VarChar(191)` is encoded as `['VarChar', ['191']]`,
+     * `@db.Text` is encoded as `['Text', []]`.
+     */
+    nativeType?: [string, string[]] | null;
+    dbName?: string | null;
+    hasDefaultValue: boolean;
+    default?: FieldDefault | FieldDefaultScalar | FieldDefaultScalar[];
+    relationFromFields?: string[];
+    relationToFields?: string[];
+    relationOnDelete?: string;
+    relationOnUpdate?: string;
+    relationName?: string;
+    documentation?: string;
+}>;
+
+declare type FieldDefault = ReadonlyDeep_2<{
+    name: string;
+    args: Array<string | number>;
+}>;
+
+declare type FieldDefaultScalar = string | boolean | number;
+
+declare type FieldInitializer = {
+    type: 'value';
+    value: PrismaValue;
+} | {
+    type: 'lastInsertId';
+};
+
+declare type FieldKind = 'scalar' | 'object' | 'enum' | 'unsupported';
+
+declare type FieldLocation = 'scalar' | 'inputObjectTypes' | 'outputObjectTypes' | 'enumTypes' | 'fieldRefTypes';
+
+declare type FieldNamespace = 'model' | 'prisma';
+
+declare type FieldOperation = {
+    type: 'set';
+    value: PrismaValue;
+} | {
+    type: 'add';
+    value: PrismaValue;
+} | {
+    type: 'subtract';
+    value: PrismaValue;
+} | {
+    type: 'multiply';
+    value: PrismaValue;
+} | {
+    type: 'divide';
+    value: PrismaValue;
+};
+
 /**
  * A reference to a specific field of a specific model
  */
@@ -1463,12 +1404,49 @@ export declare interface FieldRef<Model, FieldType> {
     readonly isList: boolean;
 }
 
-export declare type FluentOperation = 'findUnique' | 'findUniqueOrThrow' | 'findFirst' | 'findFirstOrThrow' | 'create' | 'update' | 'upsert' | 'delete';
+declare type FieldRefAllowType = TypeRef<'scalar' | 'enumTypes'>;
+
+declare type FieldRefType = ReadonlyDeep_2<{
+    name: string;
+    allowTypes: FieldRefAllowType[];
+    fields: SchemaArg[];
+}>;
+
+declare type FieldScalarType = {
+    type: 'string' | 'int' | 'bigint' | 'float' | 'boolean' | 'json' | 'object' | 'datetime' | 'decimal' | 'unsupported';
+} | {
+    type: 'enum';
+    name: string;
+} | {
+    type: 'bytes';
+    encoding: 'array' | 'base64' | 'hex';
+};
+
+declare type FieldType = {
+    arity: Arity;
+} & FieldScalarType;
+
+declare type FluentOperation = 'findUnique' | 'findUniqueOrThrow' | 'findFirst' | 'findFirstOrThrow' | 'create' | 'update' | 'upsert' | 'delete';
 
 export declare interface Fn<Params = unknown, Returns = unknown> {
     params: Params;
     returns: Returns;
 }
+
+declare type Fragment = {
+    type: 'stringChunk';
+    chunk: string;
+} | {
+    type: 'parameter';
+} | {
+    type: 'parameterTuple';
+} | {
+    type: 'parameterTupleList';
+    itemPrefix: string;
+    itemSeparator: string;
+    itemSuffix: string;
+    groupSeparator: string;
+};
 
 declare interface GeneratorConfig {
     name: string;
@@ -1499,7 +1477,7 @@ export declare type GetAggregateResult<P extends OperationPayload, A> = {
     };
 };
 
-declare function getBatchRequestPayload(batch: JsonQuery[], transaction?: TransactionOptions_3<unknown>): QueryEngineBatchRequest;
+declare function getBatchRequestPayload(batch: JsonQuery[], transaction?: TransactionOptions_2<unknown>): QueryEngineBatchRequest;
 
 export declare type GetBatchResult = {
     count: number;
@@ -1563,7 +1541,6 @@ export declare function getPrismaClient(config: GetPrismaClientConfig): {
         _clientVersion: string;
         _errorFormat: ErrorFormat;
         _tracingHelper: TracingHelper;
-        _middlewares: MiddlewareHandler<QueryMiddleware>;
         _previewFeatures: string[];
         _activeProvider: string;
         _globalOmit?: GlobalOmitOptions | undefined;
@@ -1578,11 +1555,6 @@ export declare function getPrismaClient(config: GetPrismaClientConfig): {
          */
         _appliedParent: any;
         _createPrismaPromise: PrismaPromiseFactory;
-        /**
-         * Hook a middleware into the client
-         * @param middleware to hook
-         */
-        $use(middleware: QueryMiddleware): void;
         $on<E extends ExtendedEventType>(eventType: E, callback: EventCallback<E>): any;
         $connect(): Promise<void>;
         /**
@@ -1662,7 +1634,7 @@ export declare function getPrismaClient(config: GetPrismaClientConfig): {
          */
         _transactionWithCallback({ callback, options, }: {
             callback: (client: Client) => Promise<unknown>;
-            options?: TransactionOptions_2;
+            options?: Options;
         }): Promise<unknown>;
         _createItxClient(transaction: PrismaPromiseInteractiveTransaction): Client;
         /**
@@ -1697,16 +1669,15 @@ export declare function getPrismaClient(config: GetPrismaClientConfig): {
  * loaded, this same config is passed to {@link getPrismaClient} which creates a
  * closure with that config around a non-instantiated [[PrismaClient]].
  */
-declare type GetPrismaClientConfig = {
+export declare type GetPrismaClientConfig = {
     runtimeDataModel: RuntimeDataModel;
     generator?: GeneratorConfig;
-    relativeEnvPaths: {
+    relativeEnvPaths?: {
         rootEnvPath?: string | null;
         schemaEnvPath?: string | null;
     };
     relativePath: string;
     dirname: string;
-    filename?: string;
     clientVersion: string;
     engineVersion: string;
     datasourceNames: string[];
@@ -1843,6 +1814,34 @@ declare type HrTime = [number, number];
  */
 declare type HrTime_2 = [number, number];
 
+declare type Index = ReadonlyDeep_2<{
+    model: string;
+    type: IndexType;
+    isDefinedOnField: boolean;
+    name?: string;
+    dbName?: string;
+    algorithm?: string;
+    clustered?: boolean;
+    fields: IndexField[];
+}>;
+
+declare type IndexField = ReadonlyDeep_2<{
+    name: string;
+    sortOrder?: SortOrder;
+    length?: number;
+    operatorClass?: string;
+}>;
+
+declare type IndexType = 'id' | 'normal' | 'unique' | 'fulltext';
+
+declare type InMemoryOps = {
+    pagination: Pagination | null;
+    distinct: string[] | null;
+    reverse: boolean;
+    linkingFields: string[] | null;
+    nested: Record<string, InMemoryOps>;
+};
+
 /**
  * Matches a JSON array.
  * Unlike \`JsonArray\`, readonly arrays are assignable to this type.
@@ -1874,6 +1873,22 @@ export declare type InputJsonObject = {
 export declare type InputJsonValue = string | number | boolean | InputJsonObject | InputJsonArray | {
     toJSON(): unknown;
 };
+
+declare type InputType = ReadonlyDeep_2<{
+    name: string;
+    constraints: {
+        maxNumFields: number | null;
+        minNumFields: number | null;
+        fields?: string[];
+    };
+    meta?: {
+        source?: string;
+        grouping?: string;
+    };
+    fields: SchemaArg[];
+}>;
+
+declare type InputTypeRef = TypeRef<'scalar' | 'inputObjectTypes' | 'enumTypes' | 'fieldRefTypes'>;
 
 declare type InteractiveTransactionInfo<Payload = unknown> = {
     /**
@@ -1947,16 +1962,12 @@ declare type InternalRequestParams = {
     /** Used to convert args for middleware and back */
     middlewareArgsMapper?: MiddlewareArgsMapper<unknown, unknown>;
     /** Used for Accelerate client extension via Data Proxy */
-    customDataProxyFetch?: CustomDataProxyFetch;
+    customDataProxyFetch?: AccelerateExtensionFetchDecorator;
 } & Omit<QueryMiddlewareParams, 'runInTransaction'>;
 
-declare const enum IsolationLevel {
-    ReadUncommitted = "ReadUncommitted",
-    ReadCommitted = "ReadCommitted",
-    RepeatableRead = "RepeatableRead",
-    Snapshot = "Snapshot",
-    Serializable = "Serializable"
-}
+declare type IsolationLevel = 'READ UNCOMMITTED' | 'READ COMMITTED' | 'REPEATABLE READ' | 'SNAPSHOT' | 'SERIALIZABLE';
+
+declare type IsolationLevel_2 = 'ReadUncommitted' | 'ReadCommitted' | 'RepeatableRead' | 'Snapshot' | 'Serializable';
 
 declare function isSkip(value: unknown): value is Skip;
 
@@ -1976,6 +1987,13 @@ declare interface Job {
  * Create a SQL query for a list of values.
  */
 export declare function join(values: readonly RawValue[], separator?: string, prefix?: string, suffix?: string): Sql;
+
+declare type JoinExpression = {
+    child: QueryPlanNode;
+    on: [left: string, right: string][];
+    parentField: string;
+    isRelationUnique: boolean;
+};
 
 export declare type JsArgs = {
     select?: Selection_2;
@@ -2002,7 +2020,7 @@ export declare interface JsonArray extends Array<JsonValue> {
 export declare type JsonBatchQuery = {
     batch: JsonQuery[];
     transaction?: {
-        isolationLevel?: Transaction_2.IsolationLevel;
+        isolationLevel?: IsolationLevel_2;
     };
 };
 
@@ -2016,6 +2034,7 @@ declare type JsonFieldSelection = {
 };
 
 declare class JsonNull extends NullTypesEnumValue {
+    #private;
 }
 
 /**
@@ -2145,6 +2164,124 @@ export declare function makeStrictEnum<T extends Record<PropertyKey, string | nu
 
 export declare function makeTypedQueryFactory(sql: string): (...values: any[]) => TypedSql<any[], unknown>;
 
+declare type MappedError = {
+    kind: 'GenericJs';
+    id: number;
+} | {
+    kind: 'UnsupportedNativeDataType';
+    type: string;
+} | {
+    kind: 'InvalidIsolationLevel';
+    level: string;
+} | {
+    kind: 'LengthMismatch';
+    column?: string;
+} | {
+    kind: 'UniqueConstraintViolation';
+    constraint?: {
+        fields: string[];
+    } | {
+        index: string;
+    } | {
+        foreignKey: {};
+    };
+} | {
+    kind: 'NullConstraintViolation';
+    constraint?: {
+        fields: string[];
+    } | {
+        index: string;
+    } | {
+        foreignKey: {};
+    };
+} | {
+    kind: 'ForeignKeyConstraintViolation';
+    constraint?: {
+        fields: string[];
+    } | {
+        index: string;
+    } | {
+        foreignKey: {};
+    };
+} | {
+    kind: 'DatabaseNotReachable';
+    host?: string;
+    port?: number;
+} | {
+    kind: 'DatabaseDoesNotExist';
+    db?: string;
+} | {
+    kind: 'DatabaseAlreadyExists';
+    db?: string;
+} | {
+    kind: 'DatabaseAccessDenied';
+    db?: string;
+} | {
+    kind: 'ConnectionClosed';
+} | {
+    kind: 'TlsConnectionError';
+    reason: string;
+} | {
+    kind: 'AuthenticationFailed';
+    user?: string;
+} | {
+    kind: 'TransactionWriteConflict';
+} | {
+    kind: 'TableDoesNotExist';
+    table?: string;
+} | {
+    kind: 'ColumnNotFound';
+    column?: string;
+} | {
+    kind: 'TooManyConnections';
+    cause: string;
+} | {
+    kind: 'ValueOutOfRange';
+    cause: string;
+} | {
+    kind: 'MissingFullTextSearchIndex';
+} | {
+    kind: 'SocketTimeout';
+} | {
+    kind: 'InconsistentColumnData';
+    cause: string;
+} | {
+    kind: 'TransactionAlreadyClosed';
+    cause: string;
+} | {
+    kind: 'postgres';
+    code: string;
+    severity: string;
+    message: string;
+    detail: string | undefined;
+    column: string | undefined;
+    hint: string | undefined;
+} | {
+    kind: 'mysql';
+    code: number;
+    message: string;
+    state: string;
+} | {
+    kind: 'sqlite';
+    /**
+     * Sqlite extended error code: https://www.sqlite.org/rescode.html
+     */
+    extendedCode: number;
+    message: string;
+} | {
+    kind: 'mssql';
+    code: number;
+    message: string;
+};
+
+declare type Mappings = ReadonlyDeep_2<{
+    modelOperations: ModelMapping[];
+    otherOperations: {
+        read: string[];
+        write: string[];
+    };
+}>;
+
 /**
  * Class that holds the list of all extensions, applied to particular instance,
  * as well as resolved versions of the components that need to apply on
@@ -2236,12 +2373,38 @@ declare type MiddlewareArgsMapper<RequestArgs, MiddlewareArgs> = {
     middlewareArgsToRequestArgs(middlewareArgs: MiddlewareArgs): RequestArgs;
 };
 
-declare class MiddlewareHandler<M extends Function> {
-    private _middlewares;
-    use(middleware: M): void;
-    get(id: number): M | undefined;
-    has(id: number): boolean;
-    length(): number;
+declare type Model = ReadonlyDeep_2<{
+    name: string;
+    dbName: string | null;
+    schema: string | null;
+    fields: Field[];
+    uniqueFields: string[][];
+    uniqueIndexes: uniqueIndex[];
+    documentation?: string;
+    primaryKey: PrimaryKey | null;
+    isGenerated?: boolean;
+}>;
+
+declare enum ModelAction {
+    findUnique = "findUnique",
+    findUniqueOrThrow = "findUniqueOrThrow",
+    findFirst = "findFirst",
+    findFirstOrThrow = "findFirstOrThrow",
+    findMany = "findMany",
+    create = "create",
+    createMany = "createMany",
+    createManyAndReturn = "createManyAndReturn",
+    update = "update",
+    updateMany = "updateMany",
+    updateManyAndReturn = "updateManyAndReturn",
+    upsert = "upsert",
+    delete = "delete",
+    deleteMany = "deleteMany",
+    groupBy = "groupBy",
+    count = "count",// TODO: count does not actually exist in DMMF
+    aggregate = "aggregate",
+    findRaw = "findRaw",
+    aggregateRaw = "aggregateRaw"
 }
 
 export declare type ModelArg = {
@@ -2256,6 +2419,30 @@ export declare type ModelArgs = {
 
 export declare type ModelKey<TypeMap extends TypeMapDef, M extends PropertyKey> = M extends keyof TypeMap['model'] ? M : Capitalize<M & string>;
 
+declare type ModelMapping = ReadonlyDeep_2<{
+    model: string;
+    plural: string;
+    findUnique?: string | null;
+    findUniqueOrThrow?: string | null;
+    findFirst?: string | null;
+    findFirstOrThrow?: string | null;
+    findMany?: string | null;
+    create?: string | null;
+    createMany?: string | null;
+    createManyAndReturn?: string | null;
+    update?: string | null;
+    updateMany?: string | null;
+    updateManyAndReturn?: string | null;
+    upsert?: string | null;
+    delete?: string | null;
+    deleteMany?: string | null;
+    aggregate?: string | null;
+    groupBy?: string | null;
+    count?: string | null;
+    findRaw?: string | null;
+    aggregateRaw?: string | null;
+}>;
+
 export declare type ModelQueryOptionsCb = (args: ModelQueryOptionsCbArgs) => Promise<any>;
 
 export declare type ModelQueryOptionsCbArgs = {
@@ -2263,6 +2450,11 @@ export declare type ModelQueryOptionsCbArgs = {
     operation: string;
     args: JsArgs;
     query: (args: JsArgs) => Promise<unknown>;
+};
+
+declare type MultiBatchResponse = {
+    type: 'multi';
+    plans: QueryPlanNode[];
 };
 
 export declare type NameArgs = {
@@ -2280,11 +2472,6 @@ export declare type NeverToUnknown<T> = [T] extends [never] ? unknown : T;
 declare class NullTypesEnumValue extends ObjectEnumValue {
     _getNamespace(): string;
 }
-
-/**
- * List of Prisma enums that must use unique objects instead of strings as their values.
- */
-export declare const objectEnumNames: string[];
 
 /**
  * Base class for unique values of object-valued enums.
@@ -2309,7 +2496,7 @@ export declare const objectEnumValues: {
     };
 };
 
-declare const officialPrismaAdapters: readonly ["@prisma/adapter-planetscale", "@prisma/adapter-neon", "@prisma/adapter-libsql", "@prisma/adapter-d1", "@prisma/adapter-pg", "@prisma/adapter-pg-worker"];
+declare const officialPrismaAdapters: readonly ["@prisma/adapter-planetscale", "@prisma/adapter-neon", "@prisma/adapter-libsql", "@prisma/adapter-better-sqlite3", "@prisma/adapter-d1", "@prisma/adapter-pg", "@prisma/adapter-mssql", "@prisma/adapter-mariadb"];
 
 export declare type Omission = Record<string, boolean | Skip>;
 
@@ -2350,6 +2537,15 @@ export declare type OptionalKeys<O> = {
 }[keyof O];
 
 declare type Options = {
+    /** Timeout for starting the transaction */
+    maxWait?: number;
+    /** Timeout for the transaction body */
+    timeout?: number;
+    /** Transaction isolation level */
+    isolationLevel?: IsolationLevel_2;
+};
+
+declare type Options_2 = {
     clientVersion: string;
 };
 
@@ -2363,6 +2559,24 @@ export declare type Or<A extends 1 | 0, B extends 1 | 0> = {
         1: 1;
     };
 }[A][B];
+
+declare type OtherOperationMappings = ReadonlyDeep_2<{
+    read: string[];
+    write: string[];
+}>;
+
+declare type OutputType = ReadonlyDeep_2<{
+    name: string;
+    fields: SchemaField[];
+}>;
+
+declare type OutputTypeRef = TypeRef<'scalar' | 'outputObjectTypes' | 'enumTypes'>;
+
+declare type Pagination = {
+    cursor: Record<string, PrismaValue> | null;
+    take: number | null;
+    skip: number | null;
+};
 
 export declare function Param<$Type, $Value extends string>(name: $Value): Param<$Type, $Value>;
 
@@ -2391,6 +2605,16 @@ declare type Pick_2<T, K extends string | number | symbol> = {
 };
 export { Pick_2 as Pick }
 
+declare interface PlaceholderFormat {
+    prefix: string;
+    hasNumbering: boolean;
+}
+
+declare type PrimaryKey = ReadonlyDeep_2<{
+    name: string | null;
+    fields: string[];
+}>;
+
 export declare class PrismaClientInitializationError extends Error {
     clientVersion: string;
     errorCode?: string;
@@ -2416,7 +2640,7 @@ export declare type PrismaClientOptions = {
     /**
      * Instance of a Driver Adapter, e.g., like one provided by `@prisma/adapter-planetscale.
      */
-    adapter?: DriverAdapter | null;
+    adapter?: SqlDriverAdapterFactory | null;
     /**
      * Overwrites the datasource url from your schema.prisma file
      */
@@ -2481,7 +2705,7 @@ export declare class PrismaClientUnknownRequestError extends Error implements Er
 export declare class PrismaClientValidationError extends Error {
     name: string;
     clientVersion: string;
-    constructor(message: string, { clientVersion }: Options);
+    constructor(message: string, { clientVersion }: Options_2);
     get [Symbol.toStringTag](): string;
 }
 
@@ -2533,7 +2757,7 @@ declare interface PrismaPromise_2<TResult, TSpec extends PrismaOperationSpec<unk
 declare type PrismaPromiseBatchTransaction = {
     kind: 'batch';
     id: number;
-    isolationLevel?: IsolationLevel;
+    isolationLevel?: IsolationLevel_2;
     index: number;
     lock: PromiseLike<void>;
 };
@@ -2559,9 +2783,27 @@ declare type PrismaPromiseInteractiveTransaction<PayloadType = unknown> = {
 
 declare type PrismaPromiseTransaction<PayloadType = unknown> = PrismaPromiseBatchTransaction | PrismaPromiseInteractiveTransaction<PayloadType>;
 
+declare type PrismaValue = string | boolean | number | PrismaValue[] | null | Record<string, unknown> | PrismaValuePlaceholder | PrismaValueGenerator;
+
+declare type PrismaValueGenerator = {
+    prisma__type: 'generatorCall';
+    prisma__value: {
+        name: string;
+        args: PrismaValue[];
+    };
+};
+
+declare type PrismaValuePlaceholder = {
+    prisma__type: 'param';
+    prisma__value: {
+        name: string;
+        type: string;
+    };
+};
+
 export declare const PrivateResultType: unique symbol;
 
-declare type Provider = 'mysql' | 'postgres' | 'sqlite';
+declare type Provider = 'mysql' | 'postgres' | 'sqlite' | 'sqlserver';
 
 declare namespace Public {
     export {
@@ -2581,6 +2823,12 @@ declare namespace Public_2 {
     }
 }
 
+declare type Query = ReadonlyDeep_2<{
+    name: string;
+    args: SchemaArg[];
+    output: QueryOutput;
+}>;
+
 declare interface Queryable<Query, Result> extends AdapterInfo {
     /**
      * Execute a query and return its result.
@@ -2593,7 +2841,9 @@ declare interface Queryable<Query, Result> extends AdapterInfo {
 }
 
 declare type QueryCompiler = {
-    compile(request: string): Promise<string>;
+    compile(request: string): {};
+    compileBatch(batchRequest: string): BatchResponse;
+    free(): void;
 };
 
 declare interface QueryCompilerConstructor {
@@ -2609,7 +2859,7 @@ declare type QueryCompilerOptions = {
 declare type QueryEngineBatchGraphQLRequest = {
     batch: QueryEngineRequest[];
     transaction?: boolean;
-    isolationLevel?: Transaction_2.IsolationLevel;
+    isolationLevel?: IsolationLevel_2;
 };
 
 declare type QueryEngineBatchRequest = QueryEngineBatchGraphQLRequest | JsonBatchQuery;
@@ -2622,17 +2872,22 @@ declare type QueryEngineConfig = {
     datasourceOverrides: Record<string, string>;
     env: Record<string, string | undefined>;
     logLevel: QueryEngineLogLevel;
-    engineProtocol: EngineProtocol;
+    engineProtocol: QueryEngineProtocol;
     enableTracing: boolean;
 };
 
 declare interface QueryEngineConstructor {
-    new (config: QueryEngineConfig, logger: (log: string) => void, adapter?: ErrorCapturingSqlConnection): QueryEngineInstance;
+    new (config: QueryEngineConfig, logger: (log: string) => void, adapter?: ErrorCapturingSqlDriverAdapter): QueryEngineInstance;
 }
 
 declare type QueryEngineInstance = {
     connect(headers: string, requestId: string): Promise<void>;
     disconnect(headers: string, requestId: string): Promise<void>;
+    /**
+     * Frees any resources allocated by the engine's WASM instance. This method is automatically created by WASM bindgen.
+     * Noop for other engines.
+     */
+    free?(): void;
     /**
      * @param requestStr JSON.stringified `QueryEngineRequest | QueryEngineBatchRequest`
      * @param headersStr JSON.stringified `QueryEngineRequestHeaders`
@@ -2648,6 +2903,8 @@ declare type QueryEngineInstance = {
 };
 
 declare type QueryEngineLogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'off';
+
+declare type QueryEngineProtocol = 'graphql' | 'json';
 
 declare type QueryEngineRequest = {
     query: string;
@@ -2669,8 +2926,6 @@ declare type QueryEvent = {
 declare type QueryEventType = 'query';
 
 declare type QueryIntrospectionBuiltinType = 'int' | 'bigint' | 'float' | 'double' | 'string' | 'enum' | 'bytes' | 'bool' | 'char' | 'decimal' | 'json' | 'xml' | 'uuid' | 'datetime' | 'date' | 'time' | 'int-array' | 'bigint-array' | 'float-array' | 'double-array' | 'string-array' | 'char-array' | 'bytes-array' | 'bool-array' | 'decimal-array' | 'json-array' | 'xml-array' | 'uuid-array' | 'datetime-array' | 'date-array' | 'time-array' | 'null' | 'unknown';
-
-declare type QueryMiddleware = (params: QueryMiddlewareParams, next: (params: QueryMiddlewareParams) => Promise<unknown>) => Promise<unknown>;
 
 declare type QueryMiddlewareParams = {
     /** The model this is executed on */
@@ -2699,6 +2954,139 @@ export declare type QueryOptionsCbArgs = {
     operation: string;
     args: JsArgs | RawQueryArgs;
     query: (args: JsArgs | RawQueryArgs) => Promise<unknown>;
+};
+
+declare type QueryOutput = ReadonlyDeep_2<{
+    name: string;
+    isRequired: boolean;
+    isList: boolean;
+}>;
+
+declare type QueryPlanBinding = {
+    name: string;
+    expr: QueryPlanNode;
+};
+
+declare type QueryPlanDbQuery = {
+    type: 'rawSql';
+    sql: string;
+    args: PrismaValue[];
+    argTypes: ArgType[];
+} | {
+    type: 'templateSql';
+    fragments: Fragment[];
+    placeholderFormat: PlaceholderFormat;
+    args: PrismaValue[];
+    argTypes: DynamicArgType[];
+    chunkable: boolean;
+};
+
+declare type QueryPlanNode = {
+    type: 'value';
+    args: PrismaValue;
+} | {
+    type: 'seq';
+    args: QueryPlanNode[];
+} | {
+    type: 'get';
+    args: {
+        name: string;
+    };
+} | {
+    type: 'let';
+    args: {
+        bindings: QueryPlanBinding[];
+        expr: QueryPlanNode;
+    };
+} | {
+    type: 'getFirstNonEmpty';
+    args: {
+        names: string[];
+    };
+} | {
+    type: 'query';
+    args: QueryPlanDbQuery;
+} | {
+    type: 'execute';
+    args: QueryPlanDbQuery;
+} | {
+    type: 'reverse';
+    args: QueryPlanNode;
+} | {
+    type: 'sum';
+    args: QueryPlanNode[];
+} | {
+    type: 'concat';
+    args: QueryPlanNode[];
+} | {
+    type: 'unique';
+    args: QueryPlanNode;
+} | {
+    type: 'required';
+    args: QueryPlanNode;
+} | {
+    type: 'join';
+    args: {
+        parent: QueryPlanNode;
+        children: JoinExpression[];
+    };
+} | {
+    type: 'mapField';
+    args: {
+        field: string;
+        records: QueryPlanNode;
+    };
+} | {
+    type: 'transaction';
+    args: QueryPlanNode;
+} | {
+    type: 'dataMap';
+    args: {
+        expr: QueryPlanNode;
+        structure: ResultNode;
+        enums: Record<string, Record<string, string>>;
+    };
+} | {
+    type: 'validate';
+    args: {
+        expr: QueryPlanNode;
+        rules: DataRule[];
+    } & ValidationError;
+} | {
+    type: 'if';
+    args: {
+        value: QueryPlanNode;
+        rule: DataRule;
+        then: QueryPlanNode;
+        else: QueryPlanNode;
+    };
+} | {
+    type: 'unit';
+} | {
+    type: 'diff';
+    args: {
+        from: QueryPlanNode;
+        to: QueryPlanNode;
+        fields: string[];
+    };
+} | {
+    type: 'initializeRecord';
+    args: {
+        expr: QueryPlanNode;
+        fields: Record<string, FieldInitializer>;
+    };
+} | {
+    type: 'mapRecord';
+    args: {
+        expr: QueryPlanNode;
+        fields: Record<string, FieldOperation>;
+    };
+} | {
+    type: 'process';
+    args: {
+        expr: QueryPlanNode;
+        operations: InMemoryOps;
+    };
 };
 
 /**
@@ -2747,11 +3135,11 @@ export declare type RenameAndNestPayloadKeys<P> = {
 };
 
 declare type RequestBatchOptions<InteractiveTransactionPayload> = {
-    transaction?: TransactionOptions_3<InteractiveTransactionPayload>;
+    transaction?: TransactionOptions_2<InteractiveTransactionPayload>;
     traceparent?: string;
     numTry?: number;
     containsWrite: boolean;
-    customDataProxyFetch?: CustomDataProxyFetch;
+    customDataProxyFetch?: AccelerateExtensionFetchDecorator;
 };
 
 declare interface RequestError {
@@ -2788,7 +3176,7 @@ declare type RequestOptions<InteractiveTransactionPayload> = {
     numTry?: number;
     interactiveTransaction?: InteractiveTransactionOptions<InteractiveTransactionPayload>;
     isWrite: boolean;
-    customDataProxyFetch?: CustomDataProxyFetch;
+    customDataProxyFetch?: AccelerateExtensionFetchDecorator;
 };
 
 declare type RequestParams = {
@@ -2806,7 +3194,7 @@ declare type RequestParams = {
     otelParentCtx?: Context;
     otelChildCtx?: Context;
     globalOmit?: GlobalOmitOptions;
-    customDataProxyFetch?: CustomDataProxyFetch;
+    customDataProxyFetch?: AccelerateExtensionFetchDecorator;
 };
 
 declare type RequiredExtensionArgs = NameArgs & ResultArgs & ModelArgs & ClientArgs & QueryOptions;
@@ -2841,8 +3229,6 @@ export declare type Result_2<T, A, F extends Operation> = Result<T, A, F>;
 
 declare namespace Result_3 {
     export {
-        Operation,
-        FluentOperation,
         Count,
         GetFindResult,
         SelectablePayloadFields,
@@ -2891,6 +3277,19 @@ export declare type ResultFieldDefinition = {
     compute: ResultArgsFieldCompute;
 };
 
+declare type ResultNode = {
+    type: 'affectedRows';
+} | {
+    type: 'object';
+    fields: Record<string, ResultNode>;
+    serializedName: string | null;
+    skipNulls: boolean;
+} | {
+    type: 'field';
+    dbName: string;
+    fieldType: FieldType;
+};
+
 export declare type Return<T> = T extends (...args: any[]) => infer R ? R : T;
 
 export declare type RuntimeDataModel = {
@@ -2899,11 +3298,55 @@ export declare type RuntimeDataModel = {
     readonly types: Record<string, RuntimeModel>;
 };
 
-declare type RuntimeEnum = Omit<DMMF.DatamodelEnum, 'name'>;
+declare type RuntimeEnum = Omit<DMMF_2.DatamodelEnum, 'name'>;
 
-declare type RuntimeModel = Omit<DMMF.Model, 'name'>;
+declare type RuntimeModel = Omit<DMMF_2.Model, 'name'>;
 
 declare type RuntimeName = 'workerd' | 'deno' | 'netlify' | 'node' | 'bun' | 'edge-light' | '';
+
+declare type Schema = ReadonlyDeep_2<{
+    rootQueryType?: string;
+    rootMutationType?: string;
+    inputObjectTypes: {
+        model?: InputType[];
+        prisma?: InputType[];
+    };
+    outputObjectTypes: {
+        model: OutputType[];
+        prisma: OutputType[];
+    };
+    enumTypes: {
+        model?: SchemaEnum[];
+        prisma: SchemaEnum[];
+    };
+    fieldRefTypes: {
+        prisma?: FieldRefType[];
+    };
+}>;
+
+declare type SchemaArg = ReadonlyDeep_2<{
+    name: string;
+    comment?: string;
+    isNullable: boolean;
+    isRequired: boolean;
+    inputTypes: InputTypeRef[];
+    requiresOtherFields?: string[];
+    deprecation?: Deprecation;
+}>;
+
+declare type SchemaEnum = ReadonlyDeep_2<{
+    name: string;
+    values: string[];
+}>;
+
+declare type SchemaField = ReadonlyDeep_2<{
+    name: string;
+    isNullable?: boolean;
+    outputType: OutputTypeRef;
+    args: SchemaArg[];
+    deprecation?: Deprecation;
+    documentation?: string;
+}>;
 
 export declare type Select<T, U> = T extends U ? T : never;
 
@@ -2948,6 +3391,8 @@ declare class Skip {
 }
 
 export declare const skip: Skip;
+
+declare type SortOrder = 'asc' | 'desc';
 
 /**
  * An interface that represents a span. A span represents a single operation
@@ -3217,6 +3662,29 @@ export declare class Sql {
     };
 }
 
+declare interface SqlDriverAdapter extends SqlQueryable {
+    /**
+     * Execute multiple SQL statements separated by semicolon.
+     */
+    executeScript(script: string): Promise<void>;
+    /**
+     * Start new transaction.
+     */
+    startTransaction(isolationLevel?: IsolationLevel): Promise<Transaction>;
+    /**
+     * Optional method that returns extra connection info
+     */
+    getConnectionInfo?(): ConnectionInfo;
+    /**
+     * Dispose of the connection and release any resources.
+     */
+    dispose(): Promise<void>;
+}
+
+export declare interface SqlDriverAdapterFactory extends DriverAdapterFactory<SqlQuery, SqlResultSet> {
+    connect(): Promise<SqlDriverAdapter>;
+}
+
 declare type SqlQuery = {
     sql: string;
     args: Array<unknown>;
@@ -3325,18 +3793,11 @@ declare interface Transaction extends AdapterInfo, SqlQueryable {
 
 declare namespace Transaction_2 {
     export {
-        IsolationLevel,
-        TransactionOptions_2 as Options,
+        Options,
+        IsolationLevel_2 as IsolationLevel,
         InteractiveTransactionInfo,
         TransactionHeaders
     }
-}
-
-declare interface TransactionContext extends AdapterInfo, SqlQueryable {
-    /**
-     * Start new transaction.
-     */
-    startTransaction(): Promise<Transaction>;
 }
 
 declare type TransactionHeaders = {
@@ -3347,13 +3808,7 @@ declare type TransactionOptions = {
     usePhantomQuery: boolean;
 };
 
-declare type TransactionOptions_2 = {
-    maxWait?: number;
-    timeout?: number;
-    isolationLevel?: IsolationLevel;
-};
-
-declare type TransactionOptions_3<InteractiveTransactionPayload> = {
+declare type TransactionOptions_2<InteractiveTransactionPayload> = {
     kind: 'itx';
     options: InteractiveTransactionOptions<InteractiveTransactionPayload>;
 } | {
@@ -3375,6 +3830,13 @@ export declare type TypeMapCbDef = Fn<{
 /** Shared */
 export declare type TypeMapDef = Record<any, any>;
 
+declare type TypeRef<AllowedLocations extends FieldLocation> = {
+    isList: boolean;
+    type: string;
+    location: AllowedLocations;
+    namespace?: FieldNamespace;
+};
+
 declare namespace Types {
     export {
         Result_3 as Result,
@@ -3389,6 +3851,11 @@ declare namespace Types {
     }
 }
 export { Types }
+
+declare type uniqueIndex = ReadonlyDeep_2<{
+    name: string;
+    fields: string[];
+}>;
 
 declare type UnknownErrorParams = {
     clientVersion: string;
@@ -3454,6 +3921,48 @@ declare namespace Utils {
         JsPromise
     }
 }
+
+declare type ValidationError = {
+    error_identifier: 'RELATION_VIOLATION';
+    context: {
+        relation: string;
+        modelA: string;
+        modelB: string;
+    };
+} | {
+    error_identifier: 'MISSING_RELATED_RECORD';
+    context: {
+        model: string;
+        relation: string;
+        relationType: string;
+        operation: string;
+        neededFor?: string;
+    };
+} | {
+    error_identifier: 'MISSING_RECORD';
+    context: {
+        operation: string;
+    };
+} | {
+    error_identifier: 'INCOMPLETE_CONNECT_INPUT';
+    context: {
+        expectedRows: number;
+    };
+} | {
+    error_identifier: 'INCOMPLETE_CONNECT_OUTPUT';
+    context: {
+        expectedRows: number;
+        relation: string;
+        relationType: string;
+    };
+} | {
+    error_identifier: 'RECORDS_NOT_CONNECTED';
+    context: {
+        relation: string;
+        parent: string;
+        child: string;
+    };
+};
 
 declare function validator<V>(): <S>(select: Exact<S, V>) => S;
 

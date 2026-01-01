@@ -3,6 +3,7 @@ import * as drizzle from "benchmark-drizzle";
 import * as joist_v1 from "benchmark-joist-v1";
 import * as joist_v2 from "benchmark-joist-v2";
 import * as mikro from "benchmark-mikroorm";
+import * as node_pg from "benchmark-node-pg";
 import * as prisma from "benchmark-prisma";
 import * as typeorm from "benchmark-typeorm";
 import Table from "cli-table3";
@@ -17,6 +18,7 @@ const orms = {
   mikro: { getContext: mikro.getContext, getOperations: mikro.getOperations },
   prisma: { getContext: prisma.getContext, getOperations: prisma.getOperations },
   drizzle: { getContext: drizzle.getContext, getOperations: drizzle.getOperations },
+  node_pg: { getContext: node_pg.getContext, getOperations: node_pg.getOperations },
   joist_v1: { getContext: joist_v1.getContext, getOperations: joist_v1.getOperations },
   joist_v2: { getContext: joist_v2.getContext, getOperations: joist_v2.getOperations },
   joist_v2_pre: { getContext: joist_v2.getContextPreload, getOperations: joist_v2.getOperations },
@@ -41,7 +43,11 @@ const contexts: Map<string, Context> = new Map();
 // How many times to run each operation; we'll take the average
 const samples = Array(10);
 
-async function runBenchmark(ormKeys: string[], ops: string[], _sizes: number[] | undefined): Promise<BenchmarkResult[]> {
+async function runBenchmark(
+  ormKeys: string[],
+  ops: string[],
+  _sizes: number[] | undefined,
+): Promise<BenchmarkResult[]> {
   const results: BenchmarkResult[] = [];
   for (const op of ops) {
     // Use the configured size, otherwise each operation has a default set of sizes
@@ -136,7 +142,7 @@ function displayResults(ormNames: string[], results: BenchmarkResult[]): void {
       const mine = result.orms[ormName];
       const place = sorted.findIndex(([name]) => name === ormName) + 1;
       const total = sorted.length;
-      const colorFn = getColorFn(place, total)
+      const colorFn = getColorFn(place, total);
       if (mine) {
         const avg = averageMilliseconds(mine.durations);
         const barLength = slowestTime > 0 ? Math.round((avg / slowestTime) * 10) : 0;
@@ -210,11 +216,12 @@ async function runAllBenchmarks(): Promise<void> {
         defaultValue: Object.keys(operations),
       }),
       size: numberArrayArgument({ description: "sizes to invoke each operation with" }),
-      latency: numberArgument({  description: "latency of SQL operation in millis", defaultValue: 2 }),
+      latency: numberArgument({ description: "latency of SQL operation in millis", defaultValue: 2 }),
     },
     { expectOperands: false },
   );
 
+  console.log(cli.args.orm);
   const ormNames = cli.args.orm && cli.args.orm.length > 0 ? cli.args.orm : Object.keys(orms);
   const ops = cli.args.op && cli.args.op.length > 0 ? cli.args.op : Object.keys(operations);
   // cli.args.size is `number[]` but I expected `number[] | undefined` b/c it doesn't have a default

@@ -89,7 +89,7 @@ async function runBenchmark(
               durations.push(endTime - startTime);
               queries += Number(stats.map((s) => Number(s.calls)).reduce((a, b) => a + b));
               await fs.writeFile(
-                `./queries/${name}-${op}-${size}.sql`,
+                `../../queries/${name}-${op}-${size}.sql`,
                 stats.map((s) => `num=${s.calls} sql=${s.query}`).join("\n"),
               );
             }

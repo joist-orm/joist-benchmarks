@@ -43,14 +43,14 @@ const sql = postgres(getDatabaseUrl("driver"));
 type BenchmarkResult = {
   operation: string;
   size: number;
-  orms: Record<string, { durations: number[]; queries: number }>;
+  orms: Record<string, { durations: number[]; queries: { count: number; chars: number } }>;
 };
 
 // Track the connection pools to shutdown
 const contexts: Map<string, Context> = new Map();
 
 // How many times to run each operation; we'll take the average
-const samples = Array(10);
+const samples = 10;
 
 async function runBenchmark(
   ormKeys: string[],
@@ -62,7 +62,7 @@ async function runBenchmark(
     // Use the configured size, otherwise each operation has a default set of sizes
     const sizes = _sizes || (operations as any)[op].sizes;
     for (const size of sizes) {
-      const row: Record<string, { durations: number[]; queries: number }> = {};
+      const row: Record<string, { durations: number[]; queries: { count: number; chars: number } }> = {};
       for (const [name, config] of Object.entries(orms)) {
         if (!ormKeys.includes(name)) continue;
         try {
@@ -75,8 +75,9 @@ async function runBenchmark(
             const runCtx = { ...ctx, size, seedData };
             // Loop to get some samples
             const durations: number[] = [];
-            let queries = 0;
-            for (const _ of samples) {
+            let queriesCount = 0;
+            let queriesChars = 0;
+            for (const _ of Array(samples)) {
               await o.beforeEach(runCtx);
               await sql`SELECT pg_stat_statements_reset()`;
 
@@ -92,13 +93,20 @@ async function runBenchmark(
                 group by query
               `;
               durations.push(endTime - startTime);
-              queries += Number(stats.map((s) => Number(s.calls)).reduce((a, b) => a + b));
+              queriesCount += stats.map((s) => Number(s.calls)).reduce(sum);
+              queriesChars += stats.map((s) => Number(s.calls * s.query.length)).reduce(sum);
               await fs.writeFile(
                 `../../queries/${name}-${op}-${size}.sql`,
                 stats.map((s) => `num=${s.calls} sql=${s.query}`).join("\n"),
               );
             }
-            row[name] = { durations, queries: Math.round(queries / samples.length) };
+            row[name] = {
+              durations,
+              queries: {
+                count: Math.round(queriesCount / samples),
+                chars: Math.round(queriesChars / samples),
+              },
+            };
           }
         } catch (error) {
           console.error(`Error running benchmark for ${name} (${op}, size ${size}):`, error);
@@ -156,7 +164,13 @@ function displayResults(ormNames: string[], results: BenchmarkResult[]): void {
         const avg = averageMilliseconds(mine.durations);
         const barLength = slowestTime > 0 ? Math.round((avg / slowestTime) * 10) : 0;
         const bar = "█".repeat(barLength) + "░".repeat(10 - barLength);
-        row.push([colorFn(`#${place} ${avg.toFixed(1)}ms`), bar, `#q=${mine.queries}`].join("\n"));
+        row.push(
+          [
+            colorFn(`#${place} ${avg.toFixed(1)}ms`),
+            bar,
+            `#q=${mine.queries.count} ${formatBytes(mine.queries.chars)}`,
+          ].join("\n"),
+        );
       } else {
         row.push("N/A");
       }
@@ -168,15 +182,19 @@ function displayResults(ormNames: string[], results: BenchmarkResult[]): void {
   const totalRow: (string | number)[] = ["Total", "", ""];
   for (const ormName of sortedOrmNames) {
     let totalTime = 0;
-    let totalQueries = 0;
+    let totalQueriesCount = 0;
+    let totalQueriesChars = 0;
     for (const result of results) {
       const mine = result.orms[ormName];
       if (mine) {
         totalTime += averageMilliseconds(mine.durations);
-        totalQueries += mine.queries;
+        totalQueriesCount += mine.queries.count;
+        totalQueriesChars += mine.queries.chars;
       }
     }
-    totalRow.push(colors.bold(`${totalTime.toFixed(1)}ms\n\n#q=${totalQueries}`));
+    totalRow.push(
+      colors.bold(`${totalTime.toFixed(1)}ms\n\n#q=${totalQueriesCount} ${formatBytes(totalQueriesChars)}`),
+    );
   }
   table.push(totalRow);
 
@@ -253,15 +271,17 @@ async function runAllBenchmarks(): Promise<void> {
   }
 }
 
+/** Format bytes as b or kb with 1 decimal place. */
+function formatBytes(bytes: number): string {
+  return bytes < 1024 ? `${Math.round(bytes)}b` : `${Math.round(bytes / 1024)}kb`;
+}
+
 /** Given the durations (based on the number of samples), return the average in milliseconds. */
 function averageMilliseconds(durations: number[]): number {
-  if (durations.length === 0) {
-    return 0;
-  }
-  const sum = durations.reduce((total, duration) => total + duration, 0);
-  const average = sum / durations.length;
-  return average;
+  return durations.length === 0 ? 0 : durations.reduce(sum) / durations.length;
 }
+
+const sum = (a: number, b: number) => a + b;
 
 runAllBenchmarks()
   .catch(console.error)

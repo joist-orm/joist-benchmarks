@@ -1,5 +1,9 @@
 # Joist ORM Benchmarks
 
+## Status
+
+Alpha -- this benchmark hasn't been audited by anyone, and is still a WIP.
+
 ## Current Results
 
 ![Current benchmark results](./2026-01-01-results.png)

@@ -1804,6 +1804,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"benchmark-postgres@workspace:^, benchmark-postgres@workspace:packages/benchmark-postgres":
+  version: 0.0.0-use.local
+  resolution: "benchmark-postgres@workspace:packages/benchmark-postgres"
+  dependencies:
+    postgres: "npm:^3.4.7"
+    seed-data: "workspace:*"
+    typescript: "npm:^5.9.3"
+  languageName: unknown
+  linkType: soft
+
 "benchmark-prisma@workspace:^, benchmark-prisma@workspace:packages/benchmark-prisma":
   version: 0.0.0-use.local
   resolution: "benchmark-prisma@workspace:packages/benchmark-prisma"
@@ -1843,6 +1853,7 @@ __metadata:
     benchmark-mikroorm: "workspace:^"
     benchmark-node-pg: "workspace:^"
     benchmark-postgrejs: "workspace:^"
+    benchmark-postgres: "workspace:^"
     benchmark-prisma: "workspace:^"
     benchmark-typeorm: "workspace:^"
     cli-table3: "npm:^0.6.5"

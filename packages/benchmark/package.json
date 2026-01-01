@@ -32,6 +32,7 @@
     "benchmark-mikroorm": "workspace:^",
     "benchmark-node-pg": "workspace:^",
     "benchmark-postgrejs": "workspace:^",
+    "benchmark-postgres": "workspace:^",
     "benchmark-prisma": "workspace:^",
     "benchmark-typeorm": "workspace:^",
     "cli-table3": "^0.6.5",

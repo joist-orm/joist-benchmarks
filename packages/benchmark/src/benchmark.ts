@@ -4,6 +4,7 @@ import * as joist_v1 from "benchmark-joist-v1";
 import * as joist_v2 from "benchmark-joist-v2";
 import * as mikro from "benchmark-mikroorm";
 import * as node_pg from "benchmark-node-pg";
+import * as postgres_js from "benchmark-postgres";
 import * as postgrejs from "benchmark-postgrejs";
 import * as prisma from "benchmark-prisma";
 import * as typeorm from "benchmark-typeorm";
@@ -15,12 +16,13 @@ import { Context, getDatabaseUrl, getData, operations } from "seed-data";
 import { setToxiproxyLatency } from "./toxi-init.ts";
 
 const orms = {
+  node_pg: { getContext: node_pg.getContext, getOperations: node_pg.getOperations },
+  postgres_js: { getContext: postgres_js.getContext, getOperations: postgres_js.getOperations },
+  postgrejs: { getContext: postgrejs.getContext, getOperations: postgrejs.getOperations },
   typeorm: { getContext: typeorm.getContext, getOperations: typeorm.getOperations },
   mikro: { getContext: mikro.getContext, getOperations: mikro.getOperations },
   prisma: { getContext: prisma.getContext, getOperations: prisma.getOperations },
   drizzle: { getContext: drizzle.getContext, getOperations: drizzle.getOperations },
-  node_pg: { getContext: node_pg.getContext, getOperations: node_pg.getOperations },
-  postgrejs: { getContext: postgrejs.getContext, getOperations: postgrejs.getOperations },
   joist_v1: { getContext: joist_v1.getContext, getOperations: joist_v1.getOperations },
   joist_v2: { getContext: joist_v2.getContext, getOperations: joist_v2.getOperations },
   joist_v2_pre: { getContext: joist_v2.getContextPreload, getOperations: joist_v2.getOperations },

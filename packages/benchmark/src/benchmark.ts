@@ -7,6 +7,7 @@ import * as node_pg from "benchmark-node-pg";
 import * as postgres_js from "benchmark-postgres";
 import * as postgrejs from "benchmark-postgrejs";
 import * as prisma from "benchmark-prisma";
+import * as prisma_v7 from "benchmark-prisma-v7";
 import * as typeorm from "benchmark-typeorm";
 import Table from "cli-table3";
 import colors from "colors";
@@ -24,6 +25,7 @@ const orms = {
   typeorm: { getContext: typeorm.getContext, getOperations: typeorm.getOperations },
   mikro: { getContext: mikro.getContext, getOperations: mikro.getOperations },
   prisma: { getContext: prisma.getContext, getOperations: prisma.getOperations },
+  prisma_v7: { getContext: prisma_v7.getContext, getOperations: prisma_v7.getOperations },
   drizzle: { getContext: drizzle.getContext, getOperations: drizzle.getOperations },
   joist_v1: { getContext: joist_v1.getContext, getOperations: joist_v1.getOperations },
   joist_v2: { getContext: joist_v2.getContext, getOperations: joist_v2.getOperations },

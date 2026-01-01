@@ -34,6 +34,7 @@
     "benchmark-postgrejs": "workspace:^",
     "benchmark-postgres": "workspace:^",
     "benchmark-prisma": "workspace:^",
+    "benchmark-prisma-v7": "workspace:^",
     "benchmark-typeorm": "workspace:^",
     "cli-table3": "^0.6.5",
     "colors": "^1.4.0",

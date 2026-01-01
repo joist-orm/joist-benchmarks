@@ -16,9 +16,11 @@ import { Context, getDatabaseUrl, getData, operations } from "seed-data";
 import { setToxiproxyLatency } from "./toxi-init.ts";
 
 const orms = {
+  // Low level drivers
   node_pg: { getContext: node_pg.getContext, getOperations: node_pg.getOperations },
   postgres_js: { getContext: postgres_js.getContext, getOperations: postgres_js.getOperations },
   postgrejs: { getContext: postgrejs.getContext, getOperations: postgrejs.getOperations },
+  // High level orms
   typeorm: { getContext: typeorm.getContext, getOperations: typeorm.getOperations },
   mikro: { getContext: mikro.getContext, getOperations: mikro.getOperations },
   prisma: { getContext: prisma.getContext, getOperations: prisma.getOperations },
@@ -27,6 +29,9 @@ const orms = {
   joist_v2: { getContext: joist_v2.getContext, getOperations: joist_v2.getOperations },
   joist_v2_pre: { getContext: joist_v2.getContextPreload, getOperations: joist_v2.getOperations },
 };
+
+// We ignore the drivers unless explicitly enabled
+const drivers = ["node_pg", "postgres_js", "postgrejs"];
 
 const sql = postgres(getDatabaseUrl("driver"));
 
@@ -205,6 +210,7 @@ function dropOutliers(ormNames: string[], results: BenchmarkResult[]): Benchmark
 }
 
 async function runAllBenchmarks(): Promise<void> {
+  const ormsWithoutDrivers = Object.keys(orms).filter((o) => !drivers.includes(o));
   const cli = await parseCliArguments(
     "benchmark",
     {},
@@ -212,7 +218,7 @@ async function runAllBenchmarks(): Promise<void> {
       orm: enumArrayArgument({
         description: `orms to run (${Object.keys(orms).join(", ")})`,
         validValues: Object.keys(orms),
-        defaultValue: Object.keys(orms),
+        defaultValue: ormsWithoutDrivers,
       }),
       op: enumArrayArgument({
         description: "operations to run (" + Object.keys(operations).join(", ") + ")",

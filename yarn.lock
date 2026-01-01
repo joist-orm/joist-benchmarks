@@ -420,10 +420,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cloud-copilot/cli@npm:^0.2.27":
-  version: 0.2.27
-  resolution: "@cloud-copilot/cli@npm:0.2.27"
-  checksum: 10c0/8d05f5caa8b870fd3996d2b1b8a44b799294e62dacf24f2821d0c5f68bdecca4e1455f19d0e026ab00091b4a3e12989e3a82c7567cfed3d4c61af14a8e30b7cb
+"@cloud-copilot/cli@npm:^0.2.28":
+  version: 0.2.28
+  resolution: "@cloud-copilot/cli@npm:0.2.28"
+  checksum: 10c0/2ea2e0dcae443e64a3515f953a79731aa899844bdc2b9548156f8af3c745a2e1355bd43fffdc5ccb533b2f0a5b41a7bd181ea6dda48a1afb7f5ced021e21a46b
   languageName: node
   linkType: hard
 
@@ -1843,7 +1843,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "benchmark@workspace:packages/benchmark"
   dependencies:
-    "@cloud-copilot/cli": "npm:^0.2.27"
+    "@cloud-copilot/cli": "npm:^0.2.28"
     "@swc-node/register": "npm:^1.11.1"
     "@swc/core": "npm:^1.15.8"
     "@types/node": "npm:^22.15.3"

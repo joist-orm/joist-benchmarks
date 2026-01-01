@@ -4,6 +4,7 @@ import * as joist_v1 from "benchmark-joist-v1";
 import * as joist_v2 from "benchmark-joist-v2";
 import * as mikro from "benchmark-mikroorm";
 import * as node_pg from "benchmark-node-pg";
+import * as postgrejs from "benchmark-postgrejs";
 import * as prisma from "benchmark-prisma";
 import * as typeorm from "benchmark-typeorm";
 import Table from "cli-table3";
@@ -19,6 +20,7 @@ const orms = {
   prisma: { getContext: prisma.getContext, getOperations: prisma.getOperations },
   drizzle: { getContext: drizzle.getContext, getOperations: drizzle.getOperations },
   node_pg: { getContext: node_pg.getContext, getOperations: node_pg.getOperations },
+  postgrejs: { getContext: postgrejs.getContext, getOperations: postgrejs.getOperations },
   joist_v1: { getContext: joist_v1.getContext, getOperations: joist_v1.getOperations },
   joist_v2: { getContext: joist_v2.getContext, getOperations: joist_v2.getOperations },
   joist_v2_pre: { getContext: joist_v2.getContextPreload, getOperations: joist_v2.getOperations },
@@ -221,7 +223,6 @@ async function runAllBenchmarks(): Promise<void> {
     { expectOperands: false },
   );
 
-  console.log(cli.args.orm);
   const ormNames = cli.args.orm && cli.args.orm.length > 0 ? cli.args.orm : Object.keys(orms);
   const ops = cli.args.op && cli.args.op.length > 0 ? cli.args.op : Object.keys(operations);
   // cli.args.size is `number[]` but I expected `number[] | undefined` b/c it doesn't have a default

@@ -85,3 +85,12 @@ Test x sizes:
 - dup-some (1, 10, 100, 1000)
   - Setup: Clean database, save the seed `n`
   - Test: Load max(rand(1%-5%, 1)) of the data
+
+## Misc SQL
+
+Enabling statement logging:
+
+```sql
+ALTER SYSTEM SET log_statement = 'all';
+SELECT pg_reload_conf();
+```

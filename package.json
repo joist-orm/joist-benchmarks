@@ -4,10 +4,9 @@
   "private": true,
   "scripts": {
     "generate-seed-data": "yarn workspace seed-data generate",
-    "db:up": "docker compose up -d",
-    "db:down": "docker compose down",
-    "db:connect": "docker exec -it joist-benchmarks-db-1 psql -U postgres -d benchmark",
-    "db:ps": "docker ps | grep postgres",
+    "db-up": "docker compose up -d",
+    "db-down": "docker compose down",
+    "db-psql": "docker exec -it joist-benchmarks-db-1 psql -U postgres -d benchmark",
     "format": "prettier --write \"**/*.{ts,js,json,md,yml}\"",
     "benchmark": "yarn workspace benchmark benchmark",
     "pipeline": "yarn workspace benchmark pipeline",

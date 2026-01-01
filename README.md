@@ -93,23 +93,6 @@ yarn benchmark
 yarn benchmark --orm joist joist_v2 --op bulkCreate
 ```
 
-### Benchmark Operations
-
-Each benchmark suite tests:
-
-1. Loading data:
-
-- Single author with associated books and reviews
-- 10 authors with associated books and reviews
-- 100 authors with associated books and reviews
-- 1000 authors with associated books and reviews
-
-2. Saving data:
-- Single new author with associated book and review
-- 10 new authors with associated books and reviews
-- 100 new authors with associated books and reviews
-- 1000 new authors with associated books and reviews
-
 ## Pipeline Benchmarks
 
 There is an additional pipelining-specific benchmark:
@@ -117,26 +100,6 @@ There is an additional pipelining-specific benchmark:
 ```bash
 yarn pipeline
 ```
-
----
-
-Test x sizes:
-
-- bulk-create (1, 10, 100, 1000)
-  - Setup: Clean database, load seed data `n` into memory
-  - Test: Insert the `n` rows
-- bulk-update (1, 10, 100, 1000)
-  - Setup: Clean database, save the seed `n`
-  - Test: Load all `n` rows, and update each one
-- bulk-load (1, 10, 100, 1000)
-  - Setup: Clean database, save the seed `n`
-  - Test: Load the seed data `n` tree of data
-- loop-load (1, 10, 100, 1000)
-  - Setup: Clean database, save the seed `n`
-  - Test: Load the seed data `n` in a loop
-- dup-some (1, 10, 100, 1000)
-  - Setup: Clean database, save the seed `n`
-  - Test: Load max(rand(1%-5%, 1)) of the data
 
 ## Misc SQL
 

@@ -6,9 +6,11 @@ export const bulkCreate: PostgrejsOperation = {
   },
 
   async run({ pool, seedData }) {
-    await pool.query("BEGIN");
+    const conn = await pool.acquire();
 
     try {
+      await conn.query("BEGIN");
+
       // Insert authors
       if (seedData.authors.length > 0) {
         const authorValues: any[] = [];
@@ -18,7 +20,7 @@ export const bulkCreate: PostgrejsOperation = {
           authorPlaceholders.push(`($${offset + 1}, $${offset + 2}, $${offset + 3}, $${offset + 4})`);
           authorValues.push(author.id, author.firstName, author.lastName, author.email);
         });
-        await pool.query(
+        await conn.query(
           `INSERT INTO author (id, first_name, last_name, email) VALUES ${authorPlaceholders.join(", ")}`,
           { params: authorValues },
         );
@@ -39,7 +41,7 @@ export const bulkCreate: PostgrejsOperation = {
             book.pages,
           );
         });
-        await pool.query(
+        await conn.query(
           `INSERT INTO book (id, title, author_id, published, pages) VALUES ${bookPlaceholders.join(", ")}`,
           { params: bookValues },
         );
@@ -54,7 +56,7 @@ export const bulkCreate: PostgrejsOperation = {
           reviewPlaceholders.push(`($${offset + 1}, $${offset + 2}, $${offset + 3}, $${offset + 4})`);
           reviewValues.push(review.id, review.bookId, review.rating, review.text);
         });
-        await pool.query(
+        await conn.query(
           `INSERT INTO book_review (id, book_id, rating, text) VALUES ${reviewPlaceholders.join(", ")}`,
           { params: reviewValues },
         );
@@ -69,7 +71,7 @@ export const bulkCreate: PostgrejsOperation = {
           tagPlaceholders.push(`($${offset + 1}, $${offset + 2})`);
           tagValues.push(tag.id, tag.name);
         });
-        await pool.query(`INSERT INTO tag (id, name) VALUES ${tagPlaceholders.join(", ")}`, { params: tagValues });
+        await conn.query(`INSERT INTO tag (id, name) VALUES ${tagPlaceholders.join(", ")}`, { params: tagValues });
       }
 
       // Insert book_tags
@@ -81,16 +83,17 @@ export const bulkCreate: PostgrejsOperation = {
           bookTagPlaceholders.push(`($${offset + 1}, $${offset + 2})`);
           bookTagValues.push(bt.bookId, bt.tagId);
         });
-        await pool.query(
-          `INSERT INTO book_tag (book_id, tag_id) VALUES ${bookTagPlaceholders.join(", ")}`,
-          { params: bookTagValues },
-        );
+        await conn.query(`INSERT INTO book_tag (book_id, tag_id) VALUES ${bookTagPlaceholders.join(", ")}`, {
+          params: bookTagValues,
+        });
       }
 
-      await pool.query("COMMIT");
+      await conn.query("COMMIT");
     } catch (e) {
-      await pool.query("ROLLBACK");
+      await conn.query("ROLLBACK");
       throw e;
+    } finally {
+      await pool.release(conn);
     }
   },
 };

@@ -23,6 +23,8 @@ export async function getContext(): Promise<Pick<PostgrejsContext, "pool" | "shu
     applicationName: "postgrejs",
     min: 1,
     max: 10,
+    // This causes extra statements to be issued
+    rollbackOnError: false,
   });
   return { pool, shutdown: () => pool.close() };
 }

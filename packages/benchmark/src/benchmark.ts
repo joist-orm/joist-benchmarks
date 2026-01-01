@@ -14,7 +14,7 @@ import colors from "colors";
 import fs from "fs/promises";
 import postgres from "postgres";
 import { Context, getDatabaseUrl, getData, operations } from "seed-data";
-import { setToxiproxyLatency } from "./toxi-init.ts";
+import { getBytesSent, setToxiproxyLatency } from "./toxi-init.ts";
 
 const orms = {
   // Low level drivers
@@ -45,7 +45,7 @@ const sql = postgres(getDatabaseUrl("driver"));
 type BenchmarkResult = {
   operation: string;
   size: number;
-  orms: Record<string, { durations: number[]; queries: { count: number; chars: number } }>;
+  orms: Record<string, { durations: number[]; queries: { count: number; chars: number; bytes: number } }>;
 };
 
 // Track the connection pools to shutdown
@@ -64,7 +64,7 @@ async function runBenchmark(
     // Use the configured size, otherwise each operation has a default set of sizes
     const sizes = _sizes || (operations as any)[op].sizes;
     for (const size of sizes) {
-      const row: Record<string, { durations: number[]; queries: { count: number; chars: number } }> = {};
+      const row: Record<string, { durations: number[]; queries: { count: number; chars: number; bytes: number } }> = {};
       for (const [name, config] of Object.entries(orms)) {
         if (!ormKeys.includes(name)) continue;
         try {
@@ -79,15 +79,18 @@ async function runBenchmark(
             const durations: number[] = [];
             let queriesCount = 0;
             let queriesChars = 0;
+            let queriesBytes = 0;
             for (const _ of Array(samples)) {
               await o.beforeEach(runCtx);
               await sql`SELECT pg_stat_statements_reset()`;
+              const startingBytes = await getBytesSent();
 
               // Run the operation and measure the time taken
               const startTime = performance.now();
               await o.run(runCtx);
               const endTime = performance.now();
 
+              const endingBytes = await getBytesSent();
               // Get the number of queries issued
               const stats = await sql`
                 select sum(calls) as calls, query from pg_stat_statements
@@ -97,6 +100,7 @@ async function runBenchmark(
               durations.push(endTime - startTime);
               queriesCount += stats.map((s) => Number(s.calls)).reduce(sum);
               queriesChars += stats.map((s) => Number(s.calls * s.query.length)).reduce(sum);
+              queriesBytes += endingBytes - startingBytes;
               await fs.writeFile(
                 `../../queries/${name}-${op}-${size}.sql`,
                 stats.map((s) => `num=${s.calls} sql=${s.query}`).join("\n"),
@@ -107,6 +111,7 @@ async function runBenchmark(
               queries: {
                 count: Math.round(queriesCount / samples),
                 chars: Math.round(queriesChars / samples),
+                bytes: Math.round(queriesBytes / samples),
               },
             };
           }
@@ -170,7 +175,7 @@ function displayResults(ormNames: string[], results: BenchmarkResult[]): void {
           [
             colorFn(`#${place} ${avg.toFixed(1)}ms`),
             bar,
-            `#q=${mine.queries.count} ${formatBytes(mine.queries.chars)}`,
+            `#q=${mine.queries.count} ${formatBytes(mine.queries.chars)} ${formatBytes(mine.queries.bytes)}`,
           ].join("\n"),
         );
       } else {
@@ -186,16 +191,18 @@ function displayResults(ormNames: string[], results: BenchmarkResult[]): void {
     let totalTime = 0;
     let totalQueriesCount = 0;
     let totalQueriesChars = 0;
+    let totalQueriesBytes = 0;
     for (const result of results) {
       const mine = result.orms[ormName];
       if (mine) {
         totalTime += averageMilliseconds(mine.durations);
         totalQueriesCount += mine.queries.count;
         totalQueriesChars += mine.queries.chars;
+        totalQueriesBytes += mine.queries.bytes;
       }
     }
     totalRow.push(
-      colors.bold(`${totalTime.toFixed(1)}ms\n\n#q=${totalQueriesCount} ${formatBytes(totalQueriesChars)}`),
+      colors.bold(`${totalTime.toFixed(1)}ms\n\n#q=${totalQueriesCount} ${formatBytes(totalQueriesChars)} ${formatBytes(totalQueriesBytes)}`),
     );
   }
   table.push(totalRow);

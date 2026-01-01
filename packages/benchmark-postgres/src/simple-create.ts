@@ -7,7 +7,7 @@ export const simpleCreate: PostgresOperation = {
 
   async run({ sql, seedData }) {
     await sql.begin(async (sql) => {
-      // Only insert authors (1, 10, or 100) - map to snake_case column names
+      // Map to snake_case column names
       const authors = seedData.authors.map((a) => ({
         id: a.id,
         first_name: a.firstName,

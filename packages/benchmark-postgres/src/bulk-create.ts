@@ -14,7 +14,7 @@ export const bulkCreate: PostgresOperation = {
         last_name: a.lastName,
         email: a.email,
       }));
-      await sql`INSERT INTO author ${sql(authors, "id", "first_name", "last_name", "email")}`;
+      const ap = sql`INSERT INTO author ${sql(authors, "id", "first_name", "last_name", "email")}`;
 
       // Insert books - map to snake_case column names
       const books = seedData.books.map((b) => ({
@@ -24,7 +24,7 @@ export const bulkCreate: PostgresOperation = {
         published: b.published ? new Date(b.published) : null,
         pages: b.pages,
       }));
-      await sql`INSERT INTO book ${sql(books, "id", "title", "author_id", "published", "pages")}`;
+      const bp = sql`INSERT INTO book ${sql(books, "id", "title", "author_id", "published", "pages")}`;
 
       // Insert reviews - map to snake_case column names
       const reviews = seedData.reviews.map((r) => ({
@@ -33,21 +33,24 @@ export const bulkCreate: PostgresOperation = {
         rating: r.rating,
         text: r.text,
       }));
-      await sql`INSERT INTO book_review ${sql(reviews, "id", "book_id", "rating", "text")}`;
+      const rp = sql`INSERT INTO book_review ${sql(reviews, "id", "book_id", "rating", "text")}`;
 
       // Insert tags
       const tags = seedData.tags.map((t) => ({
         id: t.id,
         name: t.name,
       }));
-      await sql`INSERT INTO tag ${sql(tags, "id", "name")}`;
+      const tp = sql`INSERT INTO tag ${sql(tags, "id", "name")}`;
 
       // Insert book_tags - map to snake_case column names
       const bookTags = seedData.bookTags.map((bt) => ({
         book_id: bt.bookId,
         tag_id: bt.tagId,
       }));
-      await sql`INSERT INTO book_tag ${sql(bookTags, "book_id", "tag_id")}`;
+      const btp = sql`INSERT INTO book_tag ${sql(bookTags, "book_id", "tag_id")}`;
+
+      // Pipeline
+      return Promise.all([ap, bp, rp, tp, btp]);
     });
   },
 };

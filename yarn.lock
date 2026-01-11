@@ -1996,8 +1996,8 @@ __metadata:
   resolution: "benchmark-joist-v1@workspace:packages/benchmark-joist-v1"
   dependencies:
     "@types/node": "npm:^22.15.3"
-    joist-codegen: "npm:^1.286.4"
-    joist-orm: "npm:^1.286.4"
+    joist-codegen: "npm:^1.290.0"
+    joist-orm: "npm:^1.290.0"
     knex: "npm:^3.1.0"
     pg: "npm:^8.16.3"
     seed-data: "workspace:^"
@@ -2010,8 +2010,8 @@ __metadata:
   resolution: "benchmark-joist-v2@workspace:packages/benchmark-joist-v2"
   dependencies:
     "@types/node": "npm:^22.15.3"
-    joist-codegen: "https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@7aa0c71"
-    joist-orm: "https://pkg.pr.new/joist-orm/joist-orm/joist-orm@7aa0c71"
+    joist-codegen: "https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@8628078"
+    joist-orm: "https://pkg.pr.new/joist-orm/joist-orm/joist-orm@8628078"
     seed-data: "workspace:^"
     typescript: "npm:^5.9.3"
   languageName: unknown
@@ -3609,9 +3609,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"joist-codegen@https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@7aa0c71":
-  version: 1.286.4
-  resolution: "joist-codegen@https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@7aa0c71"
+"joist-codegen@https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@8628078":
+  version: 1.289.2
+  resolution: "joist-codegen@https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@8628078"
   dependencies:
     "@dprint/formatter": "npm:^0.2.1"
     "@dprint/json": "npm:0.15.6"
@@ -3622,7 +3622,7 @@ __metadata:
     "@types/semver": "npm:^7.7.1"
     change-case: "npm:^4.1.2"
     fast-glob: "npm:^3.3.3"
-    joist-utils: "https://pkg.pr.new/joist-orm/joist-orm/joist-utils@7aa0c71ab33fa77e119c36a03cf345cfc264b14e"
+    joist-utils: "https://pkg.pr.new/joist-orm/joist-orm/joist-utils@8628078d090a5f5a75fd3a1fa01dd7a42863dfd2"
     jscodeshift: "npm:^17.3.0"
     knex: "npm:^3.1.0"
     pg: "npm:^8.16.3"
@@ -3633,13 +3633,13 @@ __metadata:
     zod: "npm:^3.25.76"
   bin:
     joist-codegen: build/index.js
-  checksum: 10c0/64167bfab9dd9a6f6efe99201cdacc47c76c47d131ccca3375e1b2dd01af24dc4d92e9ebd8d7cb879e7a08d7ddafea7036e67eeec1b3c65540525dbee5c581cc
+  checksum: 10c0/8f9cdc7b41442818bff150f957a032c33861a755f38a0c35f4c7aea499929f2cf9114f46b9e0ba105b9b1a148b0876c3af03cfe126eab29abae827d4a01c8b63
   languageName: node
   linkType: hard
 
-"joist-codegen@npm:^1.286.4":
-  version: 1.286.4
-  resolution: "joist-codegen@npm:1.286.4"
+"joist-codegen@npm:^1.290.0":
+  version: 1.290.0
+  resolution: "joist-codegen@npm:1.290.0"
   dependencies:
     "@dprint/formatter": "npm:^0.2.1"
     "@dprint/json": "npm:0.15.6"
@@ -3649,7 +3649,7 @@ __metadata:
     "@types/semver": "npm:^7.7.1"
     change-case: "npm:^4.1.2"
     fast-glob: "npm:^3.3.3"
-    joist-utils: "npm:1.286.4"
+    joist-utils: "npm:1.290.0"
     jscodeshift: "npm:^17.3.0"
     knex: "npm:^3.1.0"
     pg: "npm:^8.16.3"
@@ -3660,58 +3660,58 @@ __metadata:
     zod: "npm:^3.25.76"
   bin:
     joist-codegen: build/index.js
-  checksum: 10c0/ed227f786617f01604526f2da99a0471f85ec0fd0dbb86a2c69c42f321fbc3e07f808b74d23dd02fe7f9f02d4c5b641325d86e0f85b5a8345d92299eca1c7f14
+  checksum: 10c0/1c105ee15e0b65fb784e12d55ca28ed3e806352c79cd15b8f3d2182d6e7e9eb4e84fd81acf29a64e9583b2042773b43e1f05515453f7f804afa2ca43ef49a3c6
   languageName: node
   linkType: hard
 
-"joist-orm@https://pkg.pr.new/joist-orm/joist-orm/joist-orm@7aa0c71":
-  version: 1.286.4
-  resolution: "joist-orm@https://pkg.pr.new/joist-orm/joist-orm/joist-orm@7aa0c71"
+"joist-orm@https://pkg.pr.new/joist-orm/joist-orm/joist-orm@8628078":
+  version: 1.289.2
+  resolution: "joist-orm@https://pkg.pr.new/joist-orm/joist-orm/joist-orm@8628078"
   dependencies:
     "@types/object-hash": "npm:^3.0.6"
     ansis: "npm:^3.17.0"
     dataloader: "npm:^2.2.3"
-    joist-utils: "https://pkg.pr.new/joist-orm/joist-orm/joist-utils@7aa0c71ab33fa77e119c36a03cf345cfc264b14e"
+    joist-utils: "https://pkg.pr.new/joist-orm/joist-orm/joist-utils@8628078d090a5f5a75fd3a1fa01dd7a42863dfd2"
     object-hash: "npm:^3.0.0"
     pg-types: "npm:^4.0.2"
     postgres: "github:stephenh/postgres"
-  checksum: 10c0/ddf32069d0c7588464597cf657cae34c7dd6d499df5d2f79e6c2ecf177fe4cf67442641d5de1906e8f6d5309280a198675fa69b0c92f8787b6d33874505330a3
+  checksum: 10c0/8e5f4bd0c105c119d212866adea40ace60c801618355f85cc0df46c286d1654268e71562f64ad55d1a43b41a37931140538caf704b9d9864f70c2d4073271a8e
   languageName: node
   linkType: hard
 
-"joist-orm@npm:^1.286.4":
-  version: 1.286.4
-  resolution: "joist-orm@npm:1.286.4"
+"joist-orm@npm:^1.290.0":
+  version: 1.290.0
+  resolution: "joist-orm@npm:1.290.0"
   dependencies:
     "@types/object-hash": "npm:^3.0.6"
     "@types/pg": "npm:^8.15.5"
     ansis: "npm:^3.17.0"
     dataloader: "npm:^2.2.3"
-    joist-utils: "npm:1.286.4"
+    joist-utils: "npm:1.290.0"
     knex: "npm:^3.1.0"
     object-hash: "npm:^3.0.0"
     pg: "npm:^8.16.3"
     pg-types: "npm:^4.1.0"
-  checksum: 10c0/3809ae45c246b449153f1cb4851515e94101fbb601d2dc76b16cb3a148dcbe727ab513244783d4930111837555b93eae9df45fa634bebcbdb5dbca0d54c45ed1
+  checksum: 10c0/844bb9ba7b4f09be9cc81b9486aea3e01f60687f923f2ac9fa75492580bdb40fb48c7d599e94db9c127c3f80215fd1846eb3743fff0eb4bae63f14a6a3606458
   languageName: node
   linkType: hard
 
-"joist-utils@https://pkg.pr.new/joist-orm/joist-orm/joist-utils@7aa0c71ab33fa77e119c36a03cf345cfc264b14e":
-  version: 1.286.4
-  resolution: "joist-utils@https://pkg.pr.new/joist-orm/joist-orm/joist-utils@7aa0c71ab33fa77e119c36a03cf345cfc264b14e"
+"joist-utils@https://pkg.pr.new/joist-orm/joist-orm/joist-utils@8628078d090a5f5a75fd3a1fa01dd7a42863dfd2":
+  version: 1.289.2
+  resolution: "joist-utils@https://pkg.pr.new/joist-orm/joist-orm/joist-utils@8628078d090a5f5a75fd3a1fa01dd7a42863dfd2"
   dependencies:
     pg-connection-string: "npm:^2.9.1"
-  checksum: 10c0/2895c9dcdf10f90d181aadcc97891ff6f8a334c1a84a483a6ce2184fb4c8bfb6646da08ddc45e114e31fc101ed36739bff1baa1eb7c4d4394d0829adbfd7a123
+  checksum: 10c0/4ea26e350652a23a5e3c08e37951f6c6c0b0dbcd0256c8655e78632ef4fa028b314501db758d34ca5285dfda67de56c59bf11b16af24e24920114f8ee83a0a07
   languageName: node
   linkType: hard
 
-"joist-utils@npm:1.286.4":
-  version: 1.286.4
-  resolution: "joist-utils@npm:1.286.4"
+"joist-utils@npm:1.290.0":
+  version: 1.290.0
+  resolution: "joist-utils@npm:1.290.0"
   dependencies:
     pg: "npm:^8.16.3"
     pg-connection-string: "npm:^2.9.1"
-  checksum: 10c0/e41f112752d9c0f200b5dfd86f53fce1cd7977d7d882bb5b1743db7136a1df95043bc5f26bca61e89b846be6a90d097dbb88c88ce13a0be86dec5a2b4f4e2322
+  checksum: 10c0/e3427558ea9746545065ff7cb66b941dee3ac6493010a1de091ddbd3f3775b815906d6adc027b44611094254c25836064662d5246a6e5c27b858a1e8c1c31d36
   languageName: node
   linkType: hard
 

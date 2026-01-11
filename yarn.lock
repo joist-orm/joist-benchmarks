@@ -1073,26 +1073,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mikro-orm/core@npm:^6.6.2":
-  version: 6.6.2
-  resolution: "@mikro-orm/core@npm:6.6.2"
+"@mikro-orm/core@npm:^6.6.3":
+  version: 6.6.3
+  resolution: "@mikro-orm/core@npm:6.6.3"
   dependencies:
     dataloader: "npm:2.2.3"
     dotenv: "npm:17.2.3"
     esprima: "npm:4.0.1"
-    fs-extra: "npm:11.3.2"
+    fs-extra: "npm:11.3.3"
     globby: "npm:11.1.0"
-    mikro-orm: "npm:6.6.2"
+    mikro-orm: "npm:6.6.3"
     reflect-metadata: "npm:0.2.2"
-  checksum: 10c0/d4a48c65e9b14eed1598e9ae80d9aef9879cd9cd6e66064d4f127e592183d47e94a01619a5b76456184572a43cf5fcb469f7a80f020b8027ee96b15dd218e899
+  checksum: 10c0/0b903babbb853b6a8ecddbf81def9e20bc00e0c0cba5e2902dcd9bf6478e9040043e4353e6ade987577e16205543edf8d1e5d339a03c3cabce7f00935232bea7
   languageName: node
   linkType: hard
 
-"@mikro-orm/knex@npm:6.6.2":
-  version: 6.6.2
-  resolution: "@mikro-orm/knex@npm:6.6.2"
+"@mikro-orm/knex@npm:6.6.3":
+  version: 6.6.3
+  resolution: "@mikro-orm/knex@npm:6.6.3"
   dependencies:
-    fs-extra: "npm:11.3.2"
+    fs-extra: "npm:11.3.3"
     knex: "npm:3.1.0"
     sqlstring: "npm:2.3.3"
   peerDependencies:
@@ -1107,34 +1107,34 @@ __metadata:
       optional: true
     mariadb:
       optional: true
-  checksum: 10c0/06a20e67a803f8ab83fb03616f60469f8b06b4fdbc850ac20d7e30d864f5e86bf447e8157c250de7ece24eb4c98499f35aac9f9a50020e116f54298707a11925
+  checksum: 10c0/968300c9b95f1215214ae4d17605b4dcaf43be0dfb65a11cd71e54224b191888b6c91fef586b611b196f3edb4b9a8ebf557f131e99d1deb0bab804ee0931a600
   languageName: node
   linkType: hard
 
-"@mikro-orm/postgresql@npm:^6.6.2":
-  version: 6.6.2
-  resolution: "@mikro-orm/postgresql@npm:6.6.2"
+"@mikro-orm/postgresql@npm:^6.6.3":
+  version: 6.6.3
+  resolution: "@mikro-orm/postgresql@npm:6.6.3"
   dependencies:
-    "@mikro-orm/knex": "npm:6.6.2"
+    "@mikro-orm/knex": "npm:6.6.3"
     pg: "npm:8.16.3"
     postgres-array: "npm:3.0.4"
     postgres-date: "npm:2.1.0"
     postgres-interval: "npm:4.0.2"
   peerDependencies:
     "@mikro-orm/core": ^6.0.0
-  checksum: 10c0/69f47a308d10130e1a7271513f9744dd6f3b5e7a15d78495e0705075fdd124e9ecdebda212d7785906e1f53d25c86d99efb62b5fc4a5fca49e33f890f76acb10
+  checksum: 10c0/97db5e3d2ef6938f4bad295c6f7fcf8751a141c3b7f83ec75adf69398b8f19b1278e77b8408b5153aff71042d45c679ed73879961c3a48f390bcc19d41d8f620
   languageName: node
   linkType: hard
 
-"@mikro-orm/reflection@npm:^6.6.2":
-  version: 6.6.2
-  resolution: "@mikro-orm/reflection@npm:6.6.2"
+"@mikro-orm/reflection@npm:^6.6.3":
+  version: 6.6.3
+  resolution: "@mikro-orm/reflection@npm:6.6.3"
   dependencies:
     globby: "npm:11.1.0"
     ts-morph: "npm:27.0.2"
   peerDependencies:
     "@mikro-orm/core": ^6.0.0
-  checksum: 10c0/521520371229e433d0d1f41387cbf571f73766c001b2357911657d0f212ed06a923760350eef9181326bcc353dccc4fdd26c5da34a884f056d7dbbed3a2c5183
+  checksum: 10c0/62f5cf7bc33cbb538ad49e51544c5ec6947f461e010d6ac4b1a008095694ab2c356715581d73e906d70e15ae3c04e7e6ae1d6ee77e170c2cefaf59d6ad406448
   languageName: node
   linkType: hard
 
@@ -1985,7 +1985,7 @@ __metadata:
   resolution: "benchmark-drizzle@workspace:packages/benchmark-drizzle"
   dependencies:
     drizzle-orm: "npm:^0.45.1"
-    postgres: "npm:^3.4.7"
+    postgres: "npm:^3.4.8"
     seed-data: "workspace:*"
     typescript: "npm:^5.9.3"
   languageName: unknown
@@ -2021,9 +2021,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "benchmark-mikroorm@workspace:packages/benchmark-mikroorm"
   dependencies:
-    "@mikro-orm/core": "npm:^6.6.2"
-    "@mikro-orm/postgresql": "npm:^6.6.2"
-    "@mikro-orm/reflection": "npm:^6.6.2"
+    "@mikro-orm/core": "npm:^6.6.3"
+    "@mikro-orm/postgresql": "npm:^6.6.3"
+    "@mikro-orm/reflection": "npm:^6.6.3"
     "@types/node": "npm:^22.15.3"
     benchmark: "workspace:^"
     pg: "npm:^8.16.3"
@@ -2037,7 +2037,7 @@ __metadata:
   resolution: "benchmark-node-pg@workspace:packages/benchmark-node-pg"
   dependencies:
     "@types/pg": "npm:^8.11.6"
-    pg: "npm:^8.14.0"
+    pg: "npm:^8.16.3"
     seed-data: "workspace:*"
     typescript: "npm:^5.9.3"
   languageName: unknown
@@ -2047,7 +2047,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "benchmark-postgrejs@workspace:packages/benchmark-postgrejs"
   dependencies:
-    postgrejs: "npm:^2.6.0"
+    postgrejs: "npm:^2.22.9"
     seed-data: "workspace:*"
     typescript: "npm:^5.9.3"
   languageName: unknown
@@ -2057,7 +2057,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "benchmark-postgres@workspace:packages/benchmark-postgres"
   dependencies:
-    postgres: "npm:^3.4.7"
+    postgres: "npm:^3.4.8"
     seed-data: "workspace:*"
     typescript: "npm:^5.9.3"
   languageName: unknown
@@ -2071,7 +2071,7 @@ __metadata:
     "@prisma/client": "npm:^7.2.0"
     "@types/node": "npm:^22.15.3"
     "@types/pg": "npm:^8.11.6"
-    pg: "npm:^8.14.0"
+    pg: "npm:^8.16.3"
     prisma: "npm:7.2.0"
     seed-data: "workspace:^"
     typescript: "npm:^5.9.3"
@@ -2124,7 +2124,7 @@ __metadata:
     cli-table3: "npm:^0.6.5"
     colors: "npm:^1.4.0"
     mitata: "npm:^1.0.34"
-    postgres: "npm:^3.4.7"
+    postgres: "npm:^3.4.8"
     seed-data: "workspace:^"
     typescript: "npm:^5.9.3"
   languageName: unknown
@@ -3085,14 +3085,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-extra@npm:11.3.2":
-  version: 11.3.2
-  resolution: "fs-extra@npm:11.3.2"
+"fs-extra@npm:11.3.3":
+  version: 11.3.3
+  resolution: "fs-extra@npm:11.3.3"
   dependencies:
     graceful-fs: "npm:^4.2.0"
     jsonfile: "npm:^6.0.1"
     universalify: "npm:^2.0.0"
-  checksum: 10c0/f5d629e1bb646d5dedb4d8b24c5aad3deb8cc1d5438979d6f237146cd10e113b49a949ae1b54212c2fbc98e2d0995f38009a9a1d0520f0287943335e65fe919b
+  checksum: 10c0/984924ff4104e3e9f351b658a864bf3b354b2c90429f57aec0acd12d92c4e6b762cbacacdffb4e745b280adce882e1f980c485d9f02c453f769ab4e7fc646ce3
   languageName: node
   linkType: hard
 
@@ -3973,10 +3973,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mikro-orm@npm:6.6.2":
-  version: 6.6.2
-  resolution: "mikro-orm@npm:6.6.2"
-  checksum: 10c0/7c76d0930783a8f21db62079ae0847d517f2c96476a4f6462a43b4a7647663bd6b6f9ae5c5e2f84f21547d23ca14feb880cc330dcd616f29d1a870a72a4a402f
+"mikro-orm@npm:6.6.3":
+  version: 6.6.3
+  resolution: "mikro-orm@npm:6.6.3"
+  checksum: 10c0/cc2ed71ca82b975ddb23a7e60d957a1da2406f6759b0db7dc7455266628d40f77ed14d52d804145c3a20e27477cd5ba485f0b5bfb612efcbeb12ab32122c27bf
   languageName: node
   linkType: hard
 
@@ -4536,7 +4536,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg@npm:8.16.3, pg@npm:^8.0.3, pg@npm:^8.14.0, pg@npm:^8.16.3":
+"pg@npm:8.16.3, pg@npm:^8.0.3, pg@npm:^8.16.3":
   version: 8.16.3
   resolution: "pg@npm:8.16.3"
   dependencies:
@@ -4636,7 +4636,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postgrejs@npm:^2.6.0":
+"postgrejs@npm:^2.22.9":
   version: 2.22.9
   resolution: "postgrejs@npm:2.22.9"
   dependencies:
@@ -4733,10 +4733,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postgres@npm:3.4.7, postgres@npm:^3.4.7":
+"postgres@npm:3.4.7":
   version: 3.4.7
   resolution: "postgres@npm:3.4.7"
   checksum: 10c0/b2e61b1064d38e7e1df8291f6d5a7e11f892a3240e00cf2b5e5542bf9abbfe97f3963164aeb56b42c1ab6b8aae3454c57f5bbc1791df0769375542740a7cde72
+  languageName: node
+  linkType: hard
+
+"postgres@npm:^3.4.8":
+  version: 3.4.8
+  resolution: "postgres@npm:3.4.8"
+  checksum: 10c0/fc737d79cd50d7be76750dfffc71e6322c64fe6a8fa8ed38001f2d969de0200302216ffbfd252560a3a2fa72d3f2fad6d1bdafc493c4e64020653a7c363df348
   languageName: node
   linkType: hard
 

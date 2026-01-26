@@ -1,4 +1,4 @@
-import { PostgresDriver } from "joist-orm";
+import { PostgresDriver } from "joist-orm/pg";
 import postgres, { type Sql } from "postgres";
 import { AllOperations, Context, getDatabaseUrl, Operation } from "seed-data";
 import { bulkCreate } from "./bulk-create.ts";
@@ -7,13 +7,13 @@ import { loadInLoop } from "./load-in-loop.ts";
 import { findInLoop } from "./find-in-loop.ts";
 import { simpleCreate } from "./simple-create.ts";
 
-export type JoistContext = Context & { sql: Sql; driver: PostgresDriver; preload: boolean };
+export type JoistContext = Context & { knex: Knex; driver: PostgresDriver };
 export type JoistOperation = Operation<JoistContext>;
 
-export async function getContext(): Promise<Pick<JoistContext, "driver" | "shutdown" | "sql" | "preload">> {
-  const sql = postgres(getDatabaseUrl("joist_v2"));
-  const driver = new PostgresDriver(sql);
-  return { sql, driver, shutdown: () => sql.end(), preload: false };
+export async function getContext(): Promise<Pick<JoistContext, "driver" | "shutdown" | "knex">> {
+  const conn = knex({ client: "pg", connection: getDatabaseUrl("joist_v2") });
+  const driver = new PostgresDriver(conn);
+  return { knex: conn, driver, shutdown: () => conn.destroy() };
 }
 
 export async function getContextPreload(): Promise<Pick<JoistContext, "driver" | "shutdown" | "sql" | "preload">> {
@@ -27,5 +27,5 @@ export function getOperations(): AllOperations<JoistContext> {
 }
 
 export async function cleanDatabase(ctx: JoistContext): Promise<void> {
-  await ctx.sql`TRUNCATE book_tag, book_review, book, author, tag RESTART IDENTITY CASCADE`;
+  await ctx.knex.raw("TRUNCATE book_tag, book_review, book, author, tag RESTART IDENTITY CASCADE");
 }

@@ -27,7 +27,6 @@
   "dependencies": {
     "@cloud-copilot/cli": "^0.2.28",
     "benchmark-drizzle": "workspace:^",
-    "benchmark-joist-v1": "workspace:^",
     "benchmark-joist-v2": "workspace:^",
     "benchmark-mikroorm": "workspace:^",
     "benchmark-node-pg": "workspace:^",

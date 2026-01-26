@@ -1,6 +1,5 @@
 import { parseCliArguments, enumArrayArgument, numberArgument, numberArrayArgument } from "@cloud-copilot/cli";
 import * as drizzle from "benchmark-drizzle";
-import * as joist_v1 from "benchmark-joist-v1";
 import * as joist_v2 from "benchmark-joist-v2";
 import * as mikro from "benchmark-mikroorm";
 import * as node_pg from "benchmark-node-pg";
@@ -27,7 +26,6 @@ const orms = {
   prisma: { getContext: prisma.getContext, getOperations: prisma.getOperations },
   prisma_v7: { getContext: prisma_v7.getContext, getOperations: prisma_v7.getOperations },
   drizzle: { getContext: drizzle.getContext, getOperations: drizzle.getOperations },
-  joist_v1: { getContext: joist_v1.getContext, getOperations: joist_v1.getOperations },
   joist_v2: { getContext: joist_v2.getContext, getOperations: joist_v2.getOperations },
   joist_v2_pre: { getContext: joist_v2.getContextPreload, getOperations: joist_v2.getOperations },
 };

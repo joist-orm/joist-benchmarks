@@ -1821,7 +1821,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/pg@npm:^8.11.11, @types/pg@npm:^8.11.6, @types/pg@npm:^8.15.5":
+"@types/pg@npm:^8, @types/pg@npm:^8.11.6":
   version: 8.16.0
   resolution: "@types/pg@npm:8.16.0"
   dependencies:
@@ -1836,6 +1836,15 @@ __metadata:
   version: 0.0.33
   resolution: "@types/pluralize@npm:0.0.33"
   checksum: 10c0/24899caf85b79dd291a6b6e9b9f3b67b452b18d578d0ac0d531a705bf5ee0361d9386ea1f8532c64de9e22c6e9606c5497787bb5e31bd299c487980436c59785
+  languageName: node
+  linkType: hard
+
+"@types/prettier@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@types/prettier@npm:3.0.0"
+  dependencies:
+    prettier: "npm:*"
+  checksum: 10c0/edab8c0c0e56936e89c919cac17e384a9f231ce12062fb3beeb45bc45e7dcc4035dd3d7df3333b0bdd39f3b4501f22267a9dba45e22b9728c139857142e90282
   languageName: node
   linkType: hard
 
@@ -1991,27 +2000,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"benchmark-joist-v1@workspace:^, benchmark-joist-v1@workspace:packages/benchmark-joist-v1":
-  version: 0.0.0-use.local
-  resolution: "benchmark-joist-v1@workspace:packages/benchmark-joist-v1"
-  dependencies:
-    "@types/node": "npm:^22.15.3"
-    joist-codegen: "npm:^1.286.4"
-    joist-orm: "npm:^1.286.4"
-    knex: "npm:^3.1.0"
-    pg: "npm:^8.16.3"
-    seed-data: "workspace:^"
-    typescript: "npm:^5.9.3"
-  languageName: unknown
-  linkType: soft
-
 "benchmark-joist-v2@workspace:^, benchmark-joist-v2@workspace:packages/benchmark-joist-v2":
   version: 0.0.0-use.local
   resolution: "benchmark-joist-v2@workspace:packages/benchmark-joist-v2"
   dependencies:
     "@types/node": "npm:^22.15.3"
-    joist-codegen: "https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@7aa0c71"
-    joist-orm: "https://pkg.pr.new/joist-orm/joist-orm/joist-orm@7aa0c71"
+    "@types/pg": "npm:^8"
+    joist-codegen: "npm:^2.0.3"
+    joist-orm: "npm:^2.0.3"
+    knex: "npm:^3.1.0"
+    pg: "npm:^8.17.2"
     seed-data: "workspace:^"
     typescript: "npm:^5.9.3"
   languageName: unknown
@@ -2112,7 +2110,6 @@ __metadata:
     "@swc/core": "npm:^1.15.8"
     "@types/node": "npm:^22.15.3"
     benchmark-drizzle: "workspace:^"
-    benchmark-joist-v1: "workspace:^"
     benchmark-joist-v2: "workspace:^"
     benchmark-mikroorm: "workspace:^"
     benchmark-node-pg: "workspace:^"
@@ -3075,7 +3072,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"foreground-child@npm:3.3.1, foreground-child@npm:^3.1.0":
+"foreground-child@npm:3.3.1, foreground-child@npm:^3.1.0, foreground-child@npm:^3.3.1":
   version: 3.3.1
   resolution: "foreground-child@npm:3.3.1"
   dependencies:
@@ -3263,6 +3260,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"glob@npm:~11.1.0":
+  version: 11.1.0
+  resolution: "glob@npm:11.1.0"
+  dependencies:
+    foreground-child: "npm:^3.3.1"
+    jackspeak: "npm:^4.1.1"
+    minimatch: "npm:^10.1.1"
+    minipass: "npm:^7.1.2"
+    package-json-from-dist: "npm:^1.0.0"
+    path-scurry: "npm:^2.0.0"
+  bin:
+    glob: dist/esm/bin.mjs
+  checksum: 10c0/1ceae07f23e316a6fa74581d9a74be6e8c2e590d2f7205034dd5c0435c53f5f7b712c2be00c3b65bf0a49294a1c6f4b98cd84c7637e29453b5aa13b79f1763a2
+  languageName: node
+  linkType: hard
+
 "globals@npm:^11.1.0":
   version: 11.12.0
   resolution: "globals@npm:11.12.0"
@@ -3302,6 +3315,13 @@ __metadata:
   version: 3.1.12
   resolution: "grammex@npm:3.1.12"
   checksum: 10c0/6c096ef84e1a6a0e4a50a6ba11b582b5d61d60b76830d38a5cee0383529ccdb2ac1b419695edb9877bf93717bb0ff71fba54e1e2a76bbfb61a2cca456164ef44
+  languageName: node
+  linkType: hard
+
+"graphql@npm:^16.11.0":
+  version: 16.12.0
+  resolution: "graphql@npm:16.12.0"
+  checksum: 10c0/b6fffa4e8a4e4a9933ebe85e7470b346dbf49050c1a482fac5e03e4a1a7bed2ecd3a4c97e29f04457af929464bc5e4f2aac991090c2f320111eef26e902a5c75
   languageName: node
   linkType: hard
 
@@ -3590,6 +3610,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jackspeak@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "jackspeak@npm:4.1.1"
+  dependencies:
+    "@isaacs/cliui": "npm:^8.0.2"
+  checksum: 10c0/84ec4f8e21d6514db24737d9caf65361511f75e5e424980eebca4199f400874f45e562ac20fa8aeb1dd20ca2f3f81f0788b6e9c3e64d216a5794fd6f30e0e042
+  languageName: node
+  linkType: hard
+
 "jiti@npm:^2.4.2":
   version: 2.6.1
   resolution: "jiti@npm:2.6.1"
@@ -3609,37 +3638,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"joist-codegen@https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@7aa0c71":
-  version: 1.286.4
-  resolution: "joist-codegen@https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@7aa0c71"
-  dependencies:
-    "@dprint/formatter": "npm:^0.2.1"
-    "@dprint/json": "npm:0.15.6"
-    "@inquirer/prompts": "npm:^7.8.6"
-    "@types/jscodeshift": "npm:^17.3.0"
-    "@types/pg": "npm:^8.11.11"
-    "@types/pluralize": "npm:^0.0.33"
-    "@types/semver": "npm:^7.7.1"
-    change-case: "npm:^4.1.2"
-    fast-glob: "npm:^3.3.3"
-    joist-utils: "https://pkg.pr.new/joist-orm/joist-orm/joist-utils@7aa0c71ab33fa77e119c36a03cf345cfc264b14e"
-    jscodeshift: "npm:^17.3.0"
-    knex: "npm:^3.1.0"
-    pg: "npm:^8.16.3"
-    pg-structure: "npm:^7.15.3"
-    pluralize: "npm:^8.0.0"
-    semver: "npm:^7.7.2"
-    ts-poet: "npm:^6.12.0"
-    zod: "npm:^3.25.76"
-  bin:
-    joist-codegen: build/index.js
-  checksum: 10c0/64167bfab9dd9a6f6efe99201cdacc47c76c47d131ccca3375e1b2dd01af24dc4d92e9ebd8d7cb879e7a08d7ddafea7036e67eeec1b3c65540525dbee5c581cc
-  languageName: node
-  linkType: hard
-
-"joist-codegen@npm:^1.286.4":
-  version: 1.286.4
-  resolution: "joist-codegen@npm:1.286.4"
+"joist-codegen@npm:2.0.3, joist-codegen@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "joist-codegen@npm:2.0.3"
   dependencies:
     "@dprint/formatter": "npm:^0.2.1"
     "@dprint/json": "npm:0.15.6"
@@ -3649,69 +3650,146 @@ __metadata:
     "@types/semver": "npm:^7.7.1"
     change-case: "npm:^4.1.2"
     fast-glob: "npm:^3.3.3"
-    joist-utils: "npm:1.286.4"
     jscodeshift: "npm:^17.3.0"
-    knex: "npm:^3.1.0"
-    pg: "npm:^8.16.3"
     pg-structure: "npm:^7.15.3"
     pluralize: "npm:^8.0.0"
     semver: "npm:^7.7.2"
     ts-poet: "npm:^6.12.0"
     zod: "npm:^3.25.76"
+  peerDependencies:
+    joist-utils: 2.0.3
+    knex: ^3.1.0
+    pg: ^8.16.3
   bin:
     joist-codegen: build/index.js
-  checksum: 10c0/ed227f786617f01604526f2da99a0471f85ec0fd0dbb86a2c69c42f321fbc3e07f808b74d23dd02fe7f9f02d4c5b641325d86e0f85b5a8345d92299eca1c7f14
+  checksum: 10c0/e8f2f6f530c132718bab5e45199da049507fc2ffac873f30520a85f2ba04c7e3b00b683d961f66a18e1d8cd46627269123d596e64a8e5781319ca0a1cb7aebe3
   languageName: node
   linkType: hard
 
-"joist-orm@https://pkg.pr.new/joist-orm/joist-orm/joist-orm@7aa0c71":
-  version: 1.286.4
-  resolution: "joist-orm@https://pkg.pr.new/joist-orm/joist-orm/joist-orm@7aa0c71"
+"joist-core@npm:2.0.3":
+  version: 2.0.3
+  resolution: "joist-core@npm:2.0.3"
   dependencies:
     "@types/object-hash": "npm:^3.0.6"
     ansis: "npm:^3.17.0"
     dataloader: "npm:^2.2.3"
-    joist-utils: "https://pkg.pr.new/joist-orm/joist-orm/joist-utils@7aa0c71ab33fa77e119c36a03cf345cfc264b14e"
     object-hash: "npm:^3.0.0"
-    pg-types: "npm:^4.0.2"
-    postgres: "github:stephenh/postgres"
-  checksum: 10c0/ddf32069d0c7588464597cf657cae34c7dd6d499df5d2f79e6c2ecf177fe4cf67442641d5de1906e8f6d5309280a198675fa69b0c92f8787b6d33874505330a3
+  peerDependencies:
+    joist-utils: 2.0.3
+  checksum: 10c0/b01f5f280135db7d50cd943eebbcc0b09ab53345e9e456e99b7f17d370b3083a292c41904a532f23d3c171e9cdb4c6680e00fa314c11cffac90cba46da2ba9b4
   languageName: node
   linkType: hard
 
-"joist-orm@npm:^1.286.4":
-  version: 1.286.4
-  resolution: "joist-orm@npm:1.286.4"
+"joist-graphql-codegen@npm:2.0.3":
+  version: 2.0.3
+  resolution: "joist-graphql-codegen@npm:2.0.3"
   dependencies:
-    "@types/object-hash": "npm:^3.0.6"
-    "@types/pg": "npm:^8.15.5"
-    ansis: "npm:^3.17.0"
-    dataloader: "npm:^2.2.3"
-    joist-utils: "npm:1.286.4"
-    knex: "npm:^3.1.0"
-    object-hash: "npm:^3.0.0"
-    pg: "npm:^8.16.3"
-    pg-types: "npm:^4.1.0"
-  checksum: 10c0/3809ae45c246b449153f1cb4851515e94101fbb601d2dc76b16cb3a148dcbe727ab513244783d4930111837555b93eae9df45fa634bebcbdb5dbca0d54c45ed1
+    "@dprint/formatter": "npm:^0.2.1"
+    "@dprint/json": "npm:0.15.6"
+    "@types/prettier": "npm:^3.0.0"
+    change-case: "npm:^4.1.2"
+    graphql: "npm:^16.11.0"
+    pluralize: "npm:^8.0.0"
+    prettier: "npm:^3.6.2"
+    ts-poet: "npm:^6.12.0"
+  peerDependencies:
+    joist-core: 2.0.3
+    joist-utils: 2.0.3
+    pg-types: ^4.1.0
+  checksum: 10c0/91315f54aad3a1ad2f223ed6b12c4c71f478218563218bef1b7a3804818f1434d94fedb44961fdcfd344136a0163d53f0ad8397178ed4f4ab7abf3b9408eb3e8
   languageName: node
   linkType: hard
 
-"joist-utils@https://pkg.pr.new/joist-orm/joist-orm/joist-utils@7aa0c71ab33fa77e119c36a03cf345cfc264b14e":
-  version: 1.286.4
-  resolution: "joist-utils@https://pkg.pr.new/joist-orm/joist-orm/joist-utils@7aa0c71ab33fa77e119c36a03cf345cfc264b14e"
+"joist-graphql-resolver-utils@npm:2.0.3":
+  version: 2.0.3
+  resolution: "joist-graphql-resolver-utils@npm:2.0.3"
   dependencies:
-    pg-connection-string: "npm:^2.9.1"
-  checksum: 10c0/2895c9dcdf10f90d181aadcc97891ff6f8a334c1a84a483a6ce2184fb4c8bfb6646da08ddc45e114e31fc101ed36739bff1baa1eb7c4d4394d0829adbfd7a123
+    graphql: "npm:^16.11.0"
+  peerDependencies:
+    joist-core: 2.0.3
+    joist-test-utils: 2.0.3
+  checksum: 10c0/6d4cebd173f9316d3e7dc5c23e9f8c0020e68ce2c1d6e347dea1e394f2038652454e66274a676a9cc9ee4b28d24c8890ec3f604392a18aad92e1e806c2190ec7
   languageName: node
   linkType: hard
 
-"joist-utils@npm:1.286.4":
-  version: 1.286.4
-  resolution: "joist-utils@npm:1.286.4"
+"joist-knex@npm:2.0.3":
+  version: 2.0.3
+  resolution: "joist-knex@npm:2.0.3"
+  peerDependencies:
+    joist-core: 2.0.3
+    knex: ^3.1.0
+    pg: ^8.16.3
+  checksum: 10c0/4cfe4f97c7ea107438d772373a84286fb5bb6140434931266dd243cc413a2453683bf5ea80861db579184e8a850187701ebc20f333f7e98721406f7ab110984c
+  languageName: node
+  linkType: hard
+
+"joist-migration-utils@npm:2.0.3":
+  version: 2.0.3
+  resolution: "joist-migration-utils@npm:2.0.3"
   dependencies:
-    pg: "npm:^8.16.3"
-    pg-connection-string: "npm:^2.9.1"
-  checksum: 10c0/e41f112752d9c0f200b5dfd86f53fce1cd7977d7d882bb5b1743db7136a1df95043bc5f26bca61e89b846be6a90d097dbb88c88ce13a0be86dec5a2b4f4e2322
+    "@types/pluralize": "npm:^0.0.33"
+    node-pg-migrate: "npm:^8.0.4"
+    pg-structure: "npm:^7.15.3"
+    pluralize: "npm:^8.0.0"
+  peerDependencies:
+    joist-utils: 2.0.3
+    pg: ^8.16.3
+  checksum: 10c0/8eda6f32cc5c88aee8ce5b989f214138930c1862696ac6d63ffd3d71a0985824a6c8124c944fc6495835d2212c1b8dc5c51457877f39fa24f05073222479b5a2
+  languageName: node
+  linkType: hard
+
+"joist-orm@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "joist-orm@npm:2.0.3"
+  dependencies:
+    joist-codegen: "npm:2.0.3"
+    joist-core: "npm:2.0.3"
+    joist-graphql-codegen: "npm:2.0.3"
+    joist-graphql-resolver-utils: "npm:2.0.3"
+    joist-knex: "npm:2.0.3"
+    joist-migration-utils: "npm:2.0.3"
+    joist-test-utils: "npm:2.0.3"
+    joist-utils: "npm:2.0.3"
+  peerDependencies:
+    knex: ^3.1.0
+    node-pg-migrate: ^8.0.4
+    pg: ^8.16.3
+    pg-types: ^4.1.0
+    postgres-array: ^3.0.4
+  peerDependenciesMeta:
+    knex:
+      optional: true
+    node-pg-migrate:
+      optional: true
+    pg:
+      optional: true
+    postgres-array:
+      optional: true
+  bin:
+    joist-codegen: ./build/codegen.js
+    joist-pg-migrate: ./build/pg-migrate.js
+  checksum: 10c0/8ededd7dcfcb90616f63374ba2ff8fc4a63ed2a4d7b4a1bddc32e7522becc390dbd126a1154d813d6e7cdd275d46e24e115b0d83d5fa940e1b82d17017592c80
+  languageName: node
+  linkType: hard
+
+"joist-test-utils@npm:2.0.3":
+  version: 2.0.3
+  resolution: "joist-test-utils@npm:2.0.3"
+  peerDependencies:
+    joist-core: 2.0.3
+    joist-utils: 2.0.3
+    knex: ^3.1.0
+  checksum: 10c0/d4658b3643e6f0f1b04ea08bd4fb52b5ecc69b85e40a82d11b62d70b3d08f94957f9a2b0552d260f8c24936d744d03e76076790a681dac977de45dec79960a99
+  languageName: node
+  linkType: hard
+
+"joist-utils@npm:2.0.3":
+  version: 2.0.3
+  resolution: "joist-utils@npm:2.0.3"
+  peerDependencies:
+    pg: ^8.16.3
+    pg-connection-string: ^2.9.1
+  checksum: 10c0/ac8a93ef1d35826c34ef9988064ca76c3a1af3872ca603aa55cdeb86ad1757365bdf9e5ef3a28c094d53dbb4a4714588e7cc2a19b99f5912f6f85ecac10d90a3
   languageName: node
   linkType: hard
 
@@ -3904,6 +3982,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lru-cache@npm:^11.0.0":
+  version: 11.2.5
+  resolution: "lru-cache@npm:11.2.5"
+  checksum: 10c0/cc98958d25dddf1c8a8cbdc49588bd3b24450e8dfa78f32168fd188a20d4a0331c7406d0f3250c86a46619ee288056fd7a1195e8df56dc8a9592397f4fbd8e1d
+  languageName: node
+  linkType: hard
+
 "lru-cache@npm:^5.1.1":
   version: 5.1.1
   resolution: "lru-cache@npm:5.1.1"
@@ -3980,7 +4065,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^10.0.1":
+"minimatch@npm:^10.0.1, minimatch@npm:^10.1.1":
   version: 10.1.1
   resolution: "minimatch@npm:10.1.1"
   dependencies:
@@ -4186,6 +4271,24 @@ __metadata:
   bin:
     node-gyp: bin/node-gyp.js
   checksum: 10c0/c38977ce502f1ea41ba2b8721bd5b49bc3d5b3f813eabfac8414082faf0620ccb5211e15c4daecc23ed9f5e3e9cc4da00e575a0bcfc2a95a069294f2afa1e0cd
+  languageName: node
+  linkType: hard
+
+"node-pg-migrate@npm:^8.0.4":
+  version: 8.0.4
+  resolution: "node-pg-migrate@npm:8.0.4"
+  dependencies:
+    glob: "npm:~11.1.0"
+    yargs: "npm:~17.7.0"
+  peerDependencies:
+    "@types/pg": ">=6.0.0 <9.0.0"
+    pg: ">=4.3.0 <9.0.0"
+  peerDependenciesMeta:
+    "@types/pg":
+      optional: true
+  bin:
+    node-pg-migrate: bin/node-pg-migrate.js
+  checksum: 10c0/bf25ae7873ff7658609052da693d9067112b74c5f09bb9f49eb0656c0d0ea495ca690be75f3d12ee569230232f1941882bbe7c6eecc60d0e89e27c56fb4792c0
   languageName: node
   linkType: hard
 
@@ -4419,6 +4522,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"path-scurry@npm:^2.0.0":
+  version: 2.0.1
+  resolution: "path-scurry@npm:2.0.1"
+  dependencies:
+    lru-cache: "npm:^11.0.0"
+    minipass: "npm:^7.1.2"
+  checksum: 10c0/2a16ed0e81fbc43513e245aa5763354e25e787dab0d539581a6c3f0f967461a159ed6236b2559de23aa5b88e7dc32b469b6c47568833dd142a4b24b4f5cd2620
+  languageName: node
+  linkType: hard
+
 "path-type@npm:^4.0.0":
   version: 4.0.0
   resolution: "path-type@npm:4.0.0"
@@ -4447,10 +4560,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pg-cloudflare@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "pg-cloudflare@npm:1.3.0"
+  checksum: 10c0/b0866c88af8e54c7b3ed510719d92df37714b3af5e3a3a10d9f761fcec99483e222f5b78a1f2de590368127648087c45c01aaf66fadbe46edb25673eedc4f8fc
+  languageName: node
+  linkType: hard
+
 "pg-connection-string@npm:2.6.2":
   version: 2.6.2
   resolution: "pg-connection-string@npm:2.6.2"
   checksum: 10c0/e8fdea74fcc8bdc3d7c5c6eadd9425fdba7e67fb7fe836f9c0cecad94c8984e435256657d1d8ce0483d1fedef667e7a57e32449a63cb805cb0289fc34b62da35
+  languageName: node
+  linkType: hard
+
+"pg-connection-string@npm:^2.10.1":
+  version: 2.10.1
+  resolution: "pg-connection-string@npm:2.10.1"
+  checksum: 10c0/f218a72b59c661022caca9a7f2116655632b1d7e7d6dc9a8ee9f238744e0927e0d6f44e12f50d9767c6d9cd47d9b3766aa054b77504b15c6bf503400530e053e
   languageName: node
   linkType: hard
 
@@ -4468,13 +4595,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-numeric@npm:1.0.2":
-  version: 1.0.2
-  resolution: "pg-numeric@npm:1.0.2"
-  checksum: 10c0/43dd9884e7b52c79ddc28d2d282d7475fce8bba13452d33c04ceb2e0a65f561edf6699694e8e1c832ff9093770496363183c950dd29608e1bdd98f344b25bca9
-  languageName: node
-  linkType: hard
-
 "pg-pool@npm:^3.10.1":
   version: 3.10.1
   resolution: "pg-pool@npm:3.10.1"
@@ -4484,10 +4604,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pg-pool@npm:^3.11.0":
+  version: 3.11.0
+  resolution: "pg-pool@npm:3.11.0"
+  peerDependencies:
+    pg: ">=8.0"
+  checksum: 10c0/4b104b48a47257a0edad0c62e5ea1908b72cb79386270264b452e69895e9e4c589d00cdbf6e46d4e9c05bc7e7d191656b66814b5282d65f33b12648a21df3c7f
+  languageName: node
+  linkType: hard
+
 "pg-protocol@npm:*, pg-protocol@npm:^1.10.3":
   version: 1.10.3
   resolution: "pg-protocol@npm:1.10.3"
   checksum: 10c0/f7ef54708c93ee6d271e37678296fc5097e4337fca91a88a3d99359b78633dbdbf6e983f0adb34b7cdd261b7ec7266deb20c3233bf3dfdb498b3e1098e8750b9
+  languageName: node
+  linkType: hard
+
+"pg-protocol@npm:^1.11.0":
+  version: 1.11.0
+  resolution: "pg-protocol@npm:1.11.0"
+  checksum: 10c0/93e83581781418c9173eba4e4545f73392cfe66b78dd1d3624d7339fbd37e7f4abebaf2615e68e0701a9bf0edf5b81a4ad533836f388f775fe25fa24a691c464
   languageName: node
   linkType: hard
 
@@ -4521,21 +4657,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-types@npm:^4.0.2, pg-types@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "pg-types@npm:4.1.0"
-  dependencies:
-    pg-int8: "npm:1.0.1"
-    pg-numeric: "npm:1.0.2"
-    postgres-array: "npm:~3.0.1"
-    postgres-bytea: "npm:~3.0.0"
-    postgres-date: "npm:~2.1.0"
-    postgres-interval: "npm:^3.0.0"
-    postgres-range: "npm:^1.1.1"
-  checksum: 10c0/462a56b5c34e0dff38fc5f6ac939c66e80a92333a79bfb1d963ffe0383ca33427a16899e0b9d23235ce1f5df42473373fb9c9f24e1f614f8698b58cc45435ca6
-  languageName: node
-  linkType: hard
-
 "pg@npm:8.16.3, pg@npm:^8.0.3, pg@npm:^8.14.0, pg@npm:^8.16.3":
   version: 8.16.3
   resolution: "pg@npm:8.16.3"
@@ -4555,6 +4676,28 @@ __metadata:
     pg-native:
       optional: true
   checksum: 10c0/a6a407ff0efb7599760d72ffdcda47a74c34c0fd71d896623caac45cf2cfb0f49a10973cce23110f182b9810639a1e9f6904454d7358c7001574ee0ffdcbce2a
+  languageName: node
+  linkType: hard
+
+"pg@npm:^8.17.2":
+  version: 8.17.2
+  resolution: "pg@npm:8.17.2"
+  dependencies:
+    pg-cloudflare: "npm:^1.3.0"
+    pg-connection-string: "npm:^2.10.1"
+    pg-pool: "npm:^3.11.0"
+    pg-protocol: "npm:^1.11.0"
+    pg-types: "npm:2.2.0"
+    pgpass: "npm:1.0.5"
+  peerDependencies:
+    pg-native: ">=3.0.1"
+  dependenciesMeta:
+    pg-cloudflare:
+      optional: true
+  peerDependenciesMeta:
+    pg-native:
+      optional: true
+  checksum: 10c0/74b022587f92953f498dba747ccf9c7c90767af70326595d30c7ab0e2f00b2b468226c8abae54caef63ab444a8ac6f1597d859174386c7ba7c318c225d711c5f
   languageName: node
   linkType: hard
 
@@ -4652,7 +4795,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postgres-array@npm:3.0.4, postgres-array@npm:~3.0.1":
+"postgres-array@npm:3.0.4":
   version: 3.0.4
   resolution: "postgres-array@npm:3.0.4"
   checksum: 10c0/47f3e648da512bacdd6a5ed55cf770605ec271330789faeece0fd13805a49f376d6e5c9e0e353377be11a9545e727dceaa2473566c505432bf06366ccd04c6b2
@@ -4666,7 +4809,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postgres-bytea@npm:^3.0.0, postgres-bytea@npm:~3.0.0":
+"postgres-bytea@npm:^3.0.0":
   version: 3.0.0
   resolution: "postgres-bytea@npm:3.0.0"
   dependencies:
@@ -4682,7 +4825,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postgres-date@npm:2.1.0, postgres-date@npm:~2.1.0":
+"postgres-date@npm:2.1.0":
   version: 2.1.0
   resolution: "postgres-date@npm:2.1.0"
   checksum: 10c0/00a7472c10788f6b0d08d24108bf1eb80858de1bd6317740198a564918ea4a69b80c98148167b92ae688abd606483020d0de0dd3a36f3ea9a3e26bbeef3464f4
@@ -4712,27 +4855,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postgres-interval@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "postgres-interval@npm:3.0.0"
-  checksum: 10c0/8b570b30ea37c685e26d136d34460f246f98935a1533defc4b53bb05ee23ae3dc7475b718ec7ea607a57894d8c6b4f1adf67ca9cc83a75bdacffd427d5c68de8
-  languageName: node
-  linkType: hard
-
-"postgres-range@npm:^1.1.1":
-  version: 1.1.4
-  resolution: "postgres-range@npm:1.1.4"
-  checksum: 10c0/254494ef81df208e0adeae6b66ce394aba37914ea14c7ece55a45fb6691b7db04bee74c825380a47c887a9f87158fd3d86f758f9cc60b76d3a38ce5aca7912e8
-  languageName: node
-  linkType: hard
-
-"postgres@github:stephenh/postgres":
-  version: 3.4.5
-  resolution: "postgres@https://github.com/stephenh/postgres.git#commit=ede9db4a5337797dad83f81b0404529513430414"
-  checksum: 10c0/eec45cdfdb4f47322a22548c7cd89cf7a6e058ec8a2ef14cffc2c9fc1e0d5754cd7c20a40543ae09b12da38078fbbbaeee7892297d50368e5775b4ee26082fb9
-  languageName: node
-  linkType: hard
-
 "postgres@npm:3.4.7, postgres@npm:^3.4.7":
   version: 3.4.7
   resolution: "postgres@npm:3.4.7"
@@ -4751,12 +4873,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.7.4":
-  version: 3.7.4
-  resolution: "prettier@npm:3.7.4"
+"prettier@npm:*, prettier@npm:^3.6.2, prettier@npm:^3.7.4":
+  version: 3.8.1
+  resolution: "prettier@npm:3.8.1"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 10c0/9675d2cd08eacb1faf1d1a2dbfe24bfab6a912b059fc9defdb380a408893d88213e794a40a2700bd29b140eb3172e0b07c852853f6e22f16f3374659a1a13389
+  checksum: 10c0/33169b594009e48f570471271be7eac7cdcf88a209eed39ac3b8d6d78984039bfa9132f82b7e6ba3b06711f3bfe0222a62a1bfb87c43f50c25a83df1b78a2c42
   languageName: node
   linkType: hard
 
@@ -5756,7 +5878,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:^17.7.2":
+"yargs@npm:^17.7.2, yargs@npm:~17.7.0":
   version: 17.7.2
   resolution: "yargs@npm:17.7.2"
   dependencies:

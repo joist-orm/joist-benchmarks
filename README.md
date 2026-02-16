@@ -6,7 +6,7 @@ Alpha -- this benchmark hasn't been audited by anyone, and is still a WIP.
 
 ## Current Results
 
-![Current benchmark results](./2026-01-11-results.png)
+![Current benchmark results](./2026-02-16-results.png)
 
 This project benchmarks the performance of various TypeScript ORMs:
 

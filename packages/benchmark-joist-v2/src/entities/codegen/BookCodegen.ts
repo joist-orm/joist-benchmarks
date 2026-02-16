@@ -127,7 +127,7 @@ bookConfig.addRule(newRequiredRule("updatedAt"));
 bookConfig.addRule(newRequiredRule("author"));
 bookConfig.setDefault("pages", 0);
 
-declare module "joist-orm" {
+declare module "joist-core" {
   interface TypeMap {
     Book: {
       entityType: Book;

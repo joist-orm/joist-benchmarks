@@ -6,18 +6,14 @@ import { simpleCreate } from "./simple-create.ts";
 import { findInLoop } from "./find-in-loop.ts";
 import { PrismaClient } from "./prisma-client/client.js";
 import { PrismaPg } from "@prisma/adapter-pg";
-import pg from "pg";
-
-const { Pool } = pg;
 
 export type PrismaContext = Context & { prisma: PrismaClient };
 export type PrismaOperation = Operation<PrismaContext>;
 
 // Create connection pool and adapter
-const pool = new Pool({
+const adapter = new PrismaPg({
   connectionString: "postgresql://postgres:postgres@localhost:5432/benchmark?application_name=prisma_v7",
 });
-const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 export function getOperations(): AllOperations<PrismaContext> {
@@ -29,7 +25,6 @@ export async function getContext(): Promise<any> {
     prisma,
     shutdown: async () => {
       await prisma.$disconnect();
-      await pool.end();
     },
   };
 }

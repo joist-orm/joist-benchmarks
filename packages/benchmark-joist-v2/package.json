@@ -29,8 +29,7 @@
     "seed-data": "workspace:^"
   },
   "devDependencies": {
-    "@types/node": "^22.15.3",
-    "joist-codegen": "https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@8628078",
+    "@types/node": "^22.19.11",
     "typescript": "^5.9.3"
   }
 }

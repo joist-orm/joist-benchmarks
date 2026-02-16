@@ -87,7 +87,7 @@ tagConfig.addRule(newRequiredRule("name"));
 tagConfig.addRule(newRequiredRule("createdAt"));
 tagConfig.addRule(newRequiredRule("updatedAt"));
 
-declare module "joist-orm" {
+declare module "joist-core" {
   interface TypeMap {
     Tag: {
       entityType: Tag;
@@ -109,7 +109,7 @@ export abstract class TagCodegen extends BaseEntity<EntityManager, string> imple
 
   declare readonly __type: { 0: "Tag" };
 
-  readonly books: Collection<Tag, Book> = hasManyToMany("book_tag", "tag_id", "tags", "book_id");
+  readonly books: Collection<Tag, Book> = hasManyToMany(); // book_tag tag_id book_id
 
   get id(): TagId {
     return this.idMaybe || failNoIdYet("Tag");

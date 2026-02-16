@@ -127,7 +127,7 @@ bookConfig.addRule(newRequiredRule("updatedAt"));
 bookConfig.addRule(newRequiredRule("author"));
 bookConfig.setDefault("pages", 0);
 
-declare module "joist-orm" {
+declare module "joist-core" {
   interface TypeMap {
     Book: {
       entityType: Book;
@@ -149,9 +149,9 @@ export abstract class BookCodegen extends BaseEntity<EntityManager, string> impl
 
   declare readonly __type: { 0: "Book" };
 
-  readonly reviews: Collection<Book, BookReview> = hasMany("book", "book_id", undefined);
-  readonly author: ManyToOneReference<Book, Author, never> = hasOne("books");
-  readonly tags: Collection<Book, Tag> = hasManyToMany("book_tag", "book_id", "books", "tag_id");
+  readonly reviews: Collection<Book, BookReview> = hasMany();
+  readonly author: ManyToOneReference<Book, Author, never> = hasOne();
+  readonly tags: Collection<Book, Tag> = hasManyToMany(); // book_tag book_id tag_id
 
   get id(): BookId {
     return this.idMaybe || failNoIdYet("Book");

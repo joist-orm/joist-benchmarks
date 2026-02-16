@@ -39,13 +39,13 @@
     "cli-table3": "^0.6.5",
     "colors": "^1.4.0",
     "mitata": "^1.0.34",
-    "postgres": "^3.4.7",
+    "postgres": "^3.4.8",
     "seed-data": "workspace:^"
   },
   "devDependencies": {
     "@swc-node/register": "^1.11.1",
-    "@swc/core": "^1.15.8",
-    "@types/node": "^22.15.3",
+    "@swc/core": "^1.15.11",
+    "@types/node": "^22.19.11",
     "typescript": "^5.9.3"
   }
 }

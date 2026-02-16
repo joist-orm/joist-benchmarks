@@ -28,7 +28,7 @@
     "seed-data": "workspace:^"
   },
   "devDependencies": {
-    "@types/node": "^22.15.3",
+    "@types/node": "^22.19.11",
     "prisma": "6.19.1",
     "typescript": "^5.9.3"
   }

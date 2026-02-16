@@ -9,5 +9,5 @@
   },
   "entitiesDirectory": "./src/entities",
   "esm": true,
-  "version": "1.286.4"
+  "version": "2.0.3-next.19"
 }

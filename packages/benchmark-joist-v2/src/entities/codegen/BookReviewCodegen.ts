@@ -103,7 +103,7 @@ bookReviewConfig.addRule(newRequiredRule("createdAt"));
 bookReviewConfig.addRule(newRequiredRule("updatedAt"));
 bookReviewConfig.addRule(newRequiredRule("book"));
 
-declare module "joist-orm" {
+declare module "joist-core" {
   interface TypeMap {
     BookReview: {
       entityType: BookReview;
@@ -125,7 +125,7 @@ export abstract class BookReviewCodegen extends BaseEntity<EntityManager, string
 
   declare readonly __type: { 0: "BookReview" };
 
-  readonly book: ManyToOneReference<BookReview, Book, never> = hasOne("reviews");
+  readonly book: ManyToOneReference<BookReview, Book, never> = hasOne();
 
   get id(): BookReviewId {
     return this.idMaybe || failNoIdYet("BookReview");

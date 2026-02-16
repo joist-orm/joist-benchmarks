@@ -24,12 +24,12 @@
     "codegen": "node ./node_modules/joist-codegen -f ./joist-config.json"
   },
   "dependencies": {
-    "joist-orm": "https://pkg.pr.new/joist-orm/joist-orm/joist-orm@7aa0c71",
+    "joist-orm": "2.0.3-next.19",
+    "knex": "^3.1.0",
     "seed-data": "workspace:^"
   },
   "devDependencies": {
-    "@types/node": "^22.15.3",
-    "joist-codegen": "https://pkg.pr.new/joist-orm/joist-orm/joist-codegen@7aa0c71",
+    "@types/node": "^22.19.11",
     "typescript": "^5.9.3"
   }
 }

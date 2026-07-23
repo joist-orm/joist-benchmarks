@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "joist-orm": "2.0.3-next.19",
-    "knex": "^3.1.0",
+    "knex": "^3.3.0",
     "seed-data": "workspace:^"
   },
   "devDependencies": {

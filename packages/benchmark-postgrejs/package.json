@@ -22,7 +22,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "postgrejs": "^2.22.9",
+    "postgrejs": "^2.23.0",
     "seed-data": "workspace:*"
   },
   "devDependencies": {

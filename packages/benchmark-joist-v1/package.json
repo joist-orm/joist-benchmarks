@@ -25,8 +25,8 @@
   },
   "dependencies": {
     "joist-orm": "1.294.0",
-    "knex": "^3.1.0",
-    "pg": "^8.18.0",
+    "knex": "^3.3.0",
+    "pg": "^8.22.0",
     "seed-data": "workspace:^"
   },
   "devDependencies": {

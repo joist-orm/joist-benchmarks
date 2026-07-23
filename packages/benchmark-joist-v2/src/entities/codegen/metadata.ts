@@ -39,6 +39,7 @@ export const authorMeta: EntityMetadata<Author> = {
   baseTypes: [],
   subTypes: [],
   nonDeferredFkOrder: 1,
+  uniqueBy: [["email"]],
 };
 
 (Author as any).metadata = authorMeta;
@@ -60,7 +61,7 @@ export const bookMeta: EntityMetadata<Book> = {
     "updatedAt": { kind: "primitive", fieldName: "updatedAt", fieldIdName: undefined, derived: "orm", required: false, protected: false, type: Date, serde: new DateSerde("updatedAt", "updated_at", "timestamp with time zone"), immutable: false, default: "schema" },
     "author": { kind: "m2o", fieldName: "author", fieldIdName: "authorId", derived: false, required: true, otherMetadata: () => authorMeta, otherFieldName: "books", serde: new KeySerde("a", "author", "author_id", "int"), immutable: false },
     "reviews": { kind: "o2m", fieldName: "reviews", fieldIdName: "reviewIds", required: false, otherMetadata: () => bookReviewMeta, otherFieldName: "book", otherColumnName: "book_id", serde: undefined, immutable: false },
-    "tags": { kind: "m2m", fieldName: "tags", fieldIdName: "tagIds", required: false, derived: false, otherMetadata: () => tagMeta, otherFieldName: "books", serde: undefined, immutable: false, joinTableName: "book_tag", columnNames: ["book_id", "tag_id"] },
+    "tags": { kind: "m2m", fieldName: "tags", fieldIdName: "tagIds", required: false, derived: false, otherMetadata: () => tagMeta, otherFieldName: "books", serde: undefined, immutable: false, joinTableName: "book_tag", columnNames: ["book_id", "tag_id"], hasJoinTableId: true },
   },
   allFields: {},
   orderBy: undefined,
@@ -115,7 +116,7 @@ export const tagMeta: EntityMetadata<Tag> = {
     "name": { kind: "primitive", fieldName: "name", fieldIdName: undefined, derived: false, required: true, protected: false, type: "string", serde: new PrimitiveSerde("name", "name", "text"), immutable: false },
     "createdAt": { kind: "primitive", fieldName: "createdAt", fieldIdName: undefined, derived: "orm", required: false, protected: false, type: Date, serde: new DateSerde("createdAt", "created_at", "timestamp with time zone"), immutable: false, default: "schema" },
     "updatedAt": { kind: "primitive", fieldName: "updatedAt", fieldIdName: undefined, derived: "orm", required: false, protected: false, type: Date, serde: new DateSerde("updatedAt", "updated_at", "timestamp with time zone"), immutable: false, default: "schema" },
-    "books": { kind: "m2m", fieldName: "books", fieldIdName: "bookIds", required: false, derived: false, otherMetadata: () => bookMeta, otherFieldName: "tags", serde: undefined, immutable: false, joinTableName: "book_tag", columnNames: ["tag_id", "book_id"] },
+    "books": { kind: "m2m", fieldName: "books", fieldIdName: "bookIds", required: false, derived: false, otherMetadata: () => bookMeta, otherFieldName: "tags", serde: undefined, immutable: false, joinTableName: "book_tag", columnNames: ["tag_id", "book_id"], hasJoinTableId: true },
   },
   allFields: {},
   orderBy: undefined,
@@ -125,6 +126,7 @@ export const tagMeta: EntityMetadata<Tag> = {
   baseTypes: [],
   subTypes: [],
   nonDeferredFkOrder: 1,
+  uniqueBy: [["name"]],
 };
 
 (Tag as any).metadata = tagMeta;

@@ -1,5 +1,6 @@
 {
   "codegenPlugins": [],
+  "codemodVersion": 3,
   "databaseUrl": "postgresql://postgres:postgres@localhost:5432/benchmark",
   "entities": {
     "Author": { "tag": "a" },
@@ -8,6 +9,5 @@
     "Tag": { "tag": "t" }
   },
   "entitiesDirectory": "./src/entities",
-  "esm": true,
-  "version": "2.0.3-next.19"
+  "esm": true
 }

@@ -24,7 +24,7 @@
     "codegen": "node ./node_modules/joist-codegen -f ./joist-config.json"
   },
   "dependencies": {
-    "joist-orm": "2.0.3-next.19",
+    "joist-orm": "2.3.0-next.23",
     "knex": "^3.3.0",
     "seed-data": "workspace:^"
   },

@@ -17,8 +17,8 @@ import type * as Prisma from "./prismaNamespace.ts"
 
 const config: runtime.GetPrismaClientConfig = {
   "previewFeatures": [],
-  "clientVersion": "7.4.0",
-  "engineVersion": "ab56fe763f921d033a6c195e7ddeb3e255bdbb57",
+  "clientVersion": "7.9.0",
+  "engineVersion": "e922089b7d7502aff4249d5da3420f6fa55fc6ad",
   "activeProvider": "postgresql",
   "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/prisma-client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Author {\n  id        Int      @id @default(autoincrement())\n  firstName String   @map(\"first_name\")\n  lastName  String   @map(\"last_name\")\n  email     String   @unique\n  books     Book[]\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @default(now()) @map(\"updated_at\")\n\n  @@map(\"author\")\n}\n\nmodel Book {\n  id        Int          @id @default(autoincrement())\n  title     String\n  author    Author       @relation(fields: [authorId], references: [id], onDelete: Cascade)\n  authorId  Int          @map(\"author_id\")\n  published DateTime?\n  pages     Int          @default(0)\n  reviews   BookReview[]\n  tags      BookTag[]\n  createdAt DateTime     @default(now()) @map(\"created_at\")\n  updatedAt DateTime     @default(now()) @map(\"updated_at\")\n\n  @@index([authorId])\n  @@map(\"book\")\n}\n\nmodel BookReview {\n  id        Int      @id @default(autoincrement())\n  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)\n  bookId    Int      @map(\"book_id\")\n  rating    Int\n  text      String?\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @default(now()) @map(\"updated_at\")\n\n  @@index([bookId])\n  @@map(\"book_review\")\n}\n\nmodel Tag {\n  id        Int       @id @default(autoincrement())\n  name      String    @unique\n  books     BookTag[]\n  createdAt DateTime  @default(now()) @map(\"created_at\")\n  updatedAt DateTime  @default(now()) @map(\"updated_at\")\n\n  @@map(\"tag\")\n}\n\nmodel BookTag {\n  book   Book @relation(fields: [bookId], references: [id], onDelete: Cascade)\n  bookId Int  @map(\"book_id\")\n  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)\n  tagId  Int  @map(\"tag_id\")\n\n  @@id([bookId, tagId])\n  @@index([bookId])\n  @@index([tagId])\n  @@map(\"book_tag\")\n}\n",
   "runtimeDataModel": {
@@ -67,7 +67,9 @@ export interface PrismaClientConstructor {
    * Type-safe database client for TypeScript
    * @example
    * ```
-   * const prisma = new PrismaClient()
+   * const prisma = new PrismaClient({
+   *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
+   * })
    * // Fetch zero or more Authors
    * const authors = await prisma.author.findMany()
    * ```
@@ -80,7 +82,7 @@ export interface PrismaClientConstructor {
     LogOpts extends LogOptions<Options> = LogOptions<Options>,
     OmitOpts extends Prisma.PrismaClientOptions['omit'] = Options extends { omit: infer U } ? U : Prisma.PrismaClientOptions['omit'],
     ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs
-  >(options: Prisma.Subset<Options, Prisma.PrismaClientOptions> ): PrismaClient<LogOpts, OmitOpts, ExtArgs>
+  >(options: Prisma.PrismaClientConstructorArgs<Options>): PrismaClient<LogOpts, OmitOpts, ExtArgs>
 }
 
 /**
@@ -89,7 +91,9 @@ export interface PrismaClientConstructor {
  * Type-safe database client for TypeScript
  * @example
  * ```
- * const prisma = new PrismaClient()
+ * const prisma = new PrismaClient({
+ *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
+ * })
  * // Fetch zero or more Authors
  * const authors = await prisma.author.findMany()
  * ```
@@ -99,7 +103,7 @@ export interface PrismaClientConstructor {
 
 export interface PrismaClient<
   in LogOpts extends Prisma.LogLevel = never,
-  in out OmitOpts extends Prisma.PrismaClientOptions['omit'] = undefined,
+  in out OmitOpts extends Prisma.PrismaClientOptions['omit'] = Prisma.PrismaClientOptions['omit'],
   in out ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs
 > {
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
@@ -174,9 +178,9 @@ export interface PrismaClient<
    * ])
    * ```
    * 
-   * Read more in our [docs](https://www.prisma.io/docs/concepts/components/prisma-client/transactions).
+   * Read more in our [docs](https://www.prisma.io/docs/orm/prisma-client/queries/transactions).
    */
-  $transaction<P extends Prisma.PrismaPromise<any>[]>(arg: [...P], options?: { isolationLevel?: Prisma.TransactionIsolationLevel }): runtime.Types.Utils.JsPromise<runtime.Types.Utils.UnwrapTuple<P>>
+  $transaction<P extends Prisma.PrismaPromise<any>[]>(arg: [...P], options?: { maxWait?: number, timeout?: number, isolationLevel?: Prisma.TransactionIsolationLevel }): runtime.Types.Utils.JsPromise<runtime.Types.Utils.UnwrapTuple<P>>
 
   $transaction<R>(fn: (prisma: Omit<PrismaClient, runtime.ITXClientDenyList>) => runtime.Types.Utils.JsPromise<R>, options?: { maxWait?: number, timeout?: number, isolationLevel?: Prisma.TransactionIsolationLevel }): runtime.Types.Utils.JsPromise<R>
 

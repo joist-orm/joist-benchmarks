@@ -13,8 +13,8 @@
     "codegen": "yarn workspaces foreach --all run codegen"
   },
   "devDependencies": {
-    "prettier": "^3.8.1",
-    "tsx": "^4.21.0",
+    "prettier": "^3.9.6",
+    "tsx": "^4.23.1",
     "typescript": "^5.9.3"
   },
   "workspaces": [

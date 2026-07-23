@@ -24,12 +24,12 @@
     "codegen": "prisma generate"
   },
   "dependencies": {
-    "@prisma/client": "6.19.1",
+    "@prisma/client": "6.19.3",
     "seed-data": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "^22.19.11",
-    "prisma": "6.19.1",
+    "prisma": "6.19.3",
     "typescript": "^5.9.3"
   }
 }

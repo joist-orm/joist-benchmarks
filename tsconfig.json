@@ -3,6 +3,7 @@
     { "path": "./packages/benchmark" },
     { "path": "./packages/benchmark-drizzle" },
     { "path": "./packages/benchmark-joist-v1" },
+    { "path": "./packages/benchmark-joist-next" },
     { "path": "./packages/benchmark-joist-v2" },
     { "path": "./packages/benchmark-mikroorm" },
     { "path": "./packages/benchmark-prisma" },
@@ -10,6 +11,6 @@
   ],
   "files": [],
   "compilerOptions": {
-    "noEmit": true,
+    "noEmit": true
   }
 }

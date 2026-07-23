@@ -1,0 +1,55 @@
+import { JsonAggregatePreloader } from "joist-orm";
+import { Author, Book, BookReview, EntityManager, Tag } from "./entities/index.ts";
+import { cleanDatabase, type JoistOperation } from "./index.ts";
+
+export const bulkCreate: JoistOperation = {
+  async beforeEach(ctx) {
+    await cleanDatabase(ctx);
+  },
+
+  async run(ctx) {
+    const { driver, seedData, preload } = ctx;
+    const preloadPlugin = preload ? new JsonAggregatePreloader() : undefined;
+    const em = new EntityManager({}, { driver, preloadPlugin });
+
+    for (const row of seedData.authors) {
+      em.create(Author, {
+        id: `a:${row.id}`,
+        firstName: row.firstName,
+        lastName: row.lastName,
+        email: row.email,
+      });
+    }
+
+    for (const row of seedData.books) {
+      em.create(Book, {
+        id: `b:${row.id}`,
+        title: row.title,
+        author: em.getEntity(`a:${row.authorId}`) as Author,
+        published: new Date(row.published),
+        pages: row.pages,
+      });
+    }
+
+    for (const row of seedData.reviews) {
+      em.create(BookReview, {
+        id: `br:${row.id}`,
+        book: em.getEntity(`b:${row.bookId}`) as Book,
+        rating: row.rating,
+        text: row.text,
+      });
+    }
+
+    for (const row of seedData.tags) {
+      em.create(Tag, { id: `t:${row.id}`, name: row.name });
+    }
+
+    for (const row of seedData.bookTags) {
+      const book = em.getEntity(`b:${row.bookId}`) as Book;
+      const tag = em.getEntity(`t:${row.tagId}`) as Tag;
+      book.tags.add(tag);
+    }
+
+    await em.flush();
+  },
+};

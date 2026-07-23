@@ -1,5 +1,6 @@
 import { parseCliArguments, enumArrayArgument, numberArgument, numberArrayArgument } from "@cloud-copilot/cli";
 import * as drizzle from "benchmark-drizzle";
+import * as joist_next from "benchmark-joist-next";
 import * as joist_v1 from "benchmark-joist-v1";
 import * as joist_v2 from "benchmark-joist-v2";
 import * as mikro from "benchmark-mikroorm";
@@ -27,6 +28,8 @@ const orms = {
   prisma: { getContext: prisma.getContext, getOperations: prisma.getOperations },
   prisma_v7: { getContext: prisma_v7.getContext, getOperations: prisma_v7.getOperations },
   drizzle: { getContext: drizzle.getContext, getOperations: drizzle.getOperations },
+  joist_next: { getContext: joist_next.getContext, getOperations: joist_next.getOperations },
+  joist_next_pre: { getContext: joist_next.getContextPreload, getOperations: joist_next.getOperations },
   joist_v1: { getContext: joist_v1.getContext, getOperations: joist_v1.getOperations },
   joist_v2: { getContext: joist_v2.getContext, getOperations: joist_v2.getOperations },
   joist_v2_pre: { getContext: joist_v2.getContextPreload, getOperations: joist_v2.getOperations },
@@ -34,6 +37,8 @@ const orms = {
 
 // We ignore the drivers unless explicitly enabled
 const drivers = ["node_pg", "postgres_js", "postgrejs"];
+// WIP variants are available via --orm, but should not affect normal benchmark runs.
+const optInOrms = ["joist_next", "joist_next_pre"];
 
 const sql = postgres(getDatabaseUrl("driver"));
 
@@ -230,7 +235,7 @@ function dropOutliers(ormNames: string[], results: BenchmarkResult[]): Benchmark
 }
 
 async function runAllBenchmarks(): Promise<void> {
-  const ormsWithoutDrivers = Object.keys(orms).filter((o) => !drivers.includes(o));
+  const defaultOrms = Object.keys(orms).filter((orm) => !drivers.includes(orm) && !optInOrms.includes(orm));
   const cli = await parseCliArguments(
     "benchmark",
     {},
@@ -238,7 +243,7 @@ async function runAllBenchmarks(): Promise<void> {
       orm: enumArrayArgument({
         description: `orms to run (${Object.keys(orms).join(", ")})`,
         validValues: Object.keys(orms),
-        defaultValue: ormsWithoutDrivers,
+        defaultValue: defaultOrms,
       }),
       op: enumArrayArgument({
         description: "operations to run (" + Object.keys(operations).join(", ") + ")",

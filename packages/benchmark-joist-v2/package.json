@@ -26,10 +26,13 @@
   "dependencies": {
     "joist-orm": "2.3.0-next.23",
     "knex": "^3.3.0",
+    "pg": "^8.22.0",
+    "pg-types": "^4.1.0",
     "seed-data": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "^22.19.11",
+    "@types/pg": "^8.16.0",
     "typescript": "^5.9.3"
   }
 }

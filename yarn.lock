@@ -2564,8 +2564,11 @@ __metadata:
   resolution: "benchmark-joist-v2@workspace:packages/benchmark-joist-v2"
   dependencies:
     "@types/node": "npm:^22.19.11"
+    "@types/pg": "npm:^8.16.0"
     joist-orm: "npm:2.3.0-next.23"
     knex: "npm:^3.3.0"
+    pg: "npm:^8.22.0"
+    pg-types: "npm:^4.1.0"
     seed-data: "workspace:^"
     typescript: "npm:^5.9.3"
   languageName: unknown

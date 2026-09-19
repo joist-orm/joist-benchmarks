@@ -1266,12 +1266,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsopen/objects@npm:^2.2.0":
-  version: 2.2.3
-  resolution: "@jsopen/objects@npm:2.2.3"
+"@jsopen/objects@npm:^2.2.3":
+  version: 2.3.3
+  resolution: "@jsopen/objects@npm:2.3.3"
   dependencies:
     tslib: "npm:^2.8.1"
-  checksum: 10c0/bead4bb99bb08f51e3209ab667f58dcb25cc650c6edc49a65910c5811e6110de4ac3153dbe4f6a529f5800ac588276f2392e030981686418542255bd8aedb311
+  checksum: 10c0/212fed3944f5c262c88c6612c090ee185c757c740bd087ad667df78e98c969ad234e4918ae72bbfb55a06bac4ec18a1a6d048a21701a27f934ea93bc12e89d34
   languageName: node
   linkType: hard
 
@@ -2619,7 +2619,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "benchmark-postgrejs@workspace:packages/benchmark-postgrejs"
   dependencies:
-    postgrejs: "npm:^2.23.0"
+    postgrejs: "npm:^3.5.0"
     seed-data: "workspace:*"
     typescript: "npm:^5.9.3"
   languageName: unknown
@@ -3813,6 +3813,16 @@ __metadata:
   dependencies:
     locate-path: "npm:^3.0.0"
   checksum: 10c0/2c2e7d0a26db858e2f624f39038c74739e38306dee42b45f404f770db357947be9d0d587f1cac72d20c114deb38aa57316e879eb0a78b17b46da7dab0a3bd6e3
+  languageName: node
+  linkType: hard
+
+"flexy-buffer@npm:^1.1.0":
+  version: 1.1.1
+  resolution: "flexy-buffer@npm:1.1.1"
+  dependencies:
+    ts-gems: "npm:^4.0.4"
+    tslib: "npm:^2.8.1"
+  checksum: 10c0/e0b17fa8af44aebf60db1093195547e776c0eba9b432789b39a68ec747e6252a663a9fcd770d64cb1dc73f019d2afc9a96fb27bc194e36b727510694dcf3545f
   languageName: node
   linkType: hard
 
@@ -5605,19 +5615,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postgrejs@npm:^2.23.0":
-  version: 2.23.0
-  resolution: "postgrejs@npm:2.23.0"
+"postgrejs@npm:^3.5.0":
+  version: 3.5.0
+  resolution: "postgrejs@npm:3.5.0"
   dependencies:
-    "@jsopen/objects": "npm:^2.2.0"
+    "@jsopen/objects": "npm:^2.2.3"
     doublylinked: "npm:^2.5.6"
+    flexy-buffer: "npm:^1.1.0"
     lightning-pool: "npm:^4.12.0"
-    postgres-bytea: "npm:^3.0.0"
     power-tasks: "npm:^1.14.2"
     putil-promisify: "npm:^1.10.1"
     putil-varhelpers: "npm:^1.7.0"
     tslib: "npm:^2.8.1"
-  checksum: 10c0/88187fa9c634a54a3f84ced0fb4b3affb776e848883f0dbac93ab499243457ee85c5de1ed5c6722899c77e05fcc3a0acb0787595c42d62357d26f57dc01daecb
+  checksum: 10c0/925bef6f6f17283ad34101dd7d508bc05a1168ffb54b2928ba4d9f41c32ba5f9d20820a4abcd408c70e68e0a952c2a5c3178c8ef92a2a47092813766025db54d
   languageName: node
   linkType: hard
 
@@ -5635,19 +5645,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postgres-bytea@npm:^3.0.0, postgres-bytea@npm:~3.0.0":
+"postgres-bytea@npm:~1.0.0":
+  version: 1.0.0
+  resolution: "postgres-bytea@npm:1.0.0"
+  checksum: 10c0/febf2364b8a8953695cac159eeb94542ead5886792a9627b97e33f6b5bb6e263bc0706ab47ec221516e79fbd6b2452d668841830fb3b49ec6c0fc29be61892ce
+  languageName: node
+  linkType: hard
+
+"postgres-bytea@npm:~3.0.0":
   version: 3.0.0
   resolution: "postgres-bytea@npm:3.0.0"
   dependencies:
     obuf: "npm:~1.1.2"
   checksum: 10c0/41c79cc48aa730c5ba3eda6ab989a940034f07a1f57b8f2777dce56f1b8cca16c5870582932b5b10cc605048aef9b6157e06253c871b4717cafc6d00f55376aa
-  languageName: node
-  linkType: hard
-
-"postgres-bytea@npm:~1.0.0":
-  version: 1.0.0
-  resolution: "postgres-bytea@npm:1.0.0"
-  checksum: 10c0/febf2364b8a8953695cac159eeb94542ead5886792a9627b97e33f6b5bb6e263bc0706ab47ec221516e79fbd6b2452d668841830fb3b49ec6c0fc29be61892ce
   languageName: node
   linkType: hard
 
@@ -6332,6 +6342,13 @@ __metadata:
   dependencies:
     is-number: "npm:^7.0.0"
   checksum: 10c0/487988b0a19c654ff3e1961b87f471702e708fa8a8dd02a298ef16da7206692e8552a0250e8b3e8759270f62e9d8314616f6da274734d3b558b1fc7b7724e892
+  languageName: node
+  linkType: hard
+
+"ts-gems@npm:^4.0.4":
+  version: 4.0.4
+  resolution: "ts-gems@npm:4.0.4"
+  checksum: 10c0/18e208bfb2a6494685587930fe2020a5728e89e24778c270831f68a70dbeb08baa31653daabdafef4af80fb620728aa07b4624bbf95b955a71c11049ff79856c
   languageName: node
   linkType: hard
 

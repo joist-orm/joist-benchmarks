@@ -28,7 +28,7 @@
     "@mikro-orm/postgresql": "^7.2.1",
     "@mikro-orm/reflection": "^7.2.1",
     "benchmark": "workspace:^",
-    "pg": "^8.22.0",
+    "pg": "^8.23.0",
     "seed-data": "workspace:^"
   },
   "devDependencies": {

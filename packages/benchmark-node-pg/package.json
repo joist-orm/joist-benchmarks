@@ -22,11 +22,11 @@
     "build": "tsc"
   },
   "dependencies": {
-    "pg": "^8.22.0",
+    "pg": "^8.23.0",
     "seed-data": "workspace:*"
   },
   "devDependencies": {
-    "@types/pg": "^8.16.0",
+    "@types/pg": "^8.23.1",
     "typescript": "^5.9.3"
   }
 }

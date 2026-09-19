@@ -2265,6 +2265,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/pg@npm:^8.23.1":
+  version: 8.23.1
+  resolution: "@types/pg@npm:8.23.1"
+  dependencies:
+    "@types/node": "npm:*"
+    pg-protocol: "npm:*"
+    pg-types: "npm:^2.2.0"
+  checksum: 10c0/0e39ff7dbe233e1e50b172d87fe84cca086a52e255adb104ef1d60619cded356c4414427ffbea58e70a5a985c3036603c8e544ca2937fc1cf4050185109973be
+  languageName: node
+  linkType: hard
+
 "@types/pluralize@npm:^0.0.33":
   version: 0.0.33
   resolution: "@types/pluralize@npm:0.0.33"
@@ -2550,10 +2561,10 @@ __metadata:
   resolution: "benchmark-joist-next@workspace:packages/benchmark-joist-next"
   dependencies:
     "@types/node": "npm:^22.19.11"
-    "@types/pg": "npm:^8.16.0"
+    "@types/pg": "npm:^8.23.1"
     joist-orm: "https://pkg.pr.new/joist-orm/joist-orm/joist-orm@efa34b825a29df3823052071f750777323c16035"
     knex: "npm:^3.3.0"
-    pg: "npm:^8.22.0"
+    pg: "npm:^8.23.0"
     pg-types: "npm:^4.1.0"
     seed-data: "workspace:^"
     typescript: "npm:^5.9.3"
@@ -2568,7 +2579,7 @@ __metadata:
     joist-codegen: "npm:1.294.0"
     joist-orm: "npm:1.294.0"
     knex: "npm:^3.3.0"
-    pg: "npm:^8.22.0"
+    pg: "npm:^8.23.0"
     seed-data: "workspace:^"
     typescript: "npm:^5.9.3"
   languageName: unknown
@@ -2579,10 +2590,10 @@ __metadata:
   resolution: "benchmark-joist-v2@workspace:packages/benchmark-joist-v2"
   dependencies:
     "@types/node": "npm:^22.19.11"
-    "@types/pg": "npm:^8.16.0"
+    "@types/pg": "npm:^8.23.1"
     joist-orm: "npm:2.3.0"
     knex: "npm:^3.3.0"
-    pg: "npm:^8.22.0"
+    pg: "npm:^8.23.0"
     pg-types: "npm:^4.1.0"
     seed-data: "workspace:^"
     typescript: "npm:^5.9.3"
@@ -2598,7 +2609,7 @@ __metadata:
     "@mikro-orm/reflection": "npm:^7.2.1"
     "@types/node": "npm:^22.19.11"
     benchmark: "workspace:^"
-    pg: "npm:^8.22.0"
+    pg: "npm:^8.23.0"
     seed-data: "workspace:^"
     typescript: "npm:^5.9.3"
   languageName: unknown
@@ -2608,8 +2619,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "benchmark-node-pg@workspace:packages/benchmark-node-pg"
   dependencies:
-    "@types/pg": "npm:^8.16.0"
-    pg: "npm:^8.22.0"
+    "@types/pg": "npm:^8.23.1"
+    pg: "npm:^8.23.0"
     seed-data: "workspace:*"
     typescript: "npm:^5.9.3"
   languageName: unknown
@@ -2642,8 +2653,8 @@ __metadata:
     "@prisma/adapter-pg": "npm:7.10.0"
     "@prisma/client": "npm:7.10.0"
     "@types/node": "npm:^22.19.11"
-    "@types/pg": "npm:^8.16.0"
-    pg: "npm:^8.22.0"
+    "@types/pg": "npm:^8.23.1"
+    pg: "npm:^8.23.0"
     prisma: "npm:7.10.0"
     seed-data: "workspace:^"
     typescript: "npm:^5.9.3"
@@ -2667,7 +2678,7 @@ __metadata:
   resolution: "benchmark-typeorm@workspace:packages/benchmark-typeorm"
   dependencies:
     "@types/node": "npm:^22.19.11"
-    pg: "npm:^8.22.0"
+    pg: "npm:^8.23.0"
     reflect-metadata: "npm:^0.2.2"
     seed-data: "workspace:^"
     typeorm: "npm:^1.1.1"
@@ -5500,7 +5511,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg@npm:8.23.0":
+"pg@npm:8.23.0, pg@npm:^8.23.0":
   version: 8.23.0
   resolution: "pg@npm:8.23.0"
   dependencies:
@@ -5522,7 +5533,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg@npm:^8.0.3, pg@npm:^8.16.3, pg@npm:^8.22.0":
+"pg@npm:^8.0.3, pg@npm:^8.16.3":
   version: 8.22.0
   resolution: "pg@npm:8.22.0"
   dependencies:

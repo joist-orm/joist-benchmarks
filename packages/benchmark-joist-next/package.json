@@ -27,13 +27,13 @@
   "dependencies": {
     "joist-orm": "https://pkg.pr.new/joist-orm/joist-orm/joist-orm@efa34b825a29df3823052071f750777323c16035",
     "knex": "^3.3.0",
-    "pg": "^8.22.0",
+    "pg": "^8.23.0",
     "pg-types": "^4.1.0",
     "seed-data": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "^22.19.11",
-    "@types/pg": "^8.16.0",
+    "@types/pg": "^8.23.1",
     "typescript": "^5.9.3"
   }
 }

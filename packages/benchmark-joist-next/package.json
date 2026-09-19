@@ -25,7 +25,7 @@
     "update-joist": "node ./scripts/update-joist.mjs"
   },
   "dependencies": {
-    "joist-orm": "https://pkg.pr.new/joist-orm/joist-orm/joist-orm@6883b7248492be914746e5bf393661124a9811e5",
+    "joist-orm": "https://pkg.pr.new/joist-orm/joist-orm/joist-orm@efa34b825a29df3823052071f750777323c16035",
     "knex": "^3.3.0",
     "pg": "^8.22.0",
     "pg-types": "^4.1.0",

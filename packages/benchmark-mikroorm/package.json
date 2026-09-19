@@ -24,9 +24,9 @@
     "bench": "node --import=tsx --conditions=@source src/index.ts"
   },
   "dependencies": {
-    "@mikro-orm/core": "^7.1.7",
-    "@mikro-orm/postgresql": "^7.1.7",
-    "@mikro-orm/reflection": "^7.1.7",
+    "@mikro-orm/core": "^7.2.1",
+    "@mikro-orm/postgresql": "^7.2.1",
+    "@mikro-orm/reflection": "^7.2.1",
     "benchmark": "workspace:^",
     "pg": "^8.22.0",
     "seed-data": "workspace:^"
